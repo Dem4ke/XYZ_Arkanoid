@@ -26,16 +26,15 @@ namespace SnakeGame {
 		std::vector<std::string> gameOverPopUpButtons = { "No", "Yes" };
 		std::vector<std::string> chooseNamePopUpButtons = { "\n\nEnter" };
 
-		// Menu initialization (Name of menu, vector of buttons, size of buttons, color of buttons (defaultd - white), id of menu (defaultd - 0)
+		// Menu initialization (Name of menu, vector of buttons, size of buttons (40.f by default), color of buttons (white by default))
 		// Name of menu will be in 1.5 bigger, id of menu needs for choose of background
-		// id: 0 - empty background, 1 or any other - main background
-		mainMenu_.init("Snake Game", mainButtons, 40.f, sf::Color::White, 1);
-		difficultyLevelMenu_.init("Difficulity level", dufficulityLevelButtons, 40.f, sf::Color::White, 1);
-		optionsMenu_.init("Options", optionsButtons, 40.f, sf::Color::White, 1);
-		windowEditMenu_.init("Edit window size", windowEditButtons, 40.f, sf::Color::White, 1);
-		exitMenu_.init("Do you want to exit?", exitButtons, 40.f, sf::Color::White, 1);
-		pauseMenu_.init("Do you want to exit\n\tin main menu?\n", pauseButtons, 40.f, sf::Color::White, 0);
-		gameOverMenu_.init("Game Over\n\n\n", gameOverButtons, 40.f, sf::Color::White, 0);
+		mainMenu_.init("Snake Game", mainButtons);
+		difficultyLevelMenu_.init("Difficulity level", dufficulityLevelButtons);
+		optionsMenu_.init("Options", optionsButtons);
+		windowEditMenu_.init("Edit window size", windowEditButtons);
+		exitMenu_.init("Do you want to exit?", exitButtons);
+		pauseMenu_.init("Do you want to exit\n\tin main menu?\n", pauseButtons);
+		gameOverMenu_.init("Game Over\n\n\n", gameOverButtons);
 
 		// Leader board initialization (Name of menu, size of names, number of drawable positions)
 		leaderBoard_.init("Leader Board", 40.f, 8, gameState_);
@@ -91,42 +90,43 @@ namespace SnakeGame {
 	void Game::updateMenu(sf::Event& event) {
 		switch (gameState_.getCurrentGameState()) {
 		case GameStateType::MainMenu: {
-			MainMenuMovement(mainMenu_, gameState_, event);
+			mainMenu_.update(event);
 			break;
 		}
 		case GameStateType::DifficulityLevelChoose: {
-			DiffLvlMenuMovement(difficultyLevelMenu_, gameState_, event);
+			difficultyLevelMenu_.update(event);
 			break;
 		}
 		case GameStateType::Options: {
-			OptionsMenuMovement(optionsMenu_, gameState_, event);
+			optionsMenu_.update(event);
 			break;
 		}
 		case GameStateType::WindowSizeEdit: {
-			WindowEditMenuMovement(windowEditMenu_, gameState_, event, window_);
+			windowEditMenu_.update(event);
+			break;
 		}
 		case GameStateType::ExitDialog: {
-			ExitMenuMovement(exitMenu_, gameState_, event, window_);
+			exitMenu_.update(event);
 			break;
 		}
 		case GameStateType::Pause: {
-			PauseMenuMovement(pauseMenu_, gameState_, event);
+			pauseMenu_.update(event);
 			break;
 		}
 		case GameStateType::LeaderBoard: {
-			LeaderBoardMovement(leaderBoard_, gameState_, event);
+			leaderBoard_.update(event);
 			break;
 		}
 		case GameStateType::GameOver: {
-			GameOverMenuMovement(gameOverMenu_, gameState_, event);
+			gameOverMenu_.update(event);
 			break;
 		}
 		case GameStateType::GameOverPopUp: {
-			GameOverPopUpMovement(gameOverPopUp_, gameState_, event);
+			gameOverPopUp_.update(event);
 			break;
 		}
 		case GameStateType::ChooseNameOfPlayer: {
-			ChooseNamePopUpMovement(chooseName_, gameState_, leaderBoard_, event);
+			chooseName_.update(event);
 			break;
 		}
 		}
@@ -148,64 +148,82 @@ namespace SnakeGame {
 	}
 
 	void Game::gameOver() {
-		if (gameState_.getCurrentGameState() == GameStateType::GameOver) {
+		switch (gameState_.getCurrentGameState()) {
+		case GameStateType::GameOver: {
 			leaderBoard_.sortTable(gameState_);
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::PlayAgain) {
+		case GameStateType::PlayAgain: {
 			restartGame();
 			gameState_.pushGameState(GameStateType::Game);
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::GameReset) {
+		case GameStateType::GameReset: {
 			restartGame();
+			break;
+		}
 		}
 	}
 
 	void Game::drawGame() {
-		if (gameState_.getCurrentGameState() == GameStateType::MainMenu) {
-			DrawMenu(mainMenu_, window_);
+		switch (gameState_.getCurrentGameState()) {
+		case GameStateType::MainMenu: {
+			mainMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::DifficulityLevelChoose) {
-			DrawMenu(difficultyLevelMenu_, window_);
+		case GameStateType::DifficulityLevelChoose: {
+			difficultyLevelMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::Options) {
-			DrawMenu(optionsMenu_, window_);
+		case GameStateType::Options: {
+			optionsMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::WindowSizeEdit) {
-			DrawMenu(windowEditMenu_, window_);
+		case GameStateType::WindowSizeEdit: {
+			windowEditMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::ExitDialog) {
-			DrawMenu(exitMenu_, window_);
+		case GameStateType::ExitDialog: {
+			exitMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::Pause) {
+		case GameStateType::Pause: {
 			window_.draw(gameBackSprite_);
 			DrawGameField(gameField_, window_);
-			DrawMenu(pauseMenu_, window_);
+			pauseMenu_.draw();
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::GameOver) {
+		case GameStateType::LeaderBoard: {
+			leaderBoard_.draw();
+			break;
+		}
+		case GameStateType::GameOver: {
 			window_.draw(gameBackSprite_);
 			DrawGameField(gameField_, window_);
-			DrawMenu(gameOverMenu_, window_);
+			gameOverMenu_.draw();
 			DrawGameOverLeaderBoard(leaderBoard_, window_);
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::GameOverPopUp) {
+		case GameStateType::GameOverPopUp: {
 			window_.draw(gameBackSprite_);
 			DrawGameField(gameField_, window_);
-			DrawPopUp(gameOverPopUp_, window_, gameState_);
+			gameOverPopUp_.draw();
 			DrawGameOverUI(UI_, window_);
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::ChooseNameOfPlayer) {
+		case GameStateType::ChooseNameOfPlayer: {
 			window_.draw(gameBackSprite_);
 			DrawGameField(gameField_, window_);
-			DrawPopUp(chooseName_, window_, gameState_);
+			chooseName_.draw();
 			DrawGameOverUI(UI_, window_);
+			break;
 		}
-		else if (gameState_.getCurrentGameState() == GameStateType::LeaderBoard) {
-			DrawLeaderBoard(leaderBoard_, window_);
-		}
-		else if (gameState_.getCurrentGameState() == GameStateType::Game) {
+		case GameStateType::Game: {
 			window_.draw(gameBackSprite_);
 			DrawGameField(gameField_, window_);
 			DrawUI(UI_, window_);
+			break;
+		}
 		}
 	}
 
