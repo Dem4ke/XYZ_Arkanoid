@@ -3,25 +3,24 @@
 #include "GameStates.h"
 #include "Resources.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
 	class UI {
 	public:
-		UI(Resources& resources) : resources_(resources) {}
-		void init(float buttonSize);
-		void scoreUpdate(GameState& gameStates);
+		UI(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 
-		sf::Text getHelp() const;
-		sf::Text getScore() const;
-		sf::Text getGameOverScore() const;
+		void init(float buttonSize);
+		void scoreUpdate();
+		void drawMain();
+		void drawGameOver();
+
 	private:
 		sf::Text controlHelp_;
 		sf::Text score_;
 		sf::Text gameOverScore_;
 
 		Resources& resources_;
+		GameState& gameState_;
+		sf::RenderWindow& window_;
 	};
-
-	void DrawUI(UI& UI, sf::RenderWindow& window);
-	void DrawGameOverUI(UI& UI, sf::RenderWindow& window);
 }

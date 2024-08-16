@@ -1,6 +1,9 @@
 #include "UI.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
+	UI::UI(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+		resources_(resources), gameState_(gameState), window_(window) {}
+
 	void UI::init(float buttonSize) {
 		// Initialization of conrtol help
 		controlHelp_.setFont(resources_.font);
@@ -20,32 +23,26 @@ namespace SnakeGame {
 
 		// Initialization of player score in game over menu
 		gameOverScore_.setFont(resources_.font);
-		gameOverScore_.setCharacterSize(buttonSize * 2);
+		gameOverScore_.setCharacterSize(buttonSize * 2.f);
 		gameOverScore_.setFillColor(sf::Color::White);
 		gameOverScore_.setString("Your score " + std::to_string(0));
 		gameOverScore_.setPosition(resources_.getWindowWidth() / 2.f - gameOverScore_.getGlobalBounds().width / 2.f,
 									resources_.getWindowHeight() / 4.f);
 	}
 
-	void UI::scoreUpdate(GameState& gameStates) {
-		score_.setString("Your score " + std::to_string(gameStates.getScore()));
-		gameOverScore_.setString("Your score " + std::to_string(gameStates.getScore()));
-		gameOverScore_.setString("Your score " + std::to_string(gameStates.getScore()));
+	void UI::scoreUpdate() {
+		score_.setString("Your score " + std::to_string(gameState_.getScore()));
+		gameOverScore_.setString("Your score " + std::to_string(gameState_.getScore()));
+		gameOverScore_.setString("Your score " + std::to_string(gameState_.getScore()));
 	}
 
-	sf::Text UI::getHelp() const { return controlHelp_; }
+	// Draw UI in special cases
+	void UI::drawMain() {
+			window_.draw(controlHelp_);
+			window_.draw(score_);
+	}	
 
-	sf::Text UI::getScore() const { return score_; }
-
-	sf::Text UI::getGameOverScore() const { return gameOverScore_; }
-
-	// FUNCTIONS
-
-	void DrawUI(UI& UI, sf::RenderWindow& window) {
-		window.draw(UI.getHelp());
-		window.draw(UI.getScore());
-	}
-	void DrawGameOverUI(UI& UI, sf::RenderWindow& window) {
-		window.draw(UI.getGameOverScore());
+	void UI::drawGameOver() {
+		window_.draw(gameOverScore_);
 	}
 }

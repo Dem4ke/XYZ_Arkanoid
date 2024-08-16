@@ -19,10 +19,10 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Apple.cpp">
+    <ClCompile Include="Ball.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Platform.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Resources.cpp">
@@ -34,16 +34,13 @@
     <ClCompile Include="UI.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameField.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="PopUp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="LeaderBoard.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,13 +51,10 @@
     <ClInclude Include="Menu.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Wall.h">
+    <ClInclude Include="Ball.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Apple.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Platform.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Resources.h">
@@ -72,13 +66,13 @@
     <ClInclude Include="UI.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="GameField.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="PopUp.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="LeaderBoard.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

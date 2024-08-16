@@ -1,10 +1,13 @@
 #include "LeaderBoard.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
 	// LEADER BOARD
 
-	void LeaderBoard::init(std::string menuName, float buttonSize, int drawablePositions, GameState& gameState) {
+	LeaderBoard::LeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+		resources_(resources), gameState_(gameState), window_(window) {}
+
+	void LeaderBoard::init(std::string menuName, float buttonSize, int drawablePositions) {
 		posX_ = resources_.getWindowWidth() / 2.f;
 		posY_ = resources_.getWindowHeight() / 5.f;
 		buttonSize_ = buttonSize;
@@ -34,15 +37,23 @@ namespace SnakeGame {
 		SetSpriteSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
 
 		// Get leader board from file
-		gameState.deserialize(tableText_);
+		gameState_.deserialize(tableText_);
 	}
 
-	void LeaderBoard::sortTable(GameState& gameState) {
+	void LeaderBoard::update(const sf::Event& event) {
+		if (event.type == sf::Event::KeyReleased) {
+			if (event.key.code == escapeKey_ || event.key.code == sf::Keyboard::Escape) {
+				gameState_.popGameState();
+			}
+		}
+	}
+
+	void LeaderBoard::sortTable() {
 		float space = buttonSize_;
 
 		auto cmp = [](std::pair<std::string, int> const& a, std::pair<std::string, int> const& b) {
 			return a.second > b.second;
-			};
+		};
 
 		std::sort(begin(tableText_), end(tableText_), cmp);
 
@@ -64,65 +75,34 @@ namespace SnakeGame {
 	}
 
 	// Add player in leader board
-	void LeaderBoard::addPlayer(GameState& gameState) {
-		tableText_.push_back({ gameState.getPlayerName() , gameState.getScore() });
+	void LeaderBoard::addPlayer() {
+		tableText_.push_back({ gameState_.getPlayerName() , gameState_.getScore() });
 	}
 
 	// Save leader board in file
-	void LeaderBoard::saveTable(GameState& gameState) {
-		gameState.serialize(tableText_);
+	void LeaderBoard::saveTable() {
+		gameState_.serialize(tableText_);
 	}
 
-	int LeaderBoard::getPositionsCount() const {
-		return drawablePositions_ > liderBoard_.size() ? liderBoard_.size() : drawablePositions_;
-	}
+	// Draw leader board in menu
+	void LeaderBoard::drawLongBoard() {
+		int it = drawablePositions_ > liderBoard_.size() ? liderBoard_.size() : drawablePositions_;
 
-	int LeaderBoard::getShortPosCount() const {
-		return shortDrawablePos_ > liderBoard_.size() ? liderBoard_.size() : shortDrawablePos_;
-	}
-
-	sf::Text LeaderBoard::getName(int num) const { return liderBoard_[num].first; }
-
-	sf::Text LeaderBoard::getScore(int num) const { return liderBoard_[num].second; }
-
-	sf::Text LeaderBoard::getGeneralName() const { return menuName_; }
-
-	sf::Sprite LeaderBoard::getBackground() const { return backgroundSprite_; }
-
-	sf::Keyboard::Key LeaderBoard::getEscapeKey() const { return escapeKey_; }
-
-	//----------------------------------------------------------
-	// FUNCTIONS
-	
-	// LEADER BOARD MOVEMENT
-
-	void LeaderBoardMovement(LeaderBoard& leaderBoard, GameState& gameState, const sf::Event& event) {
-		if (event.type == sf::Event::KeyReleased) {
-			if (event.key.code == leaderBoard.getEscapeKey()) {
-				gameState.popGameState();
-			}
-			else if (event.key.code == sf::Keyboard::Escape) {
-				gameState.popGameState();
-			}
+		window_.draw(backgroundSprite_);
+		window_.draw(menuName_);
+		for (int i = 0; i < it; ++i) {
+			window_.draw(liderBoard_[i].first);
+			window_.draw(liderBoard_[i].second);
 		}
 	}
 
-	//----------------------------------------------------------
-	// DRAW FUNCTIONS
+	// Draw leader board after game over in short pop up
+	void LeaderBoard::drawShortBoard() {
+		int it = shortDrawablePos_ > liderBoard_.size() ? liderBoard_.size() : shortDrawablePos_;
 
-	void DrawLeaderBoard(LeaderBoard& leaderBoard, sf::RenderWindow& window) {
-		window.draw(leaderBoard.getBackground());
-		window.draw(leaderBoard.getGeneralName());
-		for (int i = 0, it = leaderBoard.getPositionsCount(); i < it; ++i) {
-			window.draw(leaderBoard.getName(i));
-			window.draw(leaderBoard.getScore(i));
-		}
-	}
-
-	void DrawGameOverLeaderBoard(LeaderBoard& leaderBoard, sf::RenderWindow& window) {
-		for (int i = 0, it = leaderBoard.getShortPosCount(); i < it; ++i) {
-			window.draw(leaderBoard.getName(i));
-			window.draw(leaderBoard.getScore(i));
+		for (int i = 0; i < it; ++i) {
+			window_.draw(liderBoard_[i].first);
+			window_.draw(liderBoard_[i].second);
 		}
 	}
 }

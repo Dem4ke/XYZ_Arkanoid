@@ -1,24 +1,26 @@
 #include "Game.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
-	Game::Game(Resources& resources, sf::RenderWindow& window) : 
+	Game::Game(Resources& resources, sf::RenderWindow& window) :
 		resources_(resources), window_(window),
-		mainMenu_(resources, gameState_, window), 
+		mainMenu_(resources, gameState_, window),
 		difficultyLevelMenu_(resources, gameState_, window),
-		optionsMenu_(resources, gameState_, window), 
+		optionsMenu_(resources, gameState_, window),
 		exitMenu_(resources, gameState_, window),
-		pauseMenu_(resources, gameState_, window), 
+		pauseMenu_(resources, gameState_, window),
 		gameOverMenu_(resources, gameState_, window),
-		leaderBoard_(resources), windowEditMenu_(resources),
-		UI_(resources), gameField_(resources, gameState_), 
-		gameOverPopUp_(resources), chooseName_(resources) {}
+		leaderBoard_(resources, gameState_, window),
+		windowEditMenu_(resources, gameState_, window),
+		gameOverPopUp_(resources, gameState_, window),
+		chooseName_(resources, gameState_, window, leaderBoard_),
+		UI_(resources, gameState_, window),
+		platform_(resources, window), ball_(resources, window) {}
 
-	void Game::initGame() {
+	void Game::init() {
 		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
-		std::vector<std::string> dufficulityLevelButtons = { "Easy", "Harder than Easy", "Medium", "Pussy hard", "Die hard" };
-		std::vector<std::string> optionsButtons = { "Music: On", "Sounds: On", 
-				"Window size " + std::to_string(window_.getSize().y) + "x" + std::to_string(window_.getSize().x) };
+		std::vector<std::string> dufficulityLevelButtons = { "Easy", "Medium", "Hard" };
+		std::vector<std::string> optionsButtons = { "Music: On", "Sounds: On", "Window size "};
 		std::vector<std::string> windowEditButtons = { "800 x 600", "1280 x 720", "1920 x 1080"};
 		std::vector<std::string> exitButtons = { "Yes", "No" };
 		std::vector<std::string> pauseButtons = { "Yes", "No" };
@@ -37,7 +39,7 @@ namespace SnakeGame {
 		gameOverMenu_.init("Game Over\n\n\n", gameOverButtons);
 
 		// Leader board initialization (Name of menu, size of names, number of drawable positions)
-		leaderBoard_.init("Leader Board", 40.f, 8, gameState_);
+		leaderBoard_.init("Leader Board");
 
 		// Initialization of pop ups (Name of pop up, vector of buttons, size of buttons, color of buttons)
 		gameOverPopUp_.init("Do you want to save your score?", gameOverPopUpButtons, 40.f);
@@ -56,15 +58,12 @@ namespace SnakeGame {
 		// Initialization of background of the game
 		initBackground();
 
-		restartGame();
+		restart();
 	}
 
-	void Game::restartGame() {
+	void Game::restart() {
 		// Reset game state 
 		gameState_.restartGameState();
-		
-		// Initialization of game field, and reset all game objects
-		gameField_.reset();
 
 		// Reset menus
 		mainMenu_.reset();
@@ -75,15 +74,34 @@ namespace SnakeGame {
 		gameOverMenu_.reset();
 
 		// Load leader board from file and sort it
-		leaderBoard_.sortTable(gameState_);
+		leaderBoard_.sortTable();
 
 		// Reset score and player name
 		gameState_.reset();
-		UI_.scoreUpdate(gameState_);
+		UI_.scoreUpdate();
 
 		// Reset pop ups
 		gameOverPopUp_.reset();
 		chooseName_.reset();
+
+		// Initialization of player's platform (width, speed)
+		switch (gameState_.getCurrentDiffLvl()) {
+		case DifficultyLevel::Easy: {
+			platform_.init(140, 200.f);
+			ball_.init();
+			break;
+		}
+		case DifficultyLevel::Medium: {
+			platform_.init(100, 200.f);
+			ball_.init();
+			break;
+		}
+		case DifficultyLevel::Hard: {
+			platform_.init(60, 200.f);
+			ball_.init();
+			break;
+		}
+		}
 	}
 
 	// Update menu states, it works only with Event
@@ -133,39 +151,45 @@ namespace SnakeGame {
 	}
 
 	// Update only game process 
-	void Game::updateGame(const float& deltaTime) {
+	void Game::update(const float& deltaTime) {
 		if (gameState_.getCurrentGameState() == GameStateType::Game) {
 
 			// Update main game process
-			gameField_.update(deltaTime);
+			platform_.move(deltaTime);
+			ball_.move(deltaTime);
 
 			// Pause menu maker
 			ExitInPauseMenu(gameState_);
 
 			// Update player's score
-			UI_.scoreUpdate(gameState_);
+			UI_.scoreUpdate();
 		}
 	}
 
 	void Game::gameOver() {
 		switch (gameState_.getCurrentGameState()) {
 		case GameStateType::GameOver: {
-			leaderBoard_.sortTable(gameState_);
+			leaderBoard_.sortTable();
 			break;
 		}
 		case GameStateType::PlayAgain: {
-			restartGame();
+			restart();
 			gameState_.pushGameState(GameStateType::Game);
 			break;
 		}
 		case GameStateType::GameReset: {
-			restartGame();
+			restart();
 			break;
+		}
+		case GameStateType::ChangeResolution: {
+			init();
+			gameState_.pushGameState(GameStateType::Options);
+			gameState_.pushGameState(GameStateType::WindowSizeEdit);
 		}
 		}
 	}
 
-	void Game::drawGame() {
+	void Game::draw() {
 		switch (gameState_.getCurrentGameState()) {
 		case GameStateType::MainMenu: {
 			mainMenu_.draw();
@@ -189,39 +213,36 @@ namespace SnakeGame {
 		}
 		case GameStateType::Pause: {
 			window_.draw(gameBackSprite_);
-			DrawGameField(gameField_, window_);
 			pauseMenu_.draw();
 			break;
 		}
 		case GameStateType::LeaderBoard: {
-			leaderBoard_.draw();
+			leaderBoard_.drawLongBoard();
 			break;
 		}
 		case GameStateType::GameOver: {
 			window_.draw(gameBackSprite_);
-			DrawGameField(gameField_, window_);
 			gameOverMenu_.draw();
-			DrawGameOverLeaderBoard(leaderBoard_, window_);
+			leaderBoard_.drawShortBoard();
 			break;
 		}
 		case GameStateType::GameOverPopUp: {
 			window_.draw(gameBackSprite_);
-			DrawGameField(gameField_, window_);
 			gameOverPopUp_.draw();
-			DrawGameOverUI(UI_, window_);
+			UI_.drawGameOver();
 			break;
 		}
 		case GameStateType::ChooseNameOfPlayer: {
 			window_.draw(gameBackSprite_);
-			DrawGameField(gameField_, window_);
 			chooseName_.draw();
-			DrawGameOverUI(UI_, window_);
+			UI_.drawGameOver();
 			break;
 		}
 		case GameStateType::Game: {
 			window_.draw(gameBackSprite_);
-			DrawGameField(gameField_, window_);
-			DrawUI(UI_, window_);
+			platform_.draw();
+			ball_.draw();
+			UI_.drawMain();
 			break;
 		}
 		}

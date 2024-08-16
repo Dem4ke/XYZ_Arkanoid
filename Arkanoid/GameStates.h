@@ -5,18 +5,16 @@
 #include <fstream>
 #include <unordered_map>
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
-	enum class DifficultyLevel {
+	enum class DifficultyLevel : int {
 		None = 0,
 		Easy,
-		HarderThanEasy,
 		Medium,
-		LessThanHard,
 		Hard,
 	};
 
-	enum class GameStateType {
+	enum class GameStateType : int {
 		None = 0,
 		MainMenu,
 		GameReset,
@@ -27,6 +25,7 @@ namespace SnakeGame {
 		DifficulityLevelChoose,
 		Options,
 		WindowSizeEdit,
+		ChangeResolution,
 		ExitDialog,
 		PlayAgain,
 		GameOverPopUp,
@@ -62,7 +61,6 @@ namespace SnakeGame {
 		std::string getPlayerName() const;
 
 		int getScore() const;
-		int getPauseTime() const;
 		GameStateType getCurrentGameState() const;
 
 		// Difficulty 
@@ -81,7 +79,6 @@ namespace SnakeGame {
 		std::string DefaultPlayerName_ = "XYZ";
 		std::string playerName_ = "XYZ";
 		int score_ = 0;
-		int afterPauseTime_ = 1; // seconds before game will continue
 
 		GameStateType gameStateType = GameStateType::None;
 		std::vector<GameStateType> gameStatesStack;

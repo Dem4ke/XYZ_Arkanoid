@@ -5,12 +5,12 @@ int main() {
 	srand(seed);
 
 	// Game initialization
-	SnakeGame::Resources resources{ 800.f, 600.f };
+	ArkanoidGame::Resources resources{ 800.f, 600.f };
 	sf::RenderWindow window(sf::VideoMode(resources.getWindowWidth(), resources.getWindowHeight()), "Snake Game!");
 
-	SnakeGame::Game game{ resources, window };
+	ArkanoidGame::Game game{ resources, window };
 
-	game.initGame();
+	game.init();
 
 	// Initialization of clocks
 	sf::Clock gameClock;
@@ -33,17 +33,17 @@ int main() {
 				break;
 			}
 
-			// Update game state
+			// All menu moves
 			game.updateMenu(event);
 		}
 
 		// Update main gameplay 
-		game.updateGame(deltaTime);
+		game.update(deltaTime);
 		game.gameOver();
 
 		// Draw game
 		window.clear();
-		game.drawGame();
+		game.draw();
 		window.display();
 	}
 

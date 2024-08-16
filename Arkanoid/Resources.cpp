@@ -1,7 +1,7 @@
 #include <cassert>
 #include "Resources.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 	Resources::Resources(float width, float height) : width_(width), height_(height) {
 		setTextures();
 		setBackgrounds();
@@ -41,6 +41,10 @@ namespace SnakeGame {
 		assert(font.loadFromFile(resourcesPath_ + fontsPath_ + "Roboto-Regular.ttf"));
 	}
 
+	void Resources::changeWindowWidth(float newWidth) { width_ = newWidth; }
+
+	void Resources::changeWindowHeight(float newHeight) { height_ = newHeight; }
+
 	float Resources::getWindowWidth() const { return width_; }
 
 	float Resources::getWindowHeight() const { return height_; }
@@ -56,6 +60,11 @@ namespace SnakeGame {
 	void SetSpriteRelativeOrigin(sf::Sprite& sprite, float originX, float originY) {
 		sf::FloatRect spriteRect = sprite.getLocalBounds();
 		sprite.setOrigin(sf::Vector2f(originX * spriteRect.width, originY * spriteRect.height));
+	}
+
+	void SetRectangleRelativeOrigin(sf::RectangleShape& rectangle, float originX, float originY) {
+		sf::FloatRect rectangleRect = rectangle.getLocalBounds();
+		rectangle.setOrigin(sf::Vector2f(originX * rectangleRect.width, originY * rectangleRect.height));
 	}
 
 	// SOUNDS AND MUSIC 

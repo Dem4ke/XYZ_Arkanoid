@@ -6,27 +6,20 @@
 #include "GameStates.h"
 #include "Resources.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
 	// Leader board menu
 	class LeaderBoard {
 	public:
-		LeaderBoard(Resources& resources) : resources_(resources) {}
+		LeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 
-		void init(std::string menuName, float buttonSize, int drawablePositions, GameState& gameState);
-		void sortTable(GameState& gameState);
-		void addPlayer(GameState& gameState);
-		void saveTable(GameState& gameState);
-
-		int getPositionsCount() const;
-		int getShortPosCount() const;
-
-		sf::Text getName(int num) const;
-		sf::Text getScore(int num) const;
-		sf::Text getGeneralName() const;
-
-		sf::Sprite getBackground() const;
-		sf::Keyboard::Key getEscapeKey() const;
+		void init(std::string menuName, float buttonSize = 40.f, int drawablePositions = 8);
+		void update(const sf::Event& event);
+		void sortTable();
+		void addPlayer();
+		void saveTable();
+		void drawLongBoard();
+		void drawShortBoard();
 
 	private:
 		int drawablePositions_ = 0;
@@ -49,12 +42,7 @@ namespace SnakeGame {
 		sf::Keyboard::Key escapeKey_ = sf::Keyboard::B;
 
 		Resources& resources_;
+		GameState& gameState_;
+		sf::RenderWindow& window_;
 	};
-
-	// Leader board movement
-	void LeaderBoardMovement(LeaderBoard& leaderBoard, GameState& gameState, const sf::Event& event);
-
-	// Draw leader boards
-	void DrawLeaderBoard(LeaderBoard& leaderBoard, sf::RenderWindow& window);
-	void DrawGameOverLeaderBoard(LeaderBoard& leaderBoard, sf::RenderWindow& window);
 }

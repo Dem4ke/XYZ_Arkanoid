@@ -1,6 +1,6 @@
 #include "GameStates.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 	
 	// DATA
 	
@@ -42,6 +42,7 @@ namespace SnakeGame {
 		return false;
 	}
 
+	//----------------------------------------------------------
 	// PRIVATE TOOLBOX
 
 	// Open filestream
@@ -95,8 +96,6 @@ namespace SnakeGame {
 	std::string GameState::getPlayerName() const { return playerName_; }
 
 	int GameState::getScore() const { return score_; }
-
-	int GameState::getPauseTime() const { return afterPauseTime_; }
 
 	GameStateType GameState::getCurrentGameState() const { return gameStateType; }
 

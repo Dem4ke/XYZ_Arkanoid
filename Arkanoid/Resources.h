@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <string>
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 	class Resources {
 	public:
 		Resources(float width, float height);
@@ -13,6 +13,9 @@ namespace SnakeGame {
 		void setBackgrounds();
 		void setSounds();
 		void setFont();
+
+		void changeWindowWidth(float newWidth);
+		void changeWindowHeight(float newHeight);
 
 		float getWindowWidth() const;
 		float getWindowHeight() const;
@@ -45,9 +48,10 @@ namespace SnakeGame {
 		const std::string backgroundsPath_ = "Backgrounds/";
 	};
 
-	// Sprites
+	// Sprites and rectangles
 	void SetSpriteSize(sf::Sprite& sprite, float desiredWidht, float desiredHeight);
 	void SetSpriteRelativeOrigin(sf::Sprite& sprite, float originX, float originY);
+	void SetRectangleRelativeOrigin(sf::RectangleShape& rectangle, float originX, float originY);
 	
 	// Sounds and music
 	void SetSoundsVolume(Resources& resources, float volume);

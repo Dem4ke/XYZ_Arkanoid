@@ -3,7 +3,7 @@
 #include "GameStates.h"
 #include "Resources.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 	
 	// Standart menu 
 	class Menu {
@@ -61,6 +61,42 @@ namespace SnakeGame {
 	public:
 		DifficultyLevelMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~DifficultyLevelMenu() {}
+
+		void update(const sf::Event& event) override;
+	};
+
+	// Menu to change window's size
+	class WindowEditMenu : public Menu {
+	public:
+		WindowEditMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~WindowEditMenu() {}
+
+		void update(const sf::Event& event) override;
+	};
+
+	// Menu to exit from game
+	class ExitMenu : public Menu {
+	public:
+		ExitMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~ExitMenu() {}
+
+		void update(const sf::Event& event) override;
+	};
+
+	// Menu of pause
+	class PauseMenu : public Menu {
+	public:
+		PauseMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~PauseMenu() {}
+
+		void update(const sf::Event& event) override;
+	};
+
+	// Menu of game over
+	class GameOver : public Menu {
+	public:
+		GameOver(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~GameOver() {}
 
 		void update(const sf::Event& event) override;
 	};

@@ -1,17 +1,6 @@
-#include <SFML/Graphics.hpp>
 #include "Engine.h"
-#include <cstdlib>
-#include <cmath>
 
-namespace SnakeGame {
-
-	Position2D GetRandomPositionInScreen(float screenWidth, float screenHeight) {
-		Position2D result;
-		result.x = rand() / (float)RAND_MAX * screenWidth;
-		result.y = rand() / (float)RAND_MAX * screenHeight;
-		return result;
-	}
-
+namespace ArkanoidGame {
 	// Squares collision
 	bool IsRectanglesCollide(Position2D rect1Position, Vector2D rect1Size, Position2D rect2Position, Vector2D rect2Size) {
 		const float dx = fabs(rect1Position.x - rect2Position.x);

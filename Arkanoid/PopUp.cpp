@@ -1,11 +1,13 @@
 #include "PopUp.h"
 
-namespace SnakeGame {
+namespace ArkanoidGame {
 
 	// POP UP
 
-	PopUp::PopUp(Resources& resources) : Menu(resources) {}
+	PopUp::PopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+		resources_(resources), gameState_(gameState), window_(window) {}
 
+	// Initialization of all pop ups buttons
 	void PopUp::init(std::string popUpName, std::vector<std::string>& allButtons,
 		float buttonSize, sf::Color colorOfButtons) {
 
@@ -15,12 +17,106 @@ namespace SnakeGame {
 		buttonSize_ = buttonSize;
 
 		// Initialization of name of a pop up
-		menuName_.setFont(resources_.font);
-		menuName_.setCharacterSize(buttonSize_);
-		menuName_.setFillColor(mainButtonColor_);
-		menuName_.setString(popUpName);
-		menuName_.setOrigin(sf::Vector2f(menuName_.getGlobalBounds().width / 2.f, menuName_.getGlobalBounds().height / 2.f));
-		menuName_.setPosition(posX_, posY_ - buttonSize_);
+		popUpName_.setFont(resources_.font);
+		popUpName_.setCharacterSize(buttonSize_);
+		popUpName_.setFillColor(mainButtonColor_);
+		popUpName_.setString(popUpName);
+		popUpName_.setOrigin(sf::Vector2f(popUpName_.getGlobalBounds().width / 2.f, popUpName_.getGlobalBounds().height / 2.f));
+		popUpName_.setPosition(posX_, posY_ - buttonSize_);
+
+		// Initialization of pop up's buttons
+		sf::Text menuButtons_;
+		float space = buttonSize_;
+		menuButtons_.setFont(resources_.font);
+		menuButtons_.setCharacterSize(buttonSize_);
+		menuButtons_.setFillColor(mainButtonColor_);
+
+		buttons_.clear();
+		for (auto& i : allButtons) {
+			menuButtons_.setString(i);
+			menuButtons_.setOrigin(sf::Vector2f(menuButtons_.getGlobalBounds().width / 2.f, menuButtons_.getGlobalBounds().height / 2.f));
+			menuButtons_.setPosition(posX_, posY_ + space * 1.2f);
+			buttons_.push_back(menuButtons_);
+			space += buttonSize_;
+		}
+
+		// Color of the first button
+		int selectedButton_ = 0;
+		buttons_[selectedButton_].setFillColor(chosenButtonColor_);
+	}
+
+	// Reset menu to default
+	void PopUp::reset() {
+		// Set choosen button to first button
+		buttons_[selectedButton_].setFillColor(mainButtonColor_);
+		selectedButton_ = 0;
+		buttons_[selectedButton_].setFillColor(chosenButtonColor_);
+	}
+
+	// Draw pop up
+	void PopUp::draw() {
+		window_.draw(popUpName_);
+		for (auto& i : buttons_) {
+			window_.draw(i);
+		}
+	}
+
+	//----------------------------------------------------------
+	// PRIVATE WORK TOOLS
+
+	void PopUp::moveUp() {
+		if (selectedButton_ >= 0) {
+			buttons_[selectedButton_].setFillColor(mainButtonColor_);
+			--selectedButton_;
+
+			if (selectedButton_ < 0) {
+				selectedButton_ = buttons_.size() - 1;
+			}
+			buttons_[selectedButton_].setFillColor(chosenButtonColor_);
+
+			// play sound of menu buttons change
+			MenuMovementSound(resources_);
+		}
+	}
+
+	void PopUp::moveDown() {
+		size_t end = buttons_.size();
+
+		if (selectedButton_ <= end) {
+			buttons_[selectedButton_].setFillColor(mainButtonColor_);
+			++selectedButton_;
+
+			if (selectedButton_ == end) {
+				selectedButton_ = 0;
+			}
+			buttons_[selectedButton_].setFillColor(chosenButtonColor_);
+
+			// play sound of menu buttons change
+			MenuMovementSound(resources_);
+		}
+	}
+
+	//----------------------------------------------------------
+	// POP UP OF CHOOSE PLAYER'S NAME
+	ChooseNamePopUp::ChooseNamePopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window, LeaderBoard& leaderBoard) :
+		PopUp(resources, gameState, window), leaderBoard_(leaderBoard) {}
+
+	// Initialization of all pop ups buttons
+	void ChooseNamePopUp::init(std::string popUpName, std::vector<std::string>& allButtons,
+		float buttonSize, sf::Color colorOfButtons) {
+
+		posX_ = resources_.getWindowWidth() / 2.f;
+		posY_ = resources_.getWindowHeight() / 2.f;
+		mainButtonColor_ = colorOfButtons;
+		buttonSize_ = buttonSize;
+
+		// Initialization of name of a pop up
+		popUpName_.setFont(resources_.font);
+		popUpName_.setCharacterSize(buttonSize_);
+		popUpName_.setFillColor(mainButtonColor_);
+		popUpName_.setString(popUpName);
+		popUpName_.setOrigin(sf::Vector2f(popUpName_.getGlobalBounds().width / 2.f, popUpName_.getGlobalBounds().height / 2.f));
+		popUpName_.setPosition(posX_, posY_ - buttonSize_);
 
 		// Initialization of pop up's buttons
 		sf::Text menuButtons_;
@@ -52,7 +148,7 @@ namespace SnakeGame {
 	}
 
 	// Reset pop up to default
-	void PopUp::reset() {
+	void ChooseNamePopUp::reset() {
 		// Set choosen button to first button
 		buttons_[selectedButton_].setFillColor(mainButtonColor_);
 		selectedButton_ = 0;
@@ -65,8 +161,46 @@ namespace SnakeGame {
 		playerName_.setPosition(posX_, posY_);
 	}
 
+	void ChooseNamePopUp::update(const sf::Event& event) {
+		if (event.type == sf::Event::KeyReleased) {
+			if (event.key.code == sf::Keyboard::BackSpace) {
+				deleteName();
+			}
+			else if (event.key.code == escapeKey_) {
+				gameState_.pushGameState(GameStateType::GameOver);
+				SoundOfChoose(resources_);
+			}
+			else if (event.key.code == enterKey_) {
+				leaderBoard_.addPlayer();
+				leaderBoard_.sortTable();
+				leaderBoard_.saveTable();
+				SoundOfChoose(resources_);
+				gameState_.pushGameState(GameStateType::GameOver);
+			}
+		}
+		else if (event.type == sf::Event::KeyPressed) {
+			if (event.key.code == enterKey_) {
+				savePlayerInTable();
+			}
+		}
+		else if (event.type == sf::Event::TextEntered) {
+			enterName(event.text.unicode);
+		}
+	}
+
+	void ChooseNamePopUp::draw() {
+		window_.draw(popUpName_);
+		window_.draw(playerName_);
+		for (auto& i : buttons_) {
+			window_.draw(i);
+		}
+	}
+
+	//----------------------------------------------------------
+	// PRIVATE WORK TOOLS
+	
 	// Enter player's name after game
-	void PopUp::enterName(sf::String letter) {
+	void ChooseNamePopUp::enterName(sf::String letter) {
 		playerInput_ += letter;
 
 		playerName_.setString(playerInput_);
@@ -75,86 +209,42 @@ namespace SnakeGame {
 	}
 
 	// Delete name
-	void PopUp::deleteName() {
+	void ChooseNamePopUp::deleteName() {
 		playerInput_.clear();
 	}
 
-	void PopUp::savePlayerInTable(GameState& gameState) {
-		gameState.setPlayerName(playerName_.getString());
-	}
-
-	sf::Text PopUp::getPlayerName() { return playerName_; }
-
-	int PopUp::getPositionsCount() const { return drawablePositions_; }
-
-	//----------------------------------------------------------
-	// FUNCTIONS
-	
-	// POP UP MOVEMENT
-
-	void GameOverPopUpMovement(PopUp& popUp, GameState& gameState, const sf::Event& event) {
-		if (event.type == sf::Event::KeyReleased) {
-			if (event.key.code == popUp.getUpKey()) {
-				popUp.moveUp();
-			}
-			else if (event.key.code == popUp.getDownKey()) {
-				popUp.moveDown();
-			}
-			else if (event.key.code == popUp.getEnterKey()) {
-				if (popUp.getSelectedButton() == 0) {
-					popUp.chooseButtonSound();
-					gameState.pushGameState(GameStateType::GameOver);
-				}
-				else if (popUp.getSelectedButton() == 1) {
-					popUp.chooseButtonSound();
-					gameState.pushGameState(GameStateType::ChooseNameOfPlayer);
-				}
-			}
-			else if (event.key.code == popUp.getEscapeKey()) {
-				popUp.chooseButtonSound();
-				gameState.pushGameState(GameStateType::GameOver);
-			}
-		}
-	}
-
-	void ChooseNamePopUpMovement(PopUp& popUp, GameState& gameState, LeaderBoard& leaderBoard, const sf::Event& event) {
-		if (event.type == sf::Event::KeyReleased) {
-			if (event.key.code == sf::Keyboard::BackSpace) {
-				popUp.deleteName();
-			}
-			else if (event.key.code == popUp.getEscapeKey()) {
-				popUp.chooseButtonSound();
-				gameState.pushGameState(GameStateType::GameOver);
-			}
-			else if (event.key.code == popUp.getEnterKey()) {
-				leaderBoard.addPlayer(gameState);
-				leaderBoard.sortTable(gameState);
-				leaderBoard.saveTable(gameState);
-				popUp.chooseButtonSound();
-				gameState.pushGameState(GameStateType::GameOver);
-			}
-		}
-		else if (event.type == sf::Event::KeyPressed) {
-			if (event.key.code == popUp.getEnterKey()) {
-				popUp.savePlayerInTable(gameState);
-			}
-		}
-		else if (event.type == sf::Event::TextEntered) {
-			popUp.enterName(event.text.unicode);
-		}
+	void ChooseNamePopUp::savePlayerInTable() {
+		gameState_.setPlayerName(playerName_.getString());
 	}
 
 	//----------------------------------------------------------
-	// DRAW FUNCTIONS
+	// GAME OVER POP UP
 
-	void DrawPopUp(PopUp& popUp, sf::RenderWindow& window, GameState& gameState) {
-		window.draw(popUp.getGeneralName());
-		for (int i = 0, it = popUp.getButtonsCount(); i < it; ++i) {
-			window.draw(popUp.getButton(i));
-		}
+	GameOverPopUp::GameOverPopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+		PopUp(resources, gameState, window) {}
 
-		if (gameState.getCurrentGameState() == GameStateType::ChooseNameOfPlayer) {
-			window.draw(popUp.getPlayerName());
+	void GameOverPopUp::update(const sf::Event& event) {
+		if (event.type == sf::Event::KeyReleased) {
+			if (event.key.code == upKey_) {
+				moveUp();
+			}
+			else if (event.key.code == downKey_) {
+				moveDown();
+			}
+			else if (event.key.code == enterKey_) {
+				if (selectedButton_ == 0) {
+					gameState_.pushGameState(GameStateType::GameOver);
+					SoundOfChoose(resources_);
+				}
+				else if (selectedButton_ == 1) {
+					gameState_.pushGameState(GameStateType::ChooseNameOfPlayer);
+					SoundOfChoose(resources_);
+				}
+			}
+			else if (event.key.code == escapeKey_) {
+				gameState_.pushGameState(GameStateType::GameOver);
+				SoundOfChoose(resources_);
+			}
 		}
 	}
 }
