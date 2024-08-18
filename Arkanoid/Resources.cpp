@@ -11,10 +11,7 @@ namespace ArkanoidGame {
 
 	// Load texures from resources path
 	void Resources::setTextures() {
-		assert(snakeHeadTexture.loadFromFile(resourcesPath_ + texturesPath_ + "Snake_head.png"));
-		assert(snakeBodyTexture.loadFromFile(resourcesPath_ + texturesPath_ + "Snake_Body.png"));
-		assert(appleTexture.loadFromFile(resourcesPath_ + texturesPath_ + "Apple.png"));
-		assert(wallTexture.loadFromFile(resourcesPath_ + texturesPath_ + "wall.png"));
+
 	}
 
 	// Loads backgrounds from resources path
@@ -27,7 +24,6 @@ namespace ArkanoidGame {
 	void Resources::setSounds() {
 		// Little sounds
 		assert(menuMove.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav"));
-		assert(appleEatenSound.loadFromFile(resourcesPath_ + soundsPath_ + "AppleEat.wav"));
 		assert(gameOverSound.loadFromFile(resourcesPath_ + soundsPath_ + "Maodin204__Lose.wav"));
 		assert(hitSound.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav"));
 		assert(soundOfChoose.loadFromFile(resourcesPath_ + soundsPath_ + "Theevilsocks__menu-hover.wav"));
@@ -49,24 +45,6 @@ namespace ArkanoidGame {
 
 	float Resources::getWindowHeight() const { return height_; }
 
-	// SPRITES
-
-	void SetSpriteSize(sf::Sprite& sprite, float desiredWidht, float desiredHeight) {
-		sf::FloatRect spriteRect = sprite.getLocalBounds(); // get sprite size from the corner
-		sf::Vector2f scale = { desiredWidht / spriteRect.width, desiredHeight / spriteRect.height };
-		sprite.setScale(scale);
-	}
-
-	void SetSpriteRelativeOrigin(sf::Sprite& sprite, float originX, float originY) {
-		sf::FloatRect spriteRect = sprite.getLocalBounds();
-		sprite.setOrigin(sf::Vector2f(originX * spriteRect.width, originY * spriteRect.height));
-	}
-
-	void SetRectangleRelativeOrigin(sf::RectangleShape& rectangle, float originX, float originY) {
-		sf::FloatRect rectangleRect = rectangle.getLocalBounds();
-		rectangle.setOrigin(sf::Vector2f(originX * rectangleRect.width, originY * rectangleRect.height));
-	}
-
 	// SOUNDS AND MUSIC 
 	
 	// Change volume of sounds
@@ -84,9 +62,9 @@ namespace ArkanoidGame {
 		resources.sound.play();
 	}
 
-	// Init sound of eat an apples and play
-	void AppleEatenSound(Resources& resources) {
-		resources.sound.setBuffer(resources.appleEatenSound);
+	// Init hit sound and play
+	void HitSound(Resources& resources) {
+		resources.sound.setBuffer(resources.hitSound);
 		resources.sound.play();
 	}
 

@@ -3,8 +3,7 @@
 #include "Menu.h"
 #include "LeaderBoard.h"
 #include "PopUp.h"
-#include "Platform.h"
-#include "Ball.h"
+#include "GameField.h"
 #include "UI.h"
 
 namespace ArkanoidGame {
@@ -20,19 +19,13 @@ namespace ArkanoidGame {
 		void gameOver();
 		void draw();
 
-	private:
-		void initBackground();
-	
+	private:	
 		sf::RenderWindow& window_;
 		Resources& resources_;
 
 		GameState gameState_;
 
-		sf::Sprite gameBackSprite_;
-		sf::Color gameBackColor_ = sf::Color::Blue;
-
-		Platform platform_;
-		Ball ball_;
+		GameField gameField_;
 
 		Menu mainMenu_;
 		DifficultyLevelMenu difficultyLevelMenu_;

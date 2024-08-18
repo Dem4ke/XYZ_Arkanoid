@@ -8,20 +8,66 @@ namespace ArkanoidGame {
 	void Ball::init(float size, float speed) {
 		size_ = size;
 		speed_ = speed;
+		angle_ = -90.f;
+		isOutOfPlayground_ = 0;
 
-		rectangle_.setSize(sf::Vector2f(size_, size_));
-		rectangle_.setFillColor(sf::Color::White);
-		SetRectangleRelativeOrigin(rectangle_, 0.5f, 0.5f);
+		// Set shape's options
+		circle_.setRadius(size_ / 2.f);
+		circle_.setFillColor(sf::Color::White);
+		SetRelativeOrigin(circle_, 0.5f, 0.5f);
 
+		// Set started direction of ball
+		const float pi = std::acos(-1.f);
+		direction_.x = std::cos(pi / 180.f * angle_);
+		direction_.y = std::sin(pi / 180.f * angle_);
+
+		// Set start position
 		position_ = { resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f };
-		rectangle_.setPosition(position_.x, position_.y);
+		circle_.setPosition(position_.x, position_.y);
 	}
 
 	void Ball::move(const float& deltaTime) {
-	
+		// Calculate new position of ball
+		position_ += (speed_ * deltaTime * direction_);	
+		circle_.setPosition(position_);
+
+		// Check collision with window's borders
+		if (position_.x - size_ / 2.f < 0 || position_.x + size_ / 2.f > resources_.getWindowWidth()) {
+			direction_.x *= -1;
+			HitSound(resources_);
+		}
+		
+		if (position_.y - size_ / 2.f < 0) {
+			direction_.y *= -1;
+			HitSound(resources_);
+		}
+		
+		if (position_.y + size_ / 2.f > resources_.getWindowHeight()) {
+			isOutOfPlayground_ = 1;
+		}
+	}
+
+	void Ball::changeAngle(float newAngle) {
+		const auto pi = std::acos(-1.f);
+		direction_.x = (newAngle / abs(newAngle)) * std::cos(pi / 180.f * newAngle);
+		direction_.y = -1 * abs(std::sin(pi / 180.f * newAngle));
 	}
 
 	void Ball::draw() {
-		window_.draw(rectangle_);
+		window_.draw(circle_);
 	}
+
+	float Ball::getSize() const{
+		return size_;
+	}
+
+	float Ball::centerX() const {
+		return position_.x;
+	}
+
+	float Ball::bottomY() const {
+		return position_.y + (size_ / 2.f);
+	}
+
+	bool Ball::isOutOfPlayground() const { return isOutOfPlayground_; }
 }

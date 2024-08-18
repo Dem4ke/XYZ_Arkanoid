@@ -20,16 +20,10 @@ namespace ArkanoidGame {
 		float getWindowWidth() const;
 		float getWindowHeight() const;
 
-		sf::Texture snakeHeadTexture;
-		sf::Texture snakeBodyTexture;
-		sf::Texture appleTexture;
-		sf::Texture wallTexture;
-
 		sf::Texture mainMenuBackground;
 		sf::Texture gameBackground;
 
 		sf::SoundBuffer menuMove;
-		sf::SoundBuffer appleEatenSound;
 		sf::SoundBuffer gameOverSound;
 		sf::SoundBuffer hitSound;
 		sf::SoundBuffer soundOfChoose;
@@ -47,17 +41,12 @@ namespace ArkanoidGame {
 		const std::string soundsPath_ = "Sounds/";
 		const std::string backgroundsPath_ = "Backgrounds/";
 	};
-
-	// Sprites and rectangles
-	void SetSpriteSize(sf::Sprite& sprite, float desiredWidht, float desiredHeight);
-	void SetSpriteRelativeOrigin(sf::Sprite& sprite, float originX, float originY);
-	void SetRectangleRelativeOrigin(sf::RectangleShape& rectangle, float originX, float originY);
 	
 	// Sounds and music
 	void SetSoundsVolume(Resources& resources, float volume);
 	void SetMusicVolume(Resources& resources, float volume);
 	void MenuMovementSound(Resources& resources);
-	void AppleEatenSound(Resources& resources);
+	void HitSound(Resources& resources);
 	void GameOverSound(Resources& resources);
 	void SoundOfChoose(Resources& resources);
 	void PlayBackMusic(Resources& resources);

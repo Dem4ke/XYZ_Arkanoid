@@ -9,7 +9,7 @@ namespace ArkanoidGame {
 		controlHelp_.setFont(resources_.font);
 		controlHelp_.setCharacterSize(buttonSize);
 		controlHelp_.setFillColor(sf::Color::White);
-		controlHelp_.setString("Use WASD to move, P to pause");
+		controlHelp_.setString("Use arrows to move, P to pause");
 		controlHelp_.setPosition(controlHelp_.getGlobalBounds().width - controlHelp_.getGlobalBounds().width / 1.1f,
 			controlHelp_.getGlobalBounds().height);
 

@@ -34,7 +34,7 @@ namespace ArkanoidGame {
 
 		backgroundSprite_.setTexture(resources_.mainMenuBackground);
 
-		SetSpriteSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
+		SetSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
 
 		// Get leader board from file
 		gameState_.deserialize(tableText_);

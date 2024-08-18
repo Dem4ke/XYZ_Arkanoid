@@ -15,7 +15,7 @@ namespace ArkanoidGame {
 		gameOverPopUp_(resources, gameState_, window),
 		chooseName_(resources, gameState_, window, leaderBoard_),
 		UI_(resources, gameState_, window),
-		platform_(resources, window), ball_(resources, window) {}
+		gameField_(resources, gameState_, window) {}
 
 	void Game::init() {
 		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
@@ -55,9 +55,6 @@ namespace ArkanoidGame {
 		// Initialization of start sounds volume
 		SetSoundsVolume(resources_, 5.f);
 
-		// Initialization of background of the game
-		initBackground();
-
 		restart();
 	}
 
@@ -84,24 +81,8 @@ namespace ArkanoidGame {
 		gameOverPopUp_.reset();
 		chooseName_.reset();
 
-		// Initialization of player's platform (width, speed)
-		switch (gameState_.getCurrentDiffLvl()) {
-		case DifficultyLevel::Easy: {
-			platform_.init(140, 200.f);
-			ball_.init();
-			break;
-		}
-		case DifficultyLevel::Medium: {
-			platform_.init(100, 200.f);
-			ball_.init();
-			break;
-		}
-		case DifficultyLevel::Hard: {
-			platform_.init(60, 200.f);
-			ball_.init();
-			break;
-		}
-		}
+		// Initialization of the game field
+		gameField_.init();
 	}
 
 	// Update menu states, it works only with Event
@@ -155,9 +136,8 @@ namespace ArkanoidGame {
 		if (gameState_.getCurrentGameState() == GameStateType::Game) {
 
 			// Update main game process
-			platform_.move(deltaTime);
-			ball_.move(deltaTime);
-
+			gameField_.update(deltaTime);
+			
 			// Pause menu maker
 			ExitInPauseMenu(gameState_);
 
@@ -212,7 +192,7 @@ namespace ArkanoidGame {
 			break;
 		}
 		case GameStateType::Pause: {
-			window_.draw(gameBackSprite_);
+			gameField_.draw();
 			pauseMenu_.draw();
 			break;
 		}
@@ -221,37 +201,28 @@ namespace ArkanoidGame {
 			break;
 		}
 		case GameStateType::GameOver: {
-			window_.draw(gameBackSprite_);
+			gameField_.draw();
 			gameOverMenu_.draw();
 			leaderBoard_.drawShortBoard();
 			break;
 		}
 		case GameStateType::GameOverPopUp: {
-			window_.draw(gameBackSprite_);
+			gameField_.draw();
 			gameOverPopUp_.draw();
 			UI_.drawGameOver();
 			break;
 		}
 		case GameStateType::ChooseNameOfPlayer: {
-			window_.draw(gameBackSprite_);
+			gameField_.draw();
 			chooseName_.draw();
 			UI_.drawGameOver();
 			break;
 		}
 		case GameStateType::Game: {
-			window_.draw(gameBackSprite_);
-			platform_.draw();
-			ball_.draw();
+			gameField_.draw();
 			UI_.drawMain();
 			break;
 		}
 		}
-	}
-
-	void Game::initBackground() {
-		// Initialization of background of the game
-		gameBackSprite_.setTexture(resources_.gameBackground);
-		SetSpriteSize(gameBackSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
-		gameBackSprite_.setColor(gameBackColor_);
 	}
 }

@@ -17,7 +17,7 @@ namespace ArkanoidGame {
 
 		// Initialization of background of menu
 		backgroundSprite_.setTexture(resources_.mainMenuBackground);
-		SetSpriteSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
+		SetSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
 
 		// Initialization of name of a game
 		menuName_.setFont(resources_.font);

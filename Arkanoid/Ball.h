@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Resources.h"
-#include "Engine.h"
+#include "Math.h"
 
 namespace ArkanoidGame {
 
@@ -9,18 +9,26 @@ namespace ArkanoidGame {
 	public:
 		Ball(Resources& resources, sf::RenderWindow& window);
 
-		void init(float size = 20.f, float speed = 1000.f);
+		void init(float size = 20.f, float speed = 600.f);
 		void move(const float& deltaTime);
+		void changeAngle(float newAngle);
 		void draw();
 
+		float getSize() const;
+		float centerX() const;
+		float bottomY() const;
+		bool isOutOfPlayground() const;
+
 	private:
-		float size_ = 0;
-		float speed_ = 0;
+		float size_ = 0.f;
+		float speed_ = 0.f;
+		float angle_ = 0.f;
 
-		sf::Vector2f position_;
+		bool isOutOfPlayground_ = 0;
+
 		sf::Vector2f direction_;
+		sf::Vector2f position_;
 
-		sf::RectangleShape rectangle_;
 		sf::CircleShape circle_;
 
 		Resources& resources_;

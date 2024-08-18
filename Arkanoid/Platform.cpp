@@ -8,66 +8,61 @@ namespace ArkanoidGame {
 	resources_(resources), window_(window) {}
 
 	void Platform::init(int width, float speed) {
-		direction_ = PlatformDirection::None;
-
 		width_ = width;
 		speed_ = speed;
 
 		rectangle_.setSize(sf::Vector2f(width_, height_));
 		rectangle_.setFillColor(sf::Color::Cyan);
-		SetRectangleRelativeOrigin(rectangle_, 0.5f, 0.5f);
+		SetRelativeOrigin(rectangle_, 0.5f, 0.5f);
 
 		position_ = { resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - height_ };
 		rectangle_.setPosition(position_.x, position_.y);
 	}
 
 	void Platform::move(const float& deltaTime) {
-		// Change dirertion of platform
+		// Change "speed" direction of platform while player pressed key
 		if (sf::Keyboard::isKeyPressed(rightKey_)) {
 			if ((position_.x + rectangle_.getSize().x / 2.f) >= resources_.getWindowWidth()) {
-				direction_ = PlatformDirection::None;
+				// Stop platform
+				position_.x += speed_ * 0;
 			}
 			else {
-				direction_ = PlatformDirection::Right;
+				// Platform goes to right
+				position_.x += speed_ * deltaTime;
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(leftKey_)) {
 			if ((position_.x - rectangle_.getSize().x / 2.f) <= 0) {
-				direction_ = PlatformDirection::None;
+				// Stop platform
+				position_.x += speed_ * 0;
 			}
 			else {
-				direction_ = PlatformDirection::Left;
+				// Platform goes to left
+				position_.x -= speed_ * deltaTime;
 			}	
-		}
-
-		// Change platform's "speed" direction 
-		switch (direction_) {
-		case PlatformDirection::None: {
-			position_.x += speed_ * 0;
-			break;
-		}
-		case PlatformDirection::Right: {
-			position_.x += speed_ * deltaTime;
-			break;
-		}
-		case PlatformDirection::Left: {
-			position_.x -= speed_ * deltaTime;
-			break;
-		}
 		}
 
 		// Update platform's position
 		rectangle_.setPosition(position_.x, position_.y);
-
-		// Check collision with window's borders
-		if ((position_.x + rectangle_.getSize().x / 2.f) >= resources_.getWindowWidth() ||
-			(position_.x - rectangle_.getSize().x / 2.f) <= 0) {
-		
-			direction_ = PlatformDirection::None;
-		}
 	}
 
 	void Platform::draw() {
 		window_.draw(rectangle_);
+	}
+
+	float Platform::centerX() const {
+		return position_.x;
+	}
+
+	float Platform::topLeftX() const {
+		return position_.x - (width_ / 2.f);
+	}
+
+	float Platform::topRightX() const {
+		return position_.x + (width_ / 2.f);
+	}
+
+	float Platform::topY() const {
+		return position_.y - (height_ / 2.f);
 	}
 }

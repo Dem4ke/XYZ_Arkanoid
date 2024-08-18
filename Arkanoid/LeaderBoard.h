@@ -5,6 +5,7 @@
 
 #include "GameStates.h"
 #include "Resources.h"
+#include "Math.h"
 
 namespace ArkanoidGame {
 
