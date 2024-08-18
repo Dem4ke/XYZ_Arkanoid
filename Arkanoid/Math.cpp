@@ -4,8 +4,8 @@ namespace ArkanoidGame {
 	bool IsCircleAndRectangleCollide(float radius, float circusCenterX, float circusBottomY, 
 									 float rectTopLeftX, float rectTopRightX, float rectTopY) {
 		if (circusBottomY >= rectTopY) {
-			if ((circusCenterX ) >= rectTopLeftX &&
-				(circusCenterX ) <= rectTopRightX) {
+			if ((circusCenterX + radius) >= rectTopLeftX &&
+				(circusCenterX - radius) <= rectTopRightX) {
 
 				return true;
 			}
