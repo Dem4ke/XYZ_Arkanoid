@@ -34,19 +34,16 @@ namespace ArkanoidGame {
 
 	void GameField::update(const float& deltaTime) {
 		// Platform and ball movement
-		platform_.move(deltaTime);
-		ball_.move(deltaTime);
+		platform_.update(deltaTime);
+		ball_.update(deltaTime);
 		
 		// Check collision between ball and platform
 		if (IsCircleAndRectangleCollide(ball_.getSize() / 2.f, ball_.centerX(), ball_.bottomY(), 
 										platform_.topLeftX(), platform_.topRightX(), platform_.topY())) {
 			// Find relative place of collide (-1 is left corner, 1 is right corner)
-			float collidePlace = ball_.centerX() < platform_.centerX() ? 
-							   - ball_.centerX() / (platform_.topLeftX() + platform_.centerX()) :
-								 ball_.centerX() / (platform_.centerX() + platform_.topRightX());
+			float collidePlace = (ball_.centerX() - (platform_.topLeftX() + platform_.getWidth() / 2)) / platform_.getWidth() / 2;
 
-
-			float newAngle = 90 - 20 * collidePlace;
+			float newAngle = 90.f - 120.f * collidePlace;
 			ball_.changeAngle(newAngle);
 			HitSound(resources_);
 		}

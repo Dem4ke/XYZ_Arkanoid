@@ -16,7 +16,7 @@ namespace ArkanoidGame {
 		circle_.setFillColor(sf::Color::White);
 		SetRelativeOrigin(circle_, 0.5f, 0.5f);
 
-		// Set started direction of ball
+		// Set started direction of ball (unit vector)
 		const float pi = std::acos(-1.f);
 		direction_.x = std::cos(pi / 180.f * angle_);
 		direction_.y = std::sin(pi / 180.f * angle_);
@@ -26,7 +26,7 @@ namespace ArkanoidGame {
 		circle_.setPosition(position_.x, position_.y);
 	}
 
-	void Ball::move(const float& deltaTime) {
+	void Ball::update(const float& deltaTime) {
 		// Calculate new position of ball
 		position_ += (speed_ * deltaTime * direction_);	
 		circle_.setPosition(position_);
@@ -48,8 +48,9 @@ namespace ArkanoidGame {
 	}
 
 	void Ball::changeAngle(float newAngle) {
+		// Change direction vector
 		const auto pi = std::acos(-1.f);
-		direction_.x = (newAngle / abs(newAngle)) * std::cos(pi / 180.f * newAngle);
+		direction_.x = (newAngle / abs(newAngle)) * std::cos(pi / 180.f * newAngle);;
 		direction_.y = -1 * abs(std::sin(pi / 180.f * newAngle));
 	}
 

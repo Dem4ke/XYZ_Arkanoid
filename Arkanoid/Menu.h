@@ -46,7 +46,7 @@ namespace ArkanoidGame {
 	};
 
 	// Options menu
-	class OptionsMenu : public Menu {
+	class OptionsMenu final : public Menu {
 	public:
 		OptionsMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~OptionsMenu() {}
@@ -58,7 +58,7 @@ namespace ArkanoidGame {
 	};
 
 	// Menu of choice difficulty of levels
-	class DifficultyLevelMenu : public Menu {
+	class DifficultyLevelMenu final : public Menu {
 	public:
 		DifficultyLevelMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~DifficultyLevelMenu() {}
@@ -67,7 +67,7 @@ namespace ArkanoidGame {
 	};
 
 	// Menu to change window's size
-	class WindowEditMenu : public Menu {
+	class WindowEditMenu final : public Menu {
 	public:
 		WindowEditMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~WindowEditMenu() {}
@@ -76,7 +76,7 @@ namespace ArkanoidGame {
 	};
 
 	// Menu to exit from game
-	class ExitMenu : public Menu {
+	class ExitMenu final : public Menu {
 	public:
 		ExitMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~ExitMenu() {}
@@ -85,7 +85,7 @@ namespace ArkanoidGame {
 	};
 
 	// Menu of pause
-	class PauseMenu : public Menu {
+	class PauseMenu final : public Menu {
 	public:
 		PauseMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~PauseMenu() {}
@@ -94,7 +94,7 @@ namespace ArkanoidGame {
 	};
 
 	// Menu of game over
-	class GameOver : public Menu {
+	class GameOver final : public Menu {
 	public:
 		GameOver(Resources& resources, GameState& gameState, sf::RenderWindow& window);
 		virtual ~GameOver() {}

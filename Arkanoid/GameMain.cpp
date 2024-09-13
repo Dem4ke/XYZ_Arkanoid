@@ -6,7 +6,7 @@ int main() {
 
 	// Game initialization
 	ArkanoidGame::Resources resources{ 800.f, 600.f };
-	sf::RenderWindow window(sf::VideoMode(resources.getWindowWidth(), resources.getWindowHeight()), "Snake Game!");
+	sf::RenderWindow window(sf::VideoMode(resources.getWindowWidth(), resources.getWindowHeight()), "Arcanoid!");
 
 	ArkanoidGame::Game game{ resources, window };
 

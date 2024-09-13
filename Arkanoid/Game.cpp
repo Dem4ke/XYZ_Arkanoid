@@ -30,7 +30,7 @@ namespace ArkanoidGame {
 
 		// Menu initialization (Name of menu, vector of buttons, size of buttons (40.f by default), color of buttons (white by default))
 		// Name of menu will be in 1.5 bigger, id of menu needs for choose of background
-		mainMenu_.init("Snake Game", mainButtons);
+		mainMenu_.init("Arcanoid", mainButtons);
 		difficultyLevelMenu_.init("Difficulity level", dufficulityLevelButtons);
 		optionsMenu_.init("Options", optionsButtons);
 		windowEditMenu_.init("Edit window size", windowEditButtons);

@@ -1,26 +1,29 @@
 #pragma once
 
+#include "GameObject.h"
 #include "Resources.h"
 #include "Math.h"
 
 namespace ArkanoidGame {
 
-	class Platform {
+	class Platform final : public GameObject {
 	public:
 		Platform(Resources& resources, sf::RenderWindow& window);
+		virtual ~Platform() {}
 
-		void init(int width, float speed);
-		void move(const float& deltaTime);
-		void draw();
+		void init(float size, float speed) override;
+		void update(const float& deltaTime) override;
+		void draw() override;
 
+		float getWidth() const;
 		float centerX() const;
 		float topLeftX() const;
 		float topRightX() const;
 		float topY() const;
 
 	private:
-		int width_ = 0;
-		const int height_ = 20;
+		float width_ = 0.f;
+		const float height_ = 20.f;
 		float speed_ = 0.f;
 
 		sf::Vector2f position_;
