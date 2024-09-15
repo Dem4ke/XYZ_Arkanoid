@@ -1,29 +1,42 @@
 #include "GameField.h"
 
+
 namespace ArkanoidGame {
 	GameField::GameField(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
-		resources_(resources), gameState_(gameState), window_(window), 
-		ball_(resources, window), platform_(resources, window) {}
+		resources_(resources), gameState_(gameState), window_(window) {}
+
+	GameField::~GameField() {}
 
 	void GameField::init() {
 		// Initialization of player's platform (width, speed) 
 		// Initialization of ball (size, speed)
 		switch (gameState_.getCurrentDiffLvl()) {
 		case DifficultyLevel::Easy: {
-			platform_.init(140, 500.f);
-			ball_.init();
+			// Platform initialization
+			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
+			objects_[0]->init(140.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
 		case DifficultyLevel::Medium: {
-			platform_.init(100, 550.f);
-			ball_.init();
+			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
+			objects_[0]->init(120.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
 		case DifficultyLevel::Hard: {
-			platform_.init(60, 600.f);
-			ball_.init();
+			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
+			objects_[0]->init(100.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
+		}
+
+		// Ball initialization
+		objects_.emplace_back(std::make_shared<Ball>(resources_, window_));
+		objects_[1]->init(20.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f));
+
+		// Blocks initialization
+		for (int i = 0; i < 20; ++i) {
+			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
+			//blocks_[i]->init();
 		}
 
 		// Initialization of background of the game
@@ -32,24 +45,36 @@ namespace ArkanoidGame {
 		gameBackSprite_.setColor(gameBackColor_);
 	}
 
+	void GameField::reset() {
+		objects_.clear();
+		init();
+	}
+
 	void GameField::update(const float& deltaTime) {
-		// Platform and ball movement
-		platform_.update(deltaTime);
-		ball_.update(deltaTime);
+		// All game objects updates
+		static auto updateFunctor = [deltaTime](auto obj) { 
+			obj->update(deltaTime); 
+		};
+
+		std::for_each(objects_.begin(), objects_.end(), updateFunctor);
+		std::for_each(blocks_.begin(), blocks_.end(), updateFunctor);
+
+		std::shared_ptr <Platform> platform = std::static_pointer_cast<Platform>(objects_[0]);
+		std::shared_ptr<Ball> ball = std::static_pointer_cast<Ball>(objects_[1]);
 		
 		// Check collision between ball and platform
-		if (IsCircleAndRectangleCollide(ball_.getSize() / 2.f, ball_.centerX(), ball_.bottomY(), 
-										platform_.topLeftX(), platform_.topRightX(), platform_.topY())) {
+		if (IsCircleAndRectangleCollide(ball->getSize() / 2.f, ball->centerX(), ball->bottomY(), 
+										platform->topLeftX(), platform->topRightX(), platform->topY())) {
 			// Find relative place of collide (-1 is left corner, 1 is right corner)
-			float collidePlace = (ball_.centerX() - (platform_.topLeftX() + platform_.getWidth() / 2)) / platform_.getWidth() / 2;
+			float collidePlace = (ball->centerX() - (platform->topLeftX() + platform->getWidth() / 2)) / platform->getWidth() / 2;
 
 			float newAngle = 90.f - 120.f * collidePlace;
-			ball_.changeAngle(newAngle);
+			ball->changeAngle(newAngle);
 			HitSound(resources_);
 		}
 
 		// Check is ball in playground
-		else if (ball_.isOutOfPlayground()) {
+		else if (ball->isOutOfPlayground()) {
 			gameState_.pushGameState(GameStateType::GameOverPopUp);
 			GameOverSound(resources_);
 		}
@@ -58,7 +83,11 @@ namespace ArkanoidGame {
 	void GameField::draw() {
 		window_.draw(gameBackSprite_);
 
-		platform_.draw();
-		ball_.draw();
+		static auto drawFunctor = [](auto obj) {
+			obj->draw();
+		};
+
+		std::for_each(objects_.begin(), objects_.end(), drawFunctor);
+		std::for_each(blocks_.begin(), blocks_.end(), drawFunctor);
 	}
 }

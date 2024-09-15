@@ -2,6 +2,7 @@
 
 #include "GameStates.h"
 #include "Ball.h"
+#include "Block.h"
 #include "Platform.h"
 
 namespace ArkanoidGame {
@@ -9,8 +10,10 @@ namespace ArkanoidGame {
 	class GameField {
 	public:
 		GameField(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		~GameField();
 
 		void init();
+		void reset();
 		void update(const float& deltaTime);
 		void draw();
 
@@ -19,8 +22,8 @@ namespace ArkanoidGame {
 		GameState& gameState_;
 		sf::RenderWindow& window_;
 
-		Ball ball_;
-		Platform platform_;
+		std::vector<std::shared_ptr<GameObject>> objects_;
+		std::vector<std::shared_ptr<Block>> blocks_;
 
 		sf::Sprite gameBackSprite_;
 		sf::Color gameBackColor_ = sf::Color::Blue;

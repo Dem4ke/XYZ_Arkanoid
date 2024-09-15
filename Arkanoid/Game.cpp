@@ -82,7 +82,7 @@ namespace ArkanoidGame {
 		chooseName_.reset();
 
 		// Initialization of the game field
-		gameField_.init();
+		gameField_.reset();
 	}
 
 	// Update menu states, it works only with Event

@@ -7,20 +7,20 @@ namespace ArkanoidGame {
 	Platform::Platform(Resources& resources, sf::RenderWindow& window) :
 		resources_(resources), window_(window) {}
 
-	void Platform::init(float width, float speed) {
-		width_ = width;
+	void Platform::init(float size, float speed, sf::Vector2f position) {
+		width_ = size;
 		speed_ = speed;
 
 		rectangle_.setSize(sf::Vector2f(width_, height_));
 		rectangle_.setFillColor(sf::Color::Cyan);
 		SetRelativeOrigin(rectangle_, 0.5f, 0.5f);
 
-		position_ = { resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - height_ };
+		position_ = position;
 		rectangle_.setPosition(position_.x, position_.y);
 	}
 
 	void Platform::update(const float& deltaTime) {
-		// Change "speed" direction of platform while player pressed key
+		// Change velocity direction of platform while player pressed key
 		if (sf::Keyboard::isKeyPressed(rightKey_)) {
 			if ((position_.x + rectangle_.getSize().x / 2.f) >= resources_.getWindowWidth()) {
 				// Stop platform
@@ -52,6 +52,10 @@ namespace ArkanoidGame {
 
 	float Platform::getWidth() const {
 		return width_;
+	}
+
+	float Platform::getHeight() const {
+		return height_;
 	}
 
 	float Platform::centerX() const {

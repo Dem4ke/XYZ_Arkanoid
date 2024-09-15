@@ -10,7 +10,7 @@ namespace ArkanoidGame {
 	public:
 		Ball(Resources& resources, sf::RenderWindow& window);
 
-		void init(float size = 20.f, float speed = 600.f) override;
+		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;
 		void changeAngle(float newAngle);
 		void draw() override;

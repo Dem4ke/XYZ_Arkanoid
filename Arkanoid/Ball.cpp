@@ -5,7 +5,7 @@ namespace ArkanoidGame {
 	Ball::Ball(Resources& resources, sf::RenderWindow& window) :
 		resources_(resources), window_(window) {}
 
-	void Ball::init(float size, float speed) {
+	void Ball::init(float size, float speed, sf::Vector2f position) {
 		size_ = size;
 		speed_ = speed;
 		angle_ = -90.f;
@@ -22,7 +22,7 @@ namespace ArkanoidGame {
 		direction_.y = std::sin(pi / 180.f * angle_);
 
 		// Set start position
-		position_ = { resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f };
+		position_ = position;
 		circle_.setPosition(position_.x, position_.y);
 	}
 

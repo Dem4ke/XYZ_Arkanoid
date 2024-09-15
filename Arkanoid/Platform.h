@@ -11,11 +11,12 @@ namespace ArkanoidGame {
 		Platform(Resources& resources, sf::RenderWindow& window);
 		virtual ~Platform() {}
 
-		void init(float size, float speed) override;
+		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;
 		void draw() override;
 
 		float getWidth() const;
+		float getHeight() const;
 		float centerX() const;
 		float topLeftX() const;
 		float topRightX() const;

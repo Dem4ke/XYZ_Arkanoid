@@ -10,13 +10,16 @@ namespace ArkanoidGame {
 		Block(Resources& resources, sf::RenderWindow& window);
 		virtual ~Block() {}
 
-		void init(float size, float speed) override;
+		void init(float size, float speed = 0, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;
 		void draw() override;
 
 	private:
-		sf::Vector2f position_;
+		float width_ = 0.f;
+		float height_ = 0.f;
+		bool isCrashed_ = false;
 
+		sf::Vector2f position_;
 		sf::Sprite sprite_;
 
 		Resources& resources_;
