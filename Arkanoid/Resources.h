@@ -22,6 +22,7 @@ namespace ArkanoidGame {
 
 		sf::Texture mainMenuBackground;
 		sf::Texture gameBackground;
+		sf::Texture normalBlock;
 
 		sf::SoundBuffer menuMove;
 		sf::SoundBuffer gameOverSound;

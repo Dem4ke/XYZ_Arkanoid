@@ -5,14 +5,22 @@
 #include "Math.h"
 
 namespace ArkanoidGame {
+
 	class Block : public GameObject {
 	public:
 		Block(Resources& resources, sf::RenderWindow& window);
 		virtual ~Block() {}
 
-		void init(float size, float speed = 0, sf::Vector2f position) override;
+		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;
 		void draw() override;
+
+		int checkCollide(GameObject& object);
+
+		float getOriginX() const override;
+		float getOriginY() const override;
+		float getWidth() const override;
+		float getHeight() const override;
 
 	private:
 		float width_ = 0.f;
@@ -20,7 +28,7 @@ namespace ArkanoidGame {
 		bool isCrashed_ = false;
 
 		sf::Vector2f position_;
-		sf::Sprite sprite_;
+		sf::RectangleShape rectangle_;
 
 		Resources& resources_;
 		sf::RenderWindow& window_;

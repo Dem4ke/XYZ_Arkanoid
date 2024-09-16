@@ -15,12 +15,10 @@ namespace ArkanoidGame {
 		void update(const float& deltaTime) override;
 		void draw() override;
 
-		float getWidth() const;
-		float getHeight() const;
-		float centerX() const;
-		float topLeftX() const;
-		float topRightX() const;
-		float topY() const;
+		float getOriginX() const override;
+		float getOriginY() const override;
+		float getWidth() const override;
+		float getHeight() const override;
 
 	private:
 		float width_ = 0.f;

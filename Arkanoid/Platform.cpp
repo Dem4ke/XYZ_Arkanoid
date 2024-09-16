@@ -50,27 +50,19 @@ namespace ArkanoidGame {
 		window_.draw(rectangle_);
 	}
 
+	float Platform::getOriginX() const {
+		return position_.x;
+	}
+
+	float Platform::getOriginY() const {
+		return position_.y;
+	}
+
 	float Platform::getWidth() const {
 		return width_;
 	}
 
 	float Platform::getHeight() const {
 		return height_;
-	}
-
-	float Platform::centerX() const {
-		return position_.x;
-	}
-
-	float Platform::topLeftX() const {
-		return position_.x - (width_ / 2.f);
-	}
-
-	float Platform::topRightX() const {
-		return position_.x + (width_ / 2.f);
-	}
-
-	float Platform::topY() const {
-		return position_.y - (height_ / 2.f);
 	}
 }

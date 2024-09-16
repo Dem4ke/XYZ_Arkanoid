@@ -9,15 +9,21 @@ namespace ArkanoidGame {
 	class Ball final : public GameObject {
 	public:
 		Ball(Resources& resources, sf::RenderWindow& window);
+		virtual ~Ball() {}
 
 		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;
 		void changeAngle(float newAngle);
 		void draw() override;
 
-		float getSize() const;
-		float centerX() const;
-		float bottomY() const;
+		void changeX();
+		void changeY();
+
+		float getOriginX() const override;
+		float getOriginY() const override;
+		float getWidth() const override;
+		float getHeight() const override;
+
 		bool isOutOfPlayground() const;
 
 	private:

@@ -33,13 +33,11 @@ namespace ArkanoidGame {
 
 		// Check collision with window's borders
 		if (position_.x - size_ / 2.f < 0 || position_.x + size_ / 2.f > resources_.getWindowWidth()) {
-			direction_.x *= -1;
-			HitSound(resources_);
+			changeX();
 		}
 		
 		if (position_.y - size_ / 2.f < 0) {
-			direction_.y *= -1;
-			HitSound(resources_);
+			changeY();
 		}
 		
 		if (position_.y + size_ / 2.f > resources_.getWindowHeight()) {
@@ -58,16 +56,30 @@ namespace ArkanoidGame {
 		window_.draw(circle_);
 	}
 
-	float Ball::getSize() const{
-		return size_;
+	void Ball::changeX() {
+		direction_.x *= -1;
+		HitSound(resources_);
 	}
 
-	float Ball::centerX() const {
+	void Ball::changeY() {
+		direction_.y *= -1;
+		HitSound(resources_);
+	}
+
+	float Ball::getOriginX() const {
 		return position_.x;
 	}
 
-	float Ball::bottomY() const {
-		return position_.y + (size_ / 2.f);
+	float Ball::getOriginY() const {
+		return position_.y;
+	}
+
+	float Ball::getWidth() const {
+		return size_;
+	}
+
+	float Ball::getHeight() const {
+		return size_;
 	}
 
 	bool Ball::isOutOfPlayground() const { return isOutOfPlayground_; }

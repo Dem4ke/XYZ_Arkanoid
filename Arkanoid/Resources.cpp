@@ -11,7 +11,7 @@ namespace ArkanoidGame {
 
 	// Load texures from resources path
 	void Resources::setTextures() {
-
+		assert(mainMenuBackground.loadFromFile(resourcesPath_ + texturesPath_ + "block.png"));
 	}
 
 	// Loads backgrounds from resources path
