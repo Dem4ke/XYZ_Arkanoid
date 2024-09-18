@@ -4,7 +4,6 @@
 
 namespace ArkanoidGame {
 
-	bool IsCircleAndRectangleCollide(float radius, float circusCenterX, float circusBottomY, float rectTopLeftX, float rectTopRightX, float rectTopY);
 	sf::Color getRandomColor();
 
 	// Sprites and rectangles

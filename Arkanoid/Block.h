@@ -15,7 +15,7 @@ namespace ArkanoidGame {
 		void update(const float& deltaTime) override;
 		void draw() override;
 
-		int checkCollide(GameObject& object);
+		int checkCollide(std::shared_ptr<GameObject> object) override;
 
 		float getOriginX() const override;
 		float getOriginY() const override;

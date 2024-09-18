@@ -12,6 +12,8 @@ namespace ArkanoidGame {
 		virtual void update(const float& deltaTime) = 0;
 		virtual void draw() = 0;
 
+		virtual int checkCollide(std::shared_ptr<GameObject> object) = 0;
+
 		virtual float getOriginX() const = 0;
 		virtual float getOriginY() const = 0;
 		virtual float getWidth() const = 0;

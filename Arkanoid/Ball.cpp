@@ -66,6 +66,10 @@ namespace ArkanoidGame {
 		HitSound(resources_);
 	}
 
+	int Ball::checkCollide(std::shared_ptr<GameObject> object) {
+		return 0;
+	}
+
 	float Ball::getOriginX() const {
 		return position_.x;
 	}

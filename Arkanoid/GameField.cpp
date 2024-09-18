@@ -34,9 +34,13 @@ namespace ArkanoidGame {
 		objects_[1]->init(20.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f));
 
 		// Blocks initialization
-		for (int i = 0; i < 10; ++i) {
+		for (int i = 0; i < 8; ++i) {
 			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
-			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 80.f, 60.f));
+			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 90.f + 40.f, 60.f));
+		}
+		for (int i = 0; i < 8; ++i) {
+			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
+			blocks_[i + 8]->init(20.f, 0, sf::Vector2f(i * 90.f + 40.f, 85.f));
 		}
 
 		// Initialization of background of the game
@@ -58,15 +62,32 @@ namespace ArkanoidGame {
 		};
 
 		std::for_each(objects_.begin(), objects_.end(), updateFunctor);
+		std::for_each(blocks_.begin(), blocks_.end(), updateFunctor);
 
-		std::shared_ptr <Platform> platform = std::static_pointer_cast<Platform>(objects_[0]);
+		std::shared_ptr<Platform> platform = std::static_pointer_cast<Platform>(objects_[0]);
 		std::shared_ptr<Ball> ball = std::static_pointer_cast<Ball>(objects_[1]);
+
+		// Check collision between ball and blocks
+		for (int i = 0; i < blocks_.size(); ++i) {
+			if (blocks_[i]->checkCollide(ball) == 1) {
+				ball->changeY();
+				blocks_.erase(blocks_.cbegin() + i);
+			}
+			else if (blocks_[i]->checkCollide(ball) == 2) {
+				ball->changeX();
+				blocks_.erase(blocks_.cbegin() + i);
+			}
+			else if (blocks_[i]->checkCollide(ball) == 3) {
+				ball->changeX();
+				ball->changeY();
+				blocks_.erase(blocks_.cbegin() + i);
+			}
+		}
 		
 		// Check collision between ball and platform
-		if (IsCircleAndRectangleCollide(ball->getSize() / 2.f, ball->centerX(), ball->bottomY(), 
-										platform->topLeftX(), platform->topRightX(), platform->topY())) {
+		if (platform->checkCollide(ball) == 1) {
 			// Find relative place of collide (-1 is left corner, 1 is right corner)
-			float collidePlace = (ball->centerX() - (platform->topLeftX() + platform->getWidth() / 2)) / platform->getWidth() / 2;
+			float collidePlace = (ball->getOriginX() - platform->getOriginX()) / platform->getWidth() / 2;
 
 			float newAngle = 90.f - 120.f * collidePlace;
 			ball->changeAngle(newAngle);
