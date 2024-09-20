@@ -47,8 +47,8 @@ namespace ArkanoidGame {
 			return triangleArea * 2.f / baseLenght;
 		};
 		
-		if ((object->getOriginX() > getOriginX() - getWidth() / 2.f) &&
-			(object->getOriginX() < getOriginX() + getWidth() / 2.f)) {
+		if ((object->getOriginX() + (object->getWidth() / 2.f) * 0.85f > getOriginX() - getWidth() / 2.f) &&
+			(object->getOriginX() - (object->getWidth() / 2.f) * 0.85f < getOriginX() + getWidth() / 2.f)) {
 
 			float area1 = triangleArea(object->getOriginX(), object->getOriginY(),
 				getOriginX() - getWidth() / 2.f, getOriginY() + getHeight() / 2.f,
@@ -63,8 +63,8 @@ namespace ArkanoidGame {
 
 			yNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
 		}
-		else if ((object->getOriginY() > getOriginY() - getHeight() / 2.f) &&
-				 (object->getOriginY() < getOriginY() + getHeight() / 2.f)) {
+		else if ((object->getOriginY() + (object->getHeight() / 2.f) * 0.85f > getOriginY() - getHeight() / 2.f) &&
+				 (object->getOriginY() - (object->getHeight() / 2.f) * 0.85f < getOriginY() + getHeight() / 2.f)) {
 
 			float area1 = triangleArea(object->getOriginX(), object->getOriginY(),
 				getOriginX() - getWidth() / 2.f, getOriginY() - getHeight() / 2.f,
@@ -80,11 +80,11 @@ namespace ArkanoidGame {
 			xNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
 		}
 
-		if (yNormal <= object->getWidth() / 2.f) {
+		if (yNormal < object->getWidth() / 2.f) {
 			isCrashed_ = true;
 			return 1;
 		}
-		else if (xNormal <= object->getWidth() / 2.f) {
+		else if (xNormal < object->getWidth() / 2.f) {
 			isCrashed_ = true;
 			return 2;
 		}

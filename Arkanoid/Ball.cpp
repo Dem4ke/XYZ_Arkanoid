@@ -56,6 +56,14 @@ namespace ArkanoidGame {
 		window_.draw(circle_);
 	}
 
+	void Ball::needToChangeX() {
+		isNeedToChangeX_ = true;
+	}
+
+	void Ball::needToChangeY() {
+		isNeedToChangeY_ = true;
+	}
+
 	void Ball::changeX() {
 		direction_.x *= -1;
 		HitSound(resources_);
@@ -64,6 +72,19 @@ namespace ArkanoidGame {
 	void Ball::changeY() {
 		direction_.y *= -1;
 		HitSound(resources_);
+	}
+
+	int Ball::changedWay() {
+		if (isNeedToChangeY_) {
+			isNeedToChangeY_ = false;
+			return 1;
+		}
+		else if (isNeedToChangeX_) {
+			isNeedToChangeX_ = false;
+			return 2;
+		}
+
+		return 0;
 	}
 
 	int Ball::checkCollide(std::shared_ptr<GameObject> object) {

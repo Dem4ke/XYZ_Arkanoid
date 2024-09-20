@@ -70,8 +70,8 @@ namespace ArkanoidGame {
 			return triangleArea * 2.f / baseLenght;
 		};
 
-		if ((object->getOriginX() + object->getWidth() / 3.f > getOriginX() - getWidth() / 2.f) &&
-			(object->getOriginX() - object->getWidth() / 3.f < getOriginX() + getWidth() / 2.f)) {
+		if ((object->getOriginX() + (object->getWidth() / 2.f) * 0.85f > getOriginX() - getWidth() / 2.f) &&
+			(object->getOriginX() - (object->getWidth() / 2.f) * 0.85f < getOriginX() + getWidth() / 2.f)) {
 
 			float area1 = triangleArea(object->getOriginX(), object->getOriginY(),
 				getOriginX() - getWidth() / 2.f, getOriginY() + getHeight() / 2.f,

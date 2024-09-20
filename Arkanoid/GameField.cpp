@@ -36,11 +36,15 @@ namespace ArkanoidGame {
 		// Blocks initialization
 		for (int i = 0; i < 8; ++i) {
 			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
-			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 90.f + 40.f, 60.f));
+			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 100.f + 40.f, 60.f));
+		}
+		for (int i = 0; i < 6; ++i) {
+			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
+			blocks_[i + 8]->init(20.f, 0, sf::Vector2f(i * 120.f + 100.f, 100.f));
 		}
 		for (int i = 0; i < 8; ++i) {
 			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
-			blocks_[i + 8]->init(20.f, 0, sf::Vector2f(i * 90.f + 40.f, 85.f));
+			blocks_[i + 14]->init(20.f, 0, sf::Vector2f(i * 100.f + 40.f, 140.f));
 		}
 
 		// Initialization of background of the game
@@ -70,20 +74,26 @@ namespace ArkanoidGame {
 		// Check collision between ball and blocks
 		for (int i = 0; i < blocks_.size(); ++i) {
 			if (blocks_[i]->checkCollide(ball) == 1) {
-				ball->changeY();
+				ball->needToChangeY();
 				blocks_.erase(blocks_.cbegin() + i);
 			}
 			else if (blocks_[i]->checkCollide(ball) == 2) {
-				ball->changeX();
-				blocks_.erase(blocks_.cbegin() + i);
-			}
-			else if (blocks_[i]->checkCollide(ball) == 3) {
-				ball->changeX();
-				ball->changeY();
+				ball->needToChangeX();
 				blocks_.erase(blocks_.cbegin() + i);
 			}
 		}
-		
+
+		switch (ball->changedWay()) {
+		case 1: {
+			ball->changeY();
+			break;
+		}
+		case 2: {
+			ball->changeX();
+			break;
+		}
+		}
+
 		// Check collision between ball and platform
 		if (platform->checkCollide(ball) == 1) {
 			// Find relative place of collide (-1 is left corner, 1 is right corner)
@@ -98,6 +108,12 @@ namespace ArkanoidGame {
 		else if (ball->isOutOfPlayground()) {
 			gameState_.pushGameState(GameStateType::GameOverPopUp);
 			GameOverSound(resources_);
+		}
+
+		// Check is blocks over
+		if (blocks_.size() == 0) {
+			gameState_.pushGameState(GameStateType::GameWin);
+			GameWinSound(resources_);
 		}
 	}
 

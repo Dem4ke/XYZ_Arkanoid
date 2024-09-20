@@ -49,6 +49,7 @@ namespace ArkanoidGame {
 	void MenuMovementSound(Resources& resources);
 	void HitSound(Resources& resources);
 	void GameOverSound(Resources& resources);
+	void GameWinSound(Resources& resources);
 	void SoundOfChoose(Resources& resources);
 	void PlayBackMusic(Resources& resources);
 	void StopBackMusic(Resources& resources);

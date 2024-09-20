@@ -74,6 +74,11 @@ namespace ArkanoidGame {
 		resources.sound.play();
 	}
 
+	void GameWinSound(Resources& resources) {
+		resources.sound.setBuffer(resources.gameOverSound);
+		resources.sound.play();
+	}
+
 	// Init sound of a click on any button
 	void SoundOfChoose(Resources& resources) {
 		resources.sound.setBuffer(resources.soundOfChoose);

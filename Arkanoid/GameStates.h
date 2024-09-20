@@ -29,6 +29,7 @@ namespace ArkanoidGame {
 		ExitDialog,
 		PlayAgain,
 		GameOverPopUp,
+		GameWin,
 		ChooseNameOfPlayer,
 	};
 

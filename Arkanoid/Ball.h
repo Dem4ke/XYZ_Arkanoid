@@ -16,9 +16,12 @@ namespace ArkanoidGame {
 		void changeAngle(float newAngle);
 		void draw() override;
 
+		void needToChangeX();
+		void needToChangeY();
 		void changeX();
 		void changeY();
-
+		
+		int changedWay();
 		int checkCollide(std::shared_ptr<GameObject> object) override;
 
 		float getOriginX() const override;
@@ -33,7 +36,9 @@ namespace ArkanoidGame {
 		float speed_ = 0.f;
 		float angle_ = 0.f;
 
-		bool isOutOfPlayground_ = 0;
+		bool isNeedToChangeX_ = false;
+		bool isNeedToChangeY_ = false;
+		bool isOutOfPlayground_ = false;
 
 		sf::Vector2f direction_;
 		sf::Vector2f position_;	
