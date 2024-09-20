@@ -1,19 +1,21 @@
-#include "Menu.h"
+#include "MainMenu.h"
 
 namespace ArkanoidGame {
 
 	// MAIN MENU
 
-	Menu::Menu(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+	MainMenu::MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
 		resources_(resources), gameState_(gameState), window_(window) {}
 
+	MainMenu::~MainMenu() {}
+
 	// Initialization of all menu buttons
-	void Menu::init(std::string menuName, std::vector<std::string>& allButtons,
-		float buttonSize, sf::Color colorOfButtons) {
+	void MainMenu::init() {
+
+		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
 
 		float posX = resources_.getWindowWidth() / 2.f;
 		float posY = resources_.getWindowHeight() / 3.f;
-		mainButtonColor_ = colorOfButtons;
 
 		// Initialization of background of menu
 		backgroundSprite_.setTexture(resources_.mainMenuBackground);
@@ -49,14 +51,14 @@ namespace ArkanoidGame {
 	}
 
 	// Reset menu to default
-	void Menu::reset() {
+	void MainMenu::reset() {
 		// Set choosen button to first button
 		buttons_[selectedButton_].setFillColor(mainButtonColor_);
 		selectedButton_ = 0;
 		buttons_[selectedButton_].setFillColor(chosenButtonColor_);
 	}
 
-	void Menu::update(const sf::Event& event) {
+	void MainMenu::update(const sf::Event& event) {
 		if (event.type == sf::Event::KeyReleased) {
 			if (event.key.code == upKey_) {
 				moveUp();
@@ -93,7 +95,7 @@ namespace ArkanoidGame {
 		}
 	}
 
-	void Menu::draw() {
+	void MainMenu::draw() {
 		window_.draw(backgroundSprite_);
 		window_.draw(menuName_);
 		for (auto& i : buttons_) {
@@ -104,7 +106,7 @@ namespace ArkanoidGame {
 	//----------------------------------------------------------
 	// PRIVATE WORK TOOLS
 
-	void Menu::moveUp() {
+	void MainMenu::moveUp() {
 		if (selectedButton_ >= 0) {
 			buttons_[selectedButton_].setFillColor(mainButtonColor_);
 			--selectedButton_;
@@ -119,7 +121,7 @@ namespace ArkanoidGame {
 		}
 	}
 
-	void Menu::moveDown() {
+	void MainMenu::moveDown() {
 		size_t end = buttons_.size();
 
 		if (selectedButton_ <= end) {

@@ -8,8 +8,7 @@ namespace ArkanoidGame {
 	GameField::~GameField() {}
 
 	void GameField::init() {
-		// Initialization of player's platform (width, speed) 
-		// Initialization of ball (size, speed)
+		// Initialization of player's platform (width, speed, position on screen)
 		switch (gameState_.getCurrentDiffLvl()) {
 		case DifficultyLevel::Easy: {
 			// Platform initialization
@@ -29,11 +28,11 @@ namespace ArkanoidGame {
 		}
 		}
 
-		// Ball initialization
+		// Initialization of ball (size, speed, position on screen)
 		objects_.emplace_back(std::make_shared<Ball>(resources_, window_));
 		objects_[1]->init(20.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f));
 
-		// Blocks initialization
+		// Initialization of blocks (height (widht will be in 3 times bigger), speed = 0, position on screen)
 		for (int i = 0; i < 8; ++i) {
 			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
 			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 100.f + 40.f, 60.f));
@@ -112,7 +111,7 @@ namespace ArkanoidGame {
 
 		// Check is blocks over
 		if (blocks_.size() == 0) {
-			gameState_.pushGameState(GameStateType::GameWin);
+			gameState_.pushGameState(GameStateType::GameWinPopUp);
 			GameWinSound(resources_);
 		}
 	}

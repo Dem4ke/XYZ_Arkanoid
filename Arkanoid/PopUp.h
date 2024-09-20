@@ -77,4 +77,13 @@ namespace ArkanoidGame {
 
 		void update(const sf::Event& event) override;
 	};
+
+	// Game win pop up
+	class GameWinPopUp : public PopUp {
+	public:
+		GameWinPopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~GameWinPopUp() {}
+
+		void update(const sf::Event& event) override;
+	};
 }

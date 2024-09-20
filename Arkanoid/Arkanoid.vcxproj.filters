@@ -16,7 +16,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
+    <ClCompile Include="MainMenu.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
@@ -57,7 +57,7 @@
     <ClInclude Include="Game.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
+    <ClInclude Include="MainMenu.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
@@ -91,6 +91,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Block.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStatesData.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

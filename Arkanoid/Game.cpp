@@ -13,12 +13,12 @@ namespace ArkanoidGame {
 		leaderBoard_(resources, gameState_, window),
 		windowEditMenu_(resources, gameState_, window),
 		gameOverPopUp_(resources, gameState_, window),
+		gameWinPopUp_(resources, gameState_, window),
 		chooseName_(resources, gameState_, window, leaderBoard_),
 		UI_(resources, gameState_, window),
 		gameField_(resources, gameState_, window) {}
 
 	void Game::init() {
-		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
 		std::vector<std::string> dufficulityLevelButtons = { "Easy", "Medium", "Hard" };
 		std::vector<std::string> optionsButtons = { "Music: On", "Sounds: On", "Window size "};
 		std::vector<std::string> windowEditButtons = { "800 x 600", "1280 x 720", "1920 x 1080"};
@@ -26,10 +26,11 @@ namespace ArkanoidGame {
 		std::vector<std::string> pauseButtons = { "Yes", "No" };
 		std::vector<std::string> gameOverButtons = { "\n\n\n\n\n\n\n\nPlay again", "\n\n\n\n\n\n\n\nExit"};
 		std::vector<std::string> gameOverPopUpButtons = { "No", "Yes" };
+		std::vector<std::string> gameWinPopUpButtons = { "No", "Yes" };
 		std::vector<std::string> chooseNamePopUpButtons = { "\n\nEnter" };
 
 		// Menu initialization (Name of menu, vector of buttons, size of buttons (40.f by default), color of buttons (white by default))
-		// Name of menu will be in 1.5 bigger, id of menu needs for choose of background
+		// Name of menu will be in 1.5 times bigger, id of menu needs for choose of background
 		mainMenu_.init("Arcanoid", mainButtons);
 		difficultyLevelMenu_.init("Difficulity level", dufficulityLevelButtons);
 		optionsMenu_.init("Options", optionsButtons);
@@ -122,6 +123,10 @@ namespace ArkanoidGame {
 		}
 		case GameStateType::GameOverPopUp: {
 			gameOverPopUp_.update(event);
+			break;
+		}
+		case GameStateType::GameWinPopUp: {
+			gameWinPopUp_.update(event);
 			break;
 		}
 		case GameStateType::ChooseNameOfPlayer: {

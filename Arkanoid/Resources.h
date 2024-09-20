@@ -2,7 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <string>
 
 namespace ArkanoidGame {
 	class Resources {

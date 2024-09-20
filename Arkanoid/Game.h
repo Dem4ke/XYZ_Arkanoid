@@ -38,6 +38,7 @@ namespace ArkanoidGame {
 		LeaderBoard leaderBoard_;
 
 		GameOverPopUp gameOverPopUp_;
+		GameWinPopUp gameWinPopUp_;
 		ChooseNamePopUp chooseName_;
 
 		UI UI_;

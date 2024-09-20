@@ -247,4 +247,36 @@ namespace ArkanoidGame {
 			}
 		}
 	}
+
+	//----------------------------------------------------------
+	// GAME WIN POP UP
+
+	GameWinPopUp::GameWinPopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
+		PopUp(resources, gameState, window) {}
+
+
+	void GameWinPopUp::update(const sf::Event& event) {
+		if (event.type == sf::Event::KeyReleased) {
+			if (event.key.code == upKey_) {
+				moveUp();
+			}
+			else if (event.key.code == downKey_) {
+				moveDown();
+			}
+			else if (event.key.code == enterKey_) {
+				if (selectedButton_ == 0) {
+					gameState_.pushGameState(GameStateType::GameOver);
+					SoundOfChoose(resources_);
+				}
+				else if (selectedButton_ == 1) {
+					gameState_.pushGameState(GameStateType::ChooseNameOfPlayer);
+					SoundOfChoose(resources_);
+				}
+			}
+			else if (event.key.code == escapeKey_) {
+				gameState_.pushGameState(GameStateType::GameOver);
+				SoundOfChoose(resources_);
+			}
+		}
+	}
 }
