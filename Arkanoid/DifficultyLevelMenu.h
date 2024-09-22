@@ -4,12 +4,12 @@
 #include "Resources.h"
 #include "Math.h"
 
-namespace ArkanoidGame { 
-	// Start menu
-	class MainMenu final : public IMenu {
+namespace ArkanoidGame {
+	// Menu of choice difficulty of the game
+	class DifficultyLevelMenu final : public IMenu {
 	public:
-		MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~MainMenu();
+		DifficultyLevelMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~DifficultyLevelMenu();
 
 		void init() override;
 		void reset() override;

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "GameStates.h"
 
 namespace ArkanoidGame {
-	class GameStatesData {
+	class IMenu {
 	public:
-		virtual ~GameStatesData() = default;
+		virtual ~IMenu() = default;
 
 		virtual void init() = 0;
 		virtual void reset() = 0;
@@ -15,14 +16,6 @@ namespace ArkanoidGame {
 	protected:
 		virtual void moveUp() = 0;
 		virtual void moveDown() = 0;
-
-		int selectedButton_ = 0;
-
-		std::vector<sf::Text> buttons_;
-		sf::Text menuName_;
-
-		sf::Color mainButtonColor_ = sf::Color::White;
-		sf::Color chosenButtonColor_ = sf::Color::Blue;
 
 		sf::Sprite backgroundSprite_;
 

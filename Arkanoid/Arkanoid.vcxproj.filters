@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{665fbae8-b648-47cd-86e7-e43a95895fa9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Sources">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{665fbae8-b648-47cd-86e7-e43a95895fa9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,7 +34,7 @@
     <ClCompile Include="UI.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="PopUp.cpp">
+    <ClCompile Include="ChooseNamePopUp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="LeaderBoard.cpp">
@@ -46,10 +46,31 @@
     <ClCompile Include="Math.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
+    <ClCompile Include="Block.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Block.cpp">
+    <ClCompile Include="OptionsMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowPropertyMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="DifficultyLevelMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ExitMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverMenu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverPopUp.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWinPopUp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,7 +96,7 @@
     <ClInclude Include="UI.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="PopUp.h">
+    <ClInclude Include="ChooseNamePopUp.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="LeaderBoard.h">
@@ -93,7 +114,31 @@
     <ClInclude Include="Block.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="GameStatesData.h">
+    <ClInclude Include="IMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowPropertyMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="DifficultyLevelMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExitMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverPopUp.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWinPopUp.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

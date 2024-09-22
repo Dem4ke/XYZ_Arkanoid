@@ -1,17 +1,17 @@
-#include "MainMenu.h"
+#include "WindowPropertyMenu.h"
 
 namespace ArkanoidGame {
-	MainMenu::MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window)
+	WindowPropertyMenu::WindowPropertyMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window)
 		: resources_(resources), gameState_(gameState), window_(window) {
 
 		init();
 	}
 
-	MainMenu::~MainMenu() {}
+	WindowPropertyMenu::~WindowPropertyMenu() {}
 
 	// Initialization of all menu buttons
-	void MainMenu::init() {
-		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
+	void WindowPropertyMenu::init() {
+		std::vector<std::string> mainButtons = { "800 x 600", "1280 x 720", "1920 x 1080" };
 
 		float posX = resources_.getWindowWidth() / 2.f;
 		float posY = resources_.getWindowHeight() / 3.f;
@@ -24,7 +24,7 @@ namespace ArkanoidGame {
 		menuName_.setFont(resources_.font);
 		menuName_.setCharacterSize(menuNameTextSize_);
 		menuName_.setFillColor(mainButtonColor_);
-		menuName_.setString("Arcanoid");
+		menuName_.setString("Edit window size");
 		menuName_.setOrigin(sf::Vector2f(menuName_.getGlobalBounds().width / 2.f, menuName_.getGlobalBounds().height / 2.f));
 		menuName_.setPosition(posX, posY - menuNameTextSize_);
 
@@ -50,14 +50,14 @@ namespace ArkanoidGame {
 	}
 
 	// Reset menu to default
-	void MainMenu::reset() {
+	void WindowPropertyMenu::reset() {
 		// Set choosen button to first button
 		buttons_[selectedButton_].setFillColor(mainButtonColor_);
 		selectedButton_ = 0;
 		buttons_[selectedButton_].setFillColor(chosenButtonColor_);
 	}
 
-	void MainMenu::update(const sf::Event& event) {
+	void WindowPropertyMenu::update(const sf::Event& event) {
 		if (event.type == sf::Event::KeyReleased) {
 			if (event.key.code == upKey_) {
 				moveUp();
@@ -66,35 +66,54 @@ namespace ArkanoidGame {
 				moveDown();
 			}
 			else if (event.key.code == escapeKey_) {
-				gameState_.pushGameState(GameStateType::ExitDialog);
 				SoundOfChoose(resources_);
+				gameState_.popGameState();
 			}
 			else if (event.key.code == enterKey_) {
 				if (selectedButton_ == 0) {
-					gameState_.pushGameState(GameStateType::Game);
+					selectedButton_ = 0;
+
 					SoundOfChoose(resources_);
+
+					resources_.changeWindowWidth(800);
+					resources_.changeWindowHeight(600);
+
+					window_.create(sf::VideoMode(resources_.getWindowWidth(),
+						resources_.getWindowHeight()), "Arcanoid");
+
+					gameState_.pushGameState(GameStateType::ChangeResolution);
 				}
 				else if (selectedButton_ == 1) {
-					gameState_.pushGameState(GameStateType::DifficulityLevelChoose);
+					selectedButton_ = 0;
+
 					SoundOfChoose(resources_);
+
+					resources_.changeWindowWidth(1280);
+					resources_.changeWindowHeight(720);
+
+					window_.create(sf::VideoMode(resources_.getWindowWidth(),
+						resources_.getWindowHeight()), "Arcanoid");
+
+					gameState_.pushGameState(GameStateType::ChangeResolution);
 				}
 				else if (selectedButton_ == 2) {
-					gameState_.pushGameState(GameStateType::LeaderBoard);
+					selectedButton_ = 0;
+
 					SoundOfChoose(resources_);
-				}
-				else if (selectedButton_ == 3) {
-					gameState_.pushGameState(GameStateType::Options);
-					SoundOfChoose(resources_);
-				}
-				else if (selectedButton_ == 4) {
-					gameState_.pushGameState(GameStateType::ExitDialog);
-					SoundOfChoose(resources_);
+
+					resources_.changeWindowWidth(1920);
+					resources_.changeWindowHeight(1080);
+
+					window_.create(sf::VideoMode(resources_.getWindowWidth(),
+						resources_.getWindowHeight()), "Arcanoid");
+
+					gameState_.pushGameState(GameStateType::ChangeResolution);
 				}
 			}
 		}
 	}
 
-	void MainMenu::draw() {
+	void WindowPropertyMenu::draw() {
 		window_.draw(backgroundSprite_);
 		window_.draw(menuName_);
 		for (auto& i : buttons_) {
@@ -105,7 +124,7 @@ namespace ArkanoidGame {
 	//----------------------------------------------------------
 	// PRIVATE WORK TOOLS
 
-	void MainMenu::moveUp() {
+	void WindowPropertyMenu::moveUp() {
 		if (selectedButton_ >= 0) {
 			buttons_[selectedButton_].setFillColor(mainButtonColor_);
 			--selectedButton_;
@@ -120,7 +139,7 @@ namespace ArkanoidGame {
 		}
 	}
 
-	void MainMenu::moveDown() {
+	void WindowPropertyMenu::moveDown() {
 		size_t end = buttons_.size();
 
 		if (selectedButton_ <= end) {
@@ -137,3 +156,4 @@ namespace ArkanoidGame {
 		}
 	}
 }
+

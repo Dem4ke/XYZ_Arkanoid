@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Menu.h"
-#include "LeaderBoard.h"
-#include "PopUp.h"
+#include "IMenu.h"
 #include "GameField.h"
 #include "UI.h"
 
@@ -24,23 +22,10 @@ namespace ArkanoidGame {
 		Resources& resources_;
 
 		GameState gameState_;
-
 		GameField gameField_;
-
-		Menu mainMenu_;
-		DifficultyLevelMenu difficultyLevelMenu_;
-		OptionsMenu optionsMenu_;
-		WindowEditMenu windowEditMenu_;
-		ExitMenu exitMenu_;
-		PauseMenu pauseMenu_;
-		GameOver gameOverMenu_;
-
-		LeaderBoard leaderBoard_;
-
-		GameOverPopUp gameOverPopUp_;
-		GameWinPopUp gameWinPopUp_;
-		ChooseNamePopUp chooseName_;
-
 		UI UI_;
+
+		std::vector<std::shared_ptr<IMenu>> menus_;
+		std::vector<std::shared_ptr<IMenu>> popUps_;
 	};
 }

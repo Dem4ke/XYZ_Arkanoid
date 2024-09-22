@@ -4,12 +4,12 @@
 #include "Resources.h"
 #include "Math.h"
 
-namespace ArkanoidGame { 
-	// Start menu
-	class MainMenu final : public IMenu {
+namespace ArkanoidGame {
+	// Menu of options of the game
+	class OptionsMenu final : public IMenu {
 	public:
-		MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~MainMenu();
+		OptionsMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~OptionsMenu() {}
 
 		void init() override;
 		void reset() override;
@@ -20,6 +20,7 @@ namespace ArkanoidGame {
 		// Work tools
 		void moveUp() override;
 		void moveDown() override;
+		void changeButton(int index, std::string newButton);
 
 	private:
 		int menuNameTextSize_ = 60;

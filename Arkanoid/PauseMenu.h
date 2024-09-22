@@ -4,18 +4,21 @@
 #include "Resources.h"
 #include "Math.h"
 
-namespace ArkanoidGame { 
-	// Start menu
-	class MainMenu final : public IMenu {
+namespace ArkanoidGame {
+
+	// Menu of pause
+	class PauseMenu final : public IMenu {
 	public:
-		MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~MainMenu();
+		PauseMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~PauseMenu() {}
+
+		void callMenu();
 
 		void init() override;
 		void reset() override;
 		void update(const sf::Event& event) override;
 		void draw() override;
-
+		
 	private:
 		// Work tools
 		void moveUp() override;
@@ -35,5 +38,8 @@ namespace ArkanoidGame {
 		Resources& resources_;
 		GameState& gameState_;
 		sf::RenderWindow& window_;
+
+		// Toolbox functions
+		void ExitInPauseMenu(GameState& gameState);
 	};
 }

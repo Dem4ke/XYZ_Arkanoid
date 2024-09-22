@@ -4,12 +4,12 @@
 #include "Resources.h"
 #include "Math.h"
 
-namespace ArkanoidGame { 
-	// Start menu
-	class MainMenu final : public IMenu {
+namespace ArkanoidGame {
+	// Menu of game over
+	class GameOverMenu final : public IMenu {
 	public:
-		MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~MainMenu();
+		GameOverMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~GameOverMenu();
 
 		void init() override;
 		void reset() override;

@@ -1,50 +1,37 @@
 #include "Game.h"
+#include "MainMenu.h"
+#include "DifficultyLevelMenu.h"
+#include "ExitMenu.h"
+#include "GameOverMenu.h"
+#include "LeaderBoard.h"
+#include "OptionsMenu.h"
+#include "PauseMenu.h"
+#include "WindowPropertyMenu.h"
+#include "ChooseNamePopUp.h"
+#include "GameWinPopUp.h"
+#include "GameOverPopUp.h"
 
 namespace ArkanoidGame {
 
 	Game::Game(Resources& resources, sf::RenderWindow& window) :
 		resources_(resources), window_(window),
-		mainMenu_(resources, gameState_, window),
-		difficultyLevelMenu_(resources, gameState_, window),
-		optionsMenu_(resources, gameState_, window),
-		exitMenu_(resources, gameState_, window),
-		pauseMenu_(resources, gameState_, window),
-		gameOverMenu_(resources, gameState_, window),
-		leaderBoard_(resources, gameState_, window),
-		windowEditMenu_(resources, gameState_, window),
-		gameOverPopUp_(resources, gameState_, window),
-		gameWinPopUp_(resources, gameState_, window),
-		chooseName_(resources, gameState_, window, leaderBoard_),
 		UI_(resources, gameState_, window),
 		gameField_(resources, gameState_, window) {}
 
 	void Game::init() {
-		std::vector<std::string> dufficulityLevelButtons = { "Easy", "Medium", "Hard" };
-		std::vector<std::string> optionsButtons = { "Music: On", "Sounds: On", "Window size "};
-		std::vector<std::string> windowEditButtons = { "800 x 600", "1280 x 720", "1920 x 1080"};
-		std::vector<std::string> exitButtons = { "Yes", "No" };
-		std::vector<std::string> pauseButtons = { "Yes", "No" };
-		std::vector<std::string> gameOverButtons = { "\n\n\n\n\n\n\n\nPlay again", "\n\n\n\n\n\n\n\nExit"};
-		std::vector<std::string> gameOverPopUpButtons = { "No", "Yes" };
-		std::vector<std::string> gameWinPopUpButtons = { "No", "Yes" };
-		std::vector<std::string> chooseNamePopUpButtons = { "\n\nEnter" };
+		// Initialization of menus
+		menus_.emplace_back(std::make_shared<MainMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<DifficultyLevelMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<ExitMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<GameOverMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<OptionsMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<PauseMenu>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<LeaderBoard>(resources_, gameState_, window_));
 
-		// Menu initialization (Name of menu, vector of buttons, size of buttons (40.f by default), color of buttons (white by default))
-		// Name of menu will be in 1.5 times bigger, id of menu needs for choose of background
-		mainMenu_.init("Arcanoid", mainButtons);
-		difficultyLevelMenu_.init("Difficulity level", dufficulityLevelButtons);
-		optionsMenu_.init("Options", optionsButtons);
-		windowEditMenu_.init("Edit window size", windowEditButtons);
-		exitMenu_.init("Do you want to exit?", exitButtons);
-		pauseMenu_.init("Do you want to exit\n\tin main menu?\n", pauseButtons);
-		gameOverMenu_.init("Game Over\n\n\n", gameOverButtons);
-
-		// Leader board initialization (Name of menu, size of names, number of drawable positions)
-		leaderBoard_.init("Leader Board");
-
-		// Initialization of pop ups (Name of pop up, vector of buttons, size of buttons, color of buttons)
-		gameOverPopUp_.init("Do you want to save your score?", gameOverPopUpButtons, 40.f);
-		chooseName_.init("Enter your name", chooseNamePopUpButtons, 40.f);
+		// Initialization of pop ups
+		popUps_.emplace_back(std::make_shared<ChooseNamePopUp>(resources_, gameState_, window_, menus_[5]));
+		popUps_.emplace_back(std::make_shared<GameWinPopUp>(resources_, gameState_, window_));
+		popUps_.emplace_back(std::make_shared<GameOverPopUp>(resources_, gameState_, window_));
 
 		// User interface initialization (size of a text elements)
 		UI_.init(20.f);
@@ -63,24 +50,17 @@ namespace ArkanoidGame {
 		// Reset game state 
 		gameState_.restartGameState();
 
-		// Reset menus
-		mainMenu_.reset();
-		difficultyLevelMenu_.reset();
-		optionsMenu_.reset();
-		exitMenu_.reset();
-		pauseMenu_.reset();
-		gameOverMenu_.reset();
+		// All menus and pop ups reset
+		static auto resetFunctor = [](auto obj) {
+			obj->reset();
+		};
 
-		// Load leader board from file and sort it
-		leaderBoard_.sortTable();
+		std::for_each(menus_.begin(), menus_.end(), resetFunctor);
+		std::for_each(popUps_.begin(), popUps_.end(), resetFunctor);
 
 		// Reset score and player name
 		gameState_.reset();
 		UI_.scoreUpdate();
-
-		// Reset pop ups
-		gameOverPopUp_.reset();
-		chooseName_.reset();
 
 		// Initialization of the game field
 		gameField_.reset();
@@ -144,7 +124,7 @@ namespace ArkanoidGame {
 			gameField_.update(deltaTime);
 			
 			// Pause menu maker
-			ExitInPauseMenu(gameState_);
+			pauseMenu_.callMenu();
 
 			// Update player's score
 			UI_.scoreUpdate();

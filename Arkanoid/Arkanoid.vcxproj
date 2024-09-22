@@ -160,34 +160,49 @@
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="DifficultyLevelMenu.cpp" />
+    <ClCompile Include="ExitMenu.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameField.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverMenu.cpp" />
+    <ClCompile Include="GameOverPopUp.cpp" />
+    <ClCompile Include="GameWinPopUp.cpp" />
     <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="OptionsMenu.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="PopUp.cpp" />
+    <ClCompile Include="ChooseNamePopUp.cpp" />
     <ClCompile Include="Resources.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="WindowPropertyMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="DifficultyLevelMenu.h" />
+    <ClInclude Include="ExitMenu.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameField.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameStatesData.h" />
+    <ClInclude Include="GameOverMenu.h" />
+    <ClInclude Include="GameOverPopUp.h" />
+    <ClInclude Include="GameWinPopUp.h" />
+    <ClInclude Include="IMenu.h" />
     <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="OptionsMenu.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Platform.h" />
-    <ClInclude Include="PopUp.h" />
+    <ClInclude Include="ChooseNamePopUp.h" />
     <ClInclude Include="Resources.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="WindowPropertyMenu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,30 +1,30 @@
-#include "MainMenu.h"
+#include "DifficultyLevelMenu.h"
 
 namespace ArkanoidGame {
-	MainMenu::MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window)
+	DifficultyLevelMenu::DifficultyLevelMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window)
 		: resources_(resources), gameState_(gameState), window_(window) {
 
 		init();
 	}
 
-	MainMenu::~MainMenu() {}
+	DifficultyLevelMenu::~DifficultyLevelMenu() {}
 
 	// Initialization of all menu buttons
-	void MainMenu::init() {
-		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };
+	void DifficultyLevelMenu::init() {
+		std::vector<std::string> mainButtons = { "Easy", "Medium", "Hard" };
 
 		float posX = resources_.getWindowWidth() / 2.f;
 		float posY = resources_.getWindowHeight() / 3.f;
 
-		// Initialization of a background of the menu
+		// Initialization of background of menu
 		backgroundSprite_.setTexture(resources_.mainMenuBackground);
 		SetSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
 
-		// Initialization of a name of the menu
+		// Initialization of name of a game
 		menuName_.setFont(resources_.font);
 		menuName_.setCharacterSize(menuNameTextSize_);
 		menuName_.setFillColor(mainButtonColor_);
-		menuName_.setString("Arcanoid");
+		menuName_.setString("Difficulity level");
 		menuName_.setOrigin(sf::Vector2f(menuName_.getGlobalBounds().width / 2.f, menuName_.getGlobalBounds().height / 2.f));
 		menuName_.setPosition(posX, posY - menuNameTextSize_);
 
@@ -50,14 +50,14 @@ namespace ArkanoidGame {
 	}
 
 	// Reset menu to default
-	void MainMenu::reset() {
+	void DifficultyLevelMenu::reset() {
 		// Set choosen button to first button
 		buttons_[selectedButton_].setFillColor(mainButtonColor_);
 		selectedButton_ = 0;
 		buttons_[selectedButton_].setFillColor(chosenButtonColor_);
 	}
 
-	void MainMenu::update(const sf::Event& event) {
+	void DifficultyLevelMenu::update(const sf::Event& event) {
 		if (event.type == sf::Event::KeyReleased) {
 			if (event.key.code == upKey_) {
 				moveUp();
@@ -66,35 +66,30 @@ namespace ArkanoidGame {
 				moveDown();
 			}
 			else if (event.key.code == escapeKey_) {
-				gameState_.pushGameState(GameStateType::ExitDialog);
 				SoundOfChoose(resources_);
+				gameState_.popGameState();
 			}
 			else if (event.key.code == enterKey_) {
 				if (selectedButton_ == 0) {
-					gameState_.pushGameState(GameStateType::Game);
+					gameState_.setNewDifficulty(DifficultyLevel::Easy);
+					gameState_.pushGameState(GameStateType::GameReset);
 					SoundOfChoose(resources_);
 				}
 				else if (selectedButton_ == 1) {
-					gameState_.pushGameState(GameStateType::DifficulityLevelChoose);
+					gameState_.setNewDifficulty(DifficultyLevel::Medium);
+					gameState_.pushGameState(GameStateType::GameReset);
 					SoundOfChoose(resources_);
 				}
 				else if (selectedButton_ == 2) {
-					gameState_.pushGameState(GameStateType::LeaderBoard);
-					SoundOfChoose(resources_);
-				}
-				else if (selectedButton_ == 3) {
-					gameState_.pushGameState(GameStateType::Options);
-					SoundOfChoose(resources_);
-				}
-				else if (selectedButton_ == 4) {
-					gameState_.pushGameState(GameStateType::ExitDialog);
+					gameState_.setNewDifficulty(DifficultyLevel::Hard);
+					gameState_.pushGameState(GameStateType::GameReset);
 					SoundOfChoose(resources_);
 				}
 			}
 		}
 	}
 
-	void MainMenu::draw() {
+	void DifficultyLevelMenu::draw() {
 		window_.draw(backgroundSprite_);
 		window_.draw(menuName_);
 		for (auto& i : buttons_) {
@@ -105,7 +100,7 @@ namespace ArkanoidGame {
 	//----------------------------------------------------------
 	// PRIVATE WORK TOOLS
 
-	void MainMenu::moveUp() {
+	void DifficultyLevelMenu::moveUp() {
 		if (selectedButton_ >= 0) {
 			buttons_[selectedButton_].setFillColor(mainButtonColor_);
 			--selectedButton_;
@@ -120,7 +115,7 @@ namespace ArkanoidGame {
 		}
 	}
 
-	void MainMenu::moveDown() {
+	void DifficultyLevelMenu::moveDown() {
 		size_t end = buttons_.size();
 
 		if (selectedButton_ <= end) {
