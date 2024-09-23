@@ -18,6 +18,7 @@ namespace ArkanoidGame {
 
 		float getWindowWidth() const;
 		float getWindowHeight() const;
+		float getFrameRate() const;
 
 		sf::Texture mainMenuBackground;
 		sf::Texture gameBackground;
@@ -35,6 +36,8 @@ namespace ArkanoidGame {
 	private:
 		float width_ = 0;
 		float height_ = 0;
+		float frameRate_ = 1.f / 160.f; // 160 fps 
+
 		const std::string resourcesPath_ = "Resources/";
 		const std::string fontsPath_ = "Fonts/";
 		const std::string texturesPath_ = "MainTextures/";

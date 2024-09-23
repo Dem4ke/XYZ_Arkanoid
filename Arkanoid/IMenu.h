@@ -13,10 +13,9 @@ namespace ArkanoidGame {
 		virtual void update(const sf::Event& event) = 0;
 		virtual void draw() = 0;
 
-	protected:
-		virtual void moveUp() = 0;
-		virtual void moveDown() = 0;
+		virtual GameStateType getState() = 0;
 
+	protected:
 		sf::Sprite backgroundSprite_;
 
 		sf::Keyboard::Key upKey_ = sf::Keyboard::W;

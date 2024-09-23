@@ -1,7 +1,7 @@
 #include "ChooseNamePopUp.h"
 
 namespace ArkanoidGame {
-	ChooseNamePopUp::ChooseNamePopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window, LeaderBoard& leaderBoard)
+	ChooseNamePopUp::ChooseNamePopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window, std::shared_ptr<LeaderBoard> leaderBoard)
 		: resources_(resources), gameState_(gameState), window_(window), leaderBoard_(leaderBoard) {
 	
 		init();
@@ -26,7 +26,7 @@ namespace ArkanoidGame {
 
 		// Initialization of pop up's buttons
 		sf::Text menuButtons_;
-		float space = menuButtonsTextSize_;
+		float space = static_cast<float> (menuButtonsTextSize_);
 		menuButtons_.setFont(resources_.font);
 		menuButtons_.setCharacterSize(menuButtonsTextSize_);
 		menuButtons_.setFillColor(mainButtonColor_);
@@ -77,9 +77,9 @@ namespace ArkanoidGame {
 				SoundOfChoose(resources_);
 			}
 			else if (event.key.code == enterKey_) {
-				leaderBoard_.addPlayer();
-				leaderBoard_.sortTable();
-				leaderBoard_.saveTable();
+				leaderBoard_->addPlayer();
+				leaderBoard_->sortTable();
+				leaderBoard_->saveTable();
 				SoundOfChoose(resources_);
 				gameState_.pushGameState(GameStateType::GameOver);
 			}
@@ -101,6 +101,11 @@ namespace ArkanoidGame {
 		for (auto& i : buttons_) {
 			window_.draw(i);
 		}
+	}
+
+	// Return game state which describes this menu
+	GameStateType ChooseNamePopUp::getState() {
+		return GameStateType::ChooseNameOfPlayer;
 	}
 
 	//----------------------------------------------------------

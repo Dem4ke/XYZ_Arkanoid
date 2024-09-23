@@ -16,21 +16,17 @@ namespace ArkanoidGame {
 		float posX = resources_.getWindowWidth() / 2.f;
 		float posY = resources_.getWindowHeight() / 3.f;
 
-		// Initialization of a background of the menu
-		backgroundSprite_.setTexture(resources_.mainMenuBackground);
-		SetSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
-
 		// Initialization of a name of the menu
 		menuName_.setFont(resources_.font);
 		menuName_.setCharacterSize(menuNameTextSize_);
 		menuName_.setFillColor(mainButtonColor_);
-		menuName_.setString("Congratulations! You crashed them all/nDo you want to save your score?");
+		menuName_.setString("Congratulations, you crashed them all!\n\tDo you want to save your score ?");
 		menuName_.setOrigin(sf::Vector2f(menuName_.getGlobalBounds().width / 2.f, menuName_.getGlobalBounds().height / 2.f));
 		menuName_.setPosition(posX, posY - menuNameTextSize_);
 
 		// Initialization of menu's buttons
 		sf::Text menuButtons_;
-		float space = menuButtonsTextSize_;
+		float space = static_cast<float> (menuButtonsTextSize_);
 		menuButtons_.setFont(resources_.font);
 		menuButtons_.setCharacterSize(menuButtonsTextSize_);
 		menuButtons_.setFillColor(mainButtonColor_);
@@ -83,11 +79,15 @@ namespace ArkanoidGame {
 	}
 
 	void GameWinPopUp::draw() {
-		window_.draw(backgroundSprite_);
 		window_.draw(menuName_);
 		for (auto& i : buttons_) {
 			window_.draw(i);
 		}
+	}
+	
+	// Return game state which describes this menu
+	GameStateType GameWinPopUp::getState() {
+		return GameStateType::GameWinPopUp;
 	}
 
 	//----------------------------------------------------------

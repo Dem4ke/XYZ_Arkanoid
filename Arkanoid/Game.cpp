@@ -19,6 +19,7 @@ namespace ArkanoidGame {
 		gameField_(resources, gameState_, window) {}
 
 	void Game::init() {
+		menus_.clear();
 		// Initialization of menus
 		menus_.emplace_back(std::make_shared<MainMenu>(resources_, gameState_, window_));
 		menus_.emplace_back(std::make_shared<DifficultyLevelMenu>(resources_, gameState_, window_));
@@ -27,9 +28,13 @@ namespace ArkanoidGame {
 		menus_.emplace_back(std::make_shared<OptionsMenu>(resources_, gameState_, window_));
 		menus_.emplace_back(std::make_shared<PauseMenu>(resources_, gameState_, window_));
 		menus_.emplace_back(std::make_shared<LeaderBoard>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<ShortLeaderBoard>(resources_, gameState_, window_));
+		menus_.emplace_back(std::make_shared<WindowPropertyMenu>(resources_, gameState_, window_));
 
+		popUps_.clear();
 		// Initialization of pop ups
-		popUps_.emplace_back(std::make_shared<ChooseNamePopUp>(resources_, gameState_, window_, menus_[5]));
+		std::shared_ptr<LeaderBoard> leaderBoard = std::static_pointer_cast<LeaderBoard>(menus_[6]);
+		popUps_.emplace_back(std::make_shared<ChooseNamePopUp>(resources_, gameState_, window_, leaderBoard));
 		popUps_.emplace_back(std::make_shared<GameWinPopUp>(resources_, gameState_, window_));
 		popUps_.emplace_back(std::make_shared<GameOverPopUp>(resources_, gameState_, window_));
 
@@ -68,51 +73,18 @@ namespace ArkanoidGame {
 
 	// Update menu states, it works only with Event
 	void Game::updateMenu(sf::Event& event) {
-		switch (gameState_.getCurrentGameState()) {
-		case GameStateType::MainMenu: {
-			mainMenu_.update(event);
-			break;
+		for (int i = 0, end = menus_.size(); i < end; ++i) {
+			if (menus_[i]->getState() == gameState_.getCurrentGameState()) {
+				menus_[i]->update(event);
+				break;
+			}
 		}
-		case GameStateType::DifficulityLevelChoose: {
-			difficultyLevelMenu_.update(event);
-			break;
-		}
-		case GameStateType::Options: {
-			optionsMenu_.update(event);
-			break;
-		}
-		case GameStateType::WindowSizeEdit: {
-			windowEditMenu_.update(event);
-			break;
-		}
-		case GameStateType::ExitDialog: {
-			exitMenu_.update(event);
-			break;
-		}
-		case GameStateType::Pause: {
-			pauseMenu_.update(event);
-			break;
-		}
-		case GameStateType::LeaderBoard: {
-			leaderBoard_.update(event);
-			break;
-		}
-		case GameStateType::GameOver: {
-			gameOverMenu_.update(event);
-			break;
-		}
-		case GameStateType::GameOverPopUp: {
-			gameOverPopUp_.update(event);
-			break;
-		}
-		case GameStateType::GameWinPopUp: {
-			gameWinPopUp_.update(event);
-			break;
-		}
-		case GameStateType::ChooseNameOfPlayer: {
-			chooseName_.update(event);
-			break;
-		}
+
+		for (int i = 0, end = popUps_.size(); i < end; ++i) {
+			if (popUps_[i]->getState() == gameState_.getCurrentGameState()) {
+				popUps_[i]->update(event);
+				break;
+			}
 		}
 	}
 
@@ -124,7 +96,8 @@ namespace ArkanoidGame {
 			gameField_.update(deltaTime);
 			
 			// Pause menu maker
-			pauseMenu_.callMenu();
+			std::shared_ptr<PauseMenu> pauseMenu = std::static_pointer_cast<PauseMenu>(menus_[5]);
+			pauseMenu->callMenu();
 
 			// Update player's score
 			UI_.scoreUpdate();
@@ -134,7 +107,10 @@ namespace ArkanoidGame {
 	void Game::gameOver() {
 		switch (gameState_.getCurrentGameState()) {
 		case GameStateType::GameOver: {
-			leaderBoard_.sortTable();
+			std::shared_ptr<LeaderBoard> leaderBoard = std::static_pointer_cast<LeaderBoard>(menus_[6]);
+			std::shared_ptr<ShortLeaderBoard> shortLeaderBoard = std::static_pointer_cast<ShortLeaderBoard>(menus_[7]);
+			leaderBoard->sortTable();
+			shortLeaderBoard->sortTable();
 			break;
 		}
 		case GameStateType::PlayAgain: {
@@ -155,51 +131,28 @@ namespace ArkanoidGame {
 	}
 
 	void Game::draw() {
+		// Draw everything except menus and popups
 		switch (gameState_.getCurrentGameState()) {
-		case GameStateType::MainMenu: {
-			mainMenu_.draw();
-			break;
-		}
-		case GameStateType::DifficulityLevelChoose: {
-			difficultyLevelMenu_.draw();
-			break;
-		}
-		case GameStateType::Options: {
-			optionsMenu_.draw();
-			break;
-		}
-		case GameStateType::WindowSizeEdit: {
-			windowEditMenu_.draw();
-			break;
-		}
-		case GameStateType::ExitDialog: {
-			exitMenu_.draw();
-			break;
-		}
 		case GameStateType::Pause: {
 			gameField_.draw();
-			pauseMenu_.draw();
-			break;
-		}
-		case GameStateType::LeaderBoard: {
-			leaderBoard_.drawLongBoard();
 			break;
 		}
 		case GameStateType::GameOver: {
 			gameField_.draw();
-			gameOverMenu_.draw();
-			leaderBoard_.drawShortBoard();
 			break;
 		}
 		case GameStateType::GameOverPopUp: {
 			gameField_.draw();
-			gameOverPopUp_.draw();
+			UI_.drawGameOver();
+			break;
+		}
+		case GameStateType::GameWinPopUp: {
+			gameField_.draw();
 			UI_.drawGameOver();
 			break;
 		}
 		case GameStateType::ChooseNameOfPlayer: {
 			gameField_.draw();
-			chooseName_.draw();
 			UI_.drawGameOver();
 			break;
 		}
@@ -208,6 +161,20 @@ namespace ArkanoidGame {
 			UI_.drawMain();
 			break;
 		}
+		}
+
+		// Draw all menus
+		for (int i = 0, end = menus_.size(); i < end; ++i) {
+			if (menus_[i]->getState() == gameState_.getCurrentGameState()) {
+				menus_[i]->draw();
+			}
+		}
+
+		// Draw all pop ups
+		for (int i = 0, end = popUps_.size(); i < end; ++i) {
+			if (popUps_[i]->getState() == gameState_.getCurrentGameState()) {
+				popUps_[i]->draw();
+			}
 		}
 	}
 }

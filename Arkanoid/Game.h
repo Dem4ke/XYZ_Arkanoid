@@ -18,8 +18,8 @@ namespace ArkanoidGame {
 		void draw();
 
 	private:	
-		sf::RenderWindow& window_;
 		Resources& resources_;
+		sf::RenderWindow& window_;
 
 		GameState gameState_;
 		GameField gameField_;

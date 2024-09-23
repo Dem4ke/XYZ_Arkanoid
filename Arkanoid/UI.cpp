@@ -27,7 +27,7 @@ namespace ArkanoidGame {
 		gameOverScore_.setFillColor(sf::Color::White);
 		gameOverScore_.setString("Your score " + std::to_string(0));
 		gameOverScore_.setPosition(resources_.getWindowWidth() / 2.f - gameOverScore_.getGlobalBounds().width / 2.f,
-									resources_.getWindowHeight() / 4.f);
+			resources_.getWindowHeight() / 9.f);
 	}
 
 	void UI::scoreUpdate() {

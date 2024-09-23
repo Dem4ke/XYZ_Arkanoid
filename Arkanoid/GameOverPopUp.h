@@ -15,13 +15,15 @@ namespace ArkanoidGame {
 		void update(const sf::Event& event) override;
 		void draw() override;
 
-	private:
-		// Work tools
-		void moveUp() override;
-		void moveDown() override;
+		GameStateType getState() override;
 
 	private:
-		int menuNameTextSize_ = 60;
+		// Work tools
+		void moveUp();
+		void moveDown();
+
+	private:
+		int menuNameTextSize_ = 40;
 		int menuButtonsTextSize_ = 40;
 		int selectedButton_ = 0;
 

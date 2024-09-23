@@ -37,6 +37,7 @@ namespace ArkanoidGame {
 
 		// Get leader board from file
 		gameState_.deserialize(tableText_);
+		sortTable();
 	}
 
 	// Reset menu to default
@@ -51,7 +52,7 @@ namespace ArkanoidGame {
 	}
 
 	void LeaderBoard::sortTable() {
-		float space = menuButtonsTextSize_;
+		float space = static_cast<float> (menuButtonsTextSize_);
 
 		auto cmp = [](std::pair<std::string, int> const& a, std::pair<std::string, int> const& b) {
 			return a.second > b.second;
@@ -86,26 +87,69 @@ namespace ArkanoidGame {
 		gameState_.serialize(tableText_);
 	}
 
+	// Draw leader board in menu
 	void LeaderBoard::draw() {
-		// Draw leader board in menu
-		if (gameState_.getCurrentGameState() == GameStateType::LeaderBoard) {
-			int it = drawablePositions_ > liderBoard_.size() ? liderBoard_.size() : drawablePositions_;
+		int it = drawablePositions_ > liderBoard_.size() ? liderBoard_.size() : drawablePositions_;
 
-			window_.draw(backgroundSprite_);
-			window_.draw(menuName_);
-			for (int i = 0; i < it; ++i) {
-				window_.draw(liderBoard_[i].first);
-				window_.draw(liderBoard_[i].second);
-			}
+		window_.draw(backgroundSprite_);
+		window_.draw(menuName_);
+		for (int i = 0; i < it; ++i) {
+			window_.draw(liderBoard_[i].first);
+			window_.draw(liderBoard_[i].second);
 		}
-		// Draw leader board after game over in short pop up
-		else if (gameState_.getCurrentGameState() == GameStateType::GameOver) {
-			int it = shortDrawablePos_ > liderBoard_.size() ? liderBoard_.size() : shortDrawablePos_;
+	}
 
-			for (int i = 0; i < it; ++i) {
-				window_.draw(liderBoard_[i].first);
-				window_.draw(liderBoard_[i].second);
-			}
+	// Return game state which describes this menu
+	GameStateType LeaderBoard::getState() {
+		return GameStateType::LeaderBoard;
+	}
+
+	//-----------------------------------------------------------------------------------
+	// SHORT LEADER BOARD
+
+	ShortLeaderBoard::ShortLeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window) 
+		: LeaderBoard(resources, gameState, window) {
+
+		init();
+	}
+
+	ShortLeaderBoard::~ShortLeaderBoard() {}
+
+	void ShortLeaderBoard::init() {
+		posX_ = resources_.getWindowWidth() / 2.f;
+		posY_ = resources_.getWindowHeight() / 3.3f;
+
+		// Initialization of players' names
+		playerName_.setFont(resources_.font);
+		playerName_.setCharacterSize(menuButtonsTextSize_);
+		playerName_.setFillColor(mainButtonColor_);
+
+		// Initialization of players' score
+		playerScore_.setFont(resources_.font);
+		playerScore_.setCharacterSize(menuButtonsTextSize_);
+		playerScore_.setFillColor(mainButtonColor_);
+
+		backgroundSprite_.setTexture(resources_.mainMenuBackground);
+
+		SetSize(backgroundSprite_, resources_.getWindowWidth(), resources_.getWindowHeight());
+
+		// Get leader board from file
+		gameState_.deserialize(tableText_);
+		sortTable();
+	}
+
+	// Draw leader board after game over in short pop up
+	void ShortLeaderBoard::draw() {
+		int it = drawablePositions_ > liderBoard_.size() ? liderBoard_.size() : drawablePositions_;
+
+		for (int i = 0; i < it; ++i) {
+			window_.draw(liderBoard_[i].first);
+			window_.draw(liderBoard_[i].second);
 		}
+	}
+
+	// Return game state which describes this menu
+	GameStateType ShortLeaderBoard::getState() {
+		return GameStateType::GameOver;
 	}
 }

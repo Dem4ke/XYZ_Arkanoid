@@ -9,17 +9,19 @@ namespace ArkanoidGame {
 	class OptionsMenu final : public IMenu {
 	public:
 		OptionsMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~OptionsMenu() {}
+		virtual ~OptionsMenu();
 
 		void init() override;
 		void reset() override;
 		void update(const sf::Event& event) override;
 		void draw() override;
 
+		GameStateType getState() override;
+
 	private:
 		// Work tools
-		void moveUp() override;
-		void moveDown() override;
+		void moveUp();
+		void moveDown();
 		void changeButton(int index, std::string newButton);
 
 	private:

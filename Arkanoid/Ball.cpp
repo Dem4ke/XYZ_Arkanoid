@@ -33,11 +33,11 @@ namespace ArkanoidGame {
 
 		// Check collision with window's borders
 		if (position_.x - size_ / 2.f < 0 || position_.x + size_ / 2.f > resources_.getWindowWidth()) {
-			changeX();
+			needToChangeX();
 		}
 		
 		if (position_.y - size_ / 2.f < 0) {
-			changeY();
+			needToChangeY();
 		}
 		
 		if (position_.y + size_ / 2.f > resources_.getWindowHeight()) {

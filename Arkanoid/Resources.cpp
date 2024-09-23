@@ -16,8 +16,8 @@ namespace ArkanoidGame {
 
 	// Loads backgrounds from resources path
 	void Resources::setBackgrounds() {
-		assert(mainMenuBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Menu_background.jpg"));
-		assert(gameBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Background.jpg"));
+		assert(mainMenuBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg"));
+		assert(gameBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg"));
 	}
 
 	// Load sounds from resources path
@@ -44,6 +44,8 @@ namespace ArkanoidGame {
 	float Resources::getWindowWidth() const { return width_; }
 
 	float Resources::getWindowHeight() const { return height_; }
+
+	float Resources::getFrameRate() const { return frameRate_; }
 
 	// SOUNDS AND MUSIC 
 	

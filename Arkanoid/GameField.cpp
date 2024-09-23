@@ -13,24 +13,24 @@ namespace ArkanoidGame {
 		case DifficultyLevel::Easy: {
 			// Platform initialization
 			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
-			objects_[0]->init(140.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
+			objects_[0]->init(140.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
 		case DifficultyLevel::Medium: {
 			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
-			objects_[0]->init(120.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
+			objects_[0]->init(120.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
 		case DifficultyLevel::Hard: {
 			objects_.emplace_back(std::make_shared<Platform>(resources_, window_));
-			objects_[0]->init(100.f, 700.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
+			objects_[0]->init(100.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 20.f));
 			break;
 		}
 		}
 
 		// Initialization of ball (size, speed, position on screen)
 		objects_.emplace_back(std::make_shared<Ball>(resources_, window_));
-		objects_[1]->init(20.f, 600.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f));
+		objects_[1]->init(20.f, 500.f, sf::Vector2f(resources_.getWindowWidth() / 2.f, resources_.getWindowHeight() - 40.f));
 
 		// Initialization of blocks (height (widht will be in 3 times bigger), speed = 0, position on screen)
 		for (int i = 0; i < 8; ++i) {
@@ -75,10 +75,14 @@ namespace ArkanoidGame {
 			if (blocks_[i]->checkCollide(ball) == 1) {
 				ball->needToChangeY();
 				blocks_.erase(blocks_.cbegin() + i);
+
+				gameState_.scoreIncrease(1);
 			}
 			else if (blocks_[i]->checkCollide(ball) == 2) {
 				ball->needToChangeX();
 				blocks_.erase(blocks_.cbegin() + i);
+
+				gameState_.scoreIncrease(1);
 			}
 		}
 

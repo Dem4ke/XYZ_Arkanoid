@@ -10,7 +10,7 @@ namespace ArkanoidGame {
 	class PauseMenu final : public IMenu {
 	public:
 		PauseMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~PauseMenu() {}
+		virtual ~PauseMenu();
 
 		void callMenu();
 
@@ -19,10 +19,12 @@ namespace ArkanoidGame {
 		void update(const sf::Event& event) override;
 		void draw() override;
 		
+		GameStateType getState() override;
+
 	private:
 		// Work tools
-		void moveUp() override;
-		void moveDown() override;
+		void moveUp();
+		void moveDown();
 
 	private:
 		int menuNameTextSize_ = 60;

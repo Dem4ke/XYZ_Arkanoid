@@ -14,7 +14,7 @@ namespace ArkanoidGame {
 		std::vector<std::string> mainButtons = { "Play again", "Exit" };
 
 		float posX = resources_.getWindowWidth() / 2.f;
-		float posY = resources_.getWindowHeight() / 3.f;
+		float posY = resources_.getWindowHeight() / 1.5f;
 
 		// Initialization of a background of the menu
 		backgroundSprite_.setTexture(resources_.mainMenuBackground);
@@ -26,11 +26,11 @@ namespace ArkanoidGame {
 		menuName_.setFillColor(mainButtonColor_);
 		menuName_.setString("Game Over");
 		menuName_.setOrigin(sf::Vector2f(menuName_.getGlobalBounds().width / 2.f, menuName_.getGlobalBounds().height / 2.f));
-		menuName_.setPosition(posX, posY - menuNameTextSize_);
+		menuName_.setPosition(posX, posY - posY / 1.4f);
 
 		// Initialization of menu's buttons
 		sf::Text menuButtons_;
-		float space = menuButtonsTextSize_;
+		float space = static_cast<float> (menuButtonsTextSize_);
 		menuButtons_.setFont(resources_.font);
 		menuButtons_.setCharacterSize(menuButtonsTextSize_);
 		menuButtons_.setFillColor(mainButtonColor_);
@@ -88,6 +88,11 @@ namespace ArkanoidGame {
 		for (auto& i : buttons_) {
 			window_.draw(i);
 		}
+	}
+
+	// Return game state which describes this menu
+	GameStateType GameOverMenu::getState() {
+		return GameStateType::GameOver;
 	}
 
 	//----------------------------------------------------------

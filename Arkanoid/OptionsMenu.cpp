@@ -11,7 +11,9 @@ namespace ArkanoidGame {
 
 	// Initialization of all menu buttons
 	void OptionsMenu::init() {
-		std::vector<std::string> mainButtons = { "Music: On", "Sounds: On", "Window size: " + std::to_string(resources_.getWindowWidth()) + std::to_string(resources_.getWindowHeight()) };
+		std::vector<std::string> mainButtons = { "Music: On", "Sounds: On", 
+			"Window size: " + std::to_string(static_cast<int> (resources_.getWindowWidth())) + " x " +
+							  std::to_string(static_cast<int> (resources_.getWindowHeight())) };
 
 		float posX = resources_.getWindowWidth() / 2.f;
 		float posY = resources_.getWindowHeight() / 3.f;
@@ -30,7 +32,7 @@ namespace ArkanoidGame {
 
 		// Initialization of menu's buttons
 		sf::Text menuButtons_;
-		float space = menuButtonsTextSize_;
+		float space = static_cast<float> (menuButtonsTextSize_);
 		menuButtons_.setFont(resources_.font);
 		menuButtons_.setCharacterSize(menuButtonsTextSize_);
 		menuButtons_.setFillColor(mainButtonColor_);
@@ -107,6 +109,11 @@ namespace ArkanoidGame {
 		for (auto& i : buttons_) {
 			window_.draw(i);
 		}
+	}
+
+	// Return game state which describes this menu
+	GameStateType OptionsMenu::getState() {
+		return GameStateType::Options;
 	}
 
 	//----------------------------------------------------------

@@ -6,7 +6,7 @@ int main() {
 
 	// Game initialization
 	ArkanoidGame::Resources resources{ 800.f, 600.f };
-	sf::RenderWindow window(sf::VideoMode(resources.getWindowWidth(), resources.getWindowHeight()), "Arcanoid!");
+	sf::RenderWindow window(sf::VideoMode(static_cast<unsigned int> (resources.getWindowWidth()), static_cast<unsigned int> (resources.getWindowHeight())), "Arcanoid!");
 
 	ArkanoidGame::Game game{ resources, window };
 
@@ -38,7 +38,12 @@ int main() {
 		}
 
 		// Update main gameplay 
-		game.update(deltaTime);
+		if (deltaTime < resources.getFrameRate()) {
+			// Reduce framerate to not spam CPU and GPU
+			sf::sleep(sf::seconds(resources.getFrameRate() - deltaTime));
+		}
+
+		game.update(resources.getFrameRate());
 		game.gameOver();
 
 		// Draw game

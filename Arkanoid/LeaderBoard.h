@@ -12,7 +12,7 @@ namespace ArkanoidGame {
 	class LeaderBoard : public IMenu {
 	public:
 		LeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		~LeaderBoard();
+		virtual ~LeaderBoard();
 
 		void init() override;
 		void reset() override;
@@ -22,11 +22,12 @@ namespace ArkanoidGame {
 		void saveTable();
 		void draw() override;
 
-	private:
+		GameStateType getState() override;
+
+	protected:
 		int menuNameTextSize_ = 60;
 		int menuButtonsTextSize_ = 40;
 		int drawablePositions_ = 8;
-		int shortDrawablePos_ = 5;
 
 		float posX_ = 0;
 		float posY_ = 0;
@@ -42,5 +43,19 @@ namespace ArkanoidGame {
 		Resources& resources_;
 		GameState& gameState_;
 		sf::RenderWindow& window_;
+	};
+
+	class ShortLeaderBoard final : public LeaderBoard {
+	public:
+		ShortLeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window);
+		virtual ~ShortLeaderBoard();
+
+		void init() override;
+		void draw() override;
+
+		GameStateType getState() override;
+
+	private:
+		int drawablePositions_ = 5;
 	};
 }

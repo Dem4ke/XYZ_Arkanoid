@@ -121,6 +121,11 @@ namespace ArkanoidGame {
 		}
 	}
 
+	// Return game state which describes this menu
+	GameStateType WindowPropertyMenu::getState() {
+		return GameStateType::WindowSizeEdit;
+	}
+
 	//----------------------------------------------------------
 	// PRIVATE WORK TOOLS
 
