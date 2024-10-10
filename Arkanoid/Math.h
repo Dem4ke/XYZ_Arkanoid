@@ -4,7 +4,7 @@
 
 namespace ArkanoidGame {
 
-	sf::Color getRandomColor();
+	sf::Color GetRandomColor();
 
 	// Sprites and rectangles
 	void SetSize(sf::Sprite& sprite, float desiredWidht, float desiredHeight);

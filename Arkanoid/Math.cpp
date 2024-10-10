@@ -2,7 +2,7 @@
 
 namespace ArkanoidGame {
 
-	sf::Color getRandomColor() {
+	sf::Color GetRandomColor() {
 		int index = static_cast<int> (rand() / (float)RAND_MAX * 6);
 
 		switch (index) {

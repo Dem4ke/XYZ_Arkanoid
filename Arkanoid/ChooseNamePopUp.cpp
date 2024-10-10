@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	ChooseNamePopUp::~ChooseNamePopUp() {}
-
 	// Initialization of all pop ups buttons
 	void ChooseNamePopUp::init() {
 		std::vector<std::string> mainButtons = { "Enter" };

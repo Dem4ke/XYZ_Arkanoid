@@ -10,7 +10,6 @@ namespace ArkanoidGame {
 	class ChooseNamePopUp final : public IMenu {
 	public:
 		ChooseNamePopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window, std::shared_ptr<LeaderBoard> leaderBoard);
-		virtual ~ChooseNamePopUp();
 
 		void init() override;
 		void reset() override;

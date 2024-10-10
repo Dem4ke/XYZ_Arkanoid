@@ -8,7 +8,6 @@ namespace ArkanoidGame {
 	class GameWinPopUp final : public IMenu {
 	public:
 		GameWinPopUp(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~GameWinPopUp();
 
 		void init() override;
 		void reset() override;

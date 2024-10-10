@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	DifficultyLevelMenu::~DifficultyLevelMenu() {}
-
 	// Initialization of all menu buttons
 	void DifficultyLevelMenu::init() {
 		std::vector<std::string> mainButtons = { "Easy", "Medium", "Hard" };

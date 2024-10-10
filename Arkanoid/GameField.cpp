@@ -5,8 +5,6 @@ namespace ArkanoidGame {
 	GameField::GameField(Resources& resources, GameState& gameState, sf::RenderWindow& window) :
 		resources_(resources), gameState_(gameState), window_(window) {}
 
-	GameField::~GameField() {}
-
 	void GameField::init() {
 		// Initialization of player's platform (width, speed, position on screen)
 		switch (gameState_.getCurrentDiffLvl()) {

@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	ExitMenu::~ExitMenu() {}
-
 	// Initialization of all menu buttons
 	void ExitMenu::init() {
 		std::vector<std::string> mainButtons = { "Yes", "No" };

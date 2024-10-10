@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class OptionsMenu final : public IMenu {
 	public:
 		OptionsMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~OptionsMenu();
 
 		void init() override;
 		void reset() override;

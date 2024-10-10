@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	OptionsMenu::~OptionsMenu() {}
-
 	// Initialization of all menu buttons
 	void OptionsMenu::init() {
 		std::vector<std::string> mainButtons = { "Music: On", "Sounds: On", 

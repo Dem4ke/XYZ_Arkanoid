@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	GameOverPopUp::~GameOverPopUp() {}
-
 	// Initialization of all menu buttons
 	void GameOverPopUp::init() {
 		std::vector<std::string> mainButtons = { "No", "Yes" };

@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	LeaderBoard::~LeaderBoard() {}
-
 	void LeaderBoard::init() {
 		posX_ = resources_.getWindowWidth() / 2.f;
 		posY_ = resources_.getWindowHeight() / 5.f;

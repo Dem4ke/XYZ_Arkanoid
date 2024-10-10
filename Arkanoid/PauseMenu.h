@@ -10,7 +10,6 @@ namespace ArkanoidGame {
 	class PauseMenu final : public IMenu {
 	public:
 		PauseMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~PauseMenu();
 
 		void callMenu();
 

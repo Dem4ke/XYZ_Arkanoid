@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	MainMenu::~MainMenu() {}
-
 	// Initialization of all menu buttons
 	void MainMenu::init() {
 		std::vector<std::string> mainButtons = { "Play game", "Difficulity level", "Leader board", "Options", "Exit" };

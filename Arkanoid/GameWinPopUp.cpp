@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	GameWinPopUp::~GameWinPopUp() {}
-
 	// Initialization of all menu buttons
 	void GameWinPopUp::init() {
 		std::vector<std::string> mainButtons = { "No", "Yes" };

@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class WindowPropertyMenu final : public IMenu {
 	public:
 		WindowPropertyMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~WindowPropertyMenu();
 
 		void init() override;
 		void reset() override;

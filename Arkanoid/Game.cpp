@@ -73,16 +73,17 @@ namespace ArkanoidGame {
 
 	// Update menu states, it works only with Event
 	void Game::updateMenu(sf::Event& event) {
-		for (int i = 0, end = menus_.size(); i < end; ++i) {
-			if (menus_[i]->getState() == gameState_.getCurrentGameState()) {
-				menus_[i]->update(event);
+		for (auto& i : menus_) {
+			// Checks which menu has the same game state and update it
+			if (i->getState() == gameState_.getCurrentGameState()) {
+				i->update(event);
 				break;
 			}
 		}
 
-		for (int i = 0, end = popUps_.size(); i < end; ++i) {
-			if (popUps_[i]->getState() == gameState_.getCurrentGameState()) {
-				popUps_[i]->update(event);
+		for (auto& i : popUps_) {
+			if (i->getState() == gameState_.getCurrentGameState()) {
+				i->update(event);
 				break;
 			}
 		}
@@ -163,17 +164,16 @@ namespace ArkanoidGame {
 		}
 		}
 
-		// Draw all menus
-		for (int i = 0, end = menus_.size(); i < end; ++i) {
-			if (menus_[i]->getState() == gameState_.getCurrentGameState()) {
-				menus_[i]->draw();
+		// Checks which menu has the same game state and draw it
+		for (auto& i : menus_) {
+			if (i->getState() == gameState_.getCurrentGameState()) {
+				i->draw();
 			}
 		}
 
-		// Draw all pop ups
-		for (int i = 0, end = popUps_.size(); i < end; ++i) {
-			if (popUps_[i]->getState() == gameState_.getCurrentGameState()) {
-				popUps_[i]->draw();
+		for (auto& i : popUps_) {
+			if (i->getState() == gameState_.getCurrentGameState()) {
+				i->draw();
 			}
 		}
 	}

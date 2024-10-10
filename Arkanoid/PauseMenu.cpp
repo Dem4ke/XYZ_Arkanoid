@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	PauseMenu::~PauseMenu() {}
-
 	void PauseMenu::callMenu() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) ||
 			sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {

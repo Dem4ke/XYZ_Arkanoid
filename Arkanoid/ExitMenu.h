@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class ExitMenu final : public IMenu {
 	public:
 		ExitMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~ExitMenu();
 
 		void init() override;
 		void reset() override;

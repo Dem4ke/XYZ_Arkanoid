@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	WindowPropertyMenu::~WindowPropertyMenu() {}
-
 	// Initialization of all menu buttons
 	void WindowPropertyMenu::init() {
 		std::vector<std::string> mainButtons = { "800 x 600", "1280 x 720", "1920 x 1080" };

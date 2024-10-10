@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class MainMenu final : public IMenu {
 	public:
 		MainMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~MainMenu();
 
 		void init() override;
 		void reset() override;

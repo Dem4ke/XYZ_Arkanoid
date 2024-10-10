@@ -12,7 +12,6 @@ namespace ArkanoidGame {
 	class LeaderBoard : public IMenu {
 	public:
 		LeaderBoard(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~LeaderBoard();
 
 		void init() override;
 		void reset() override;

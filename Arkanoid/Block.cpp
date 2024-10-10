@@ -9,21 +9,20 @@ namespace ArkanoidGame {
 		width_ = size * 4.f;
 		isCrashed_ = false;
 
-		// Set shape's options
-		rectangle_.setSize(sf::Vector2f(width_, height_));
-		rectangle_.setFillColor(getRandomColor());
-		rectangle_.setOutlineThickness(1);
-		rectangle_.setOutlineColor(sf::Color::Black);
+		// Set sprite's options 
+		sprite_.setTexture(resources_.normalBlock);
+		sprite_.setColor(GetRandomColor());
+		SetSize(sprite_, width_, height_);
+		SetRelativeOrigin(sprite_, 0.5f, 0.5f);
 
 		position_ = position;
-		SetRelativeOrigin(rectangle_, 0.5f, 0.5f);
-		rectangle_.setPosition(position_.x, position_.y);
+		sprite_.setPosition(position_.x, position_.y);
 	}
 
 	void Block::update(const float& deltaTime) {}
 
 	void Block::draw() {
-		window_.draw(rectangle_);
+		window_.draw(sprite_);
 	}
 
 	// Check is ball collide with block and if it is, returns index, which coordinate axis must change

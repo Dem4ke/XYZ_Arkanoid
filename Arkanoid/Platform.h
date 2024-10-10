@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class Platform final : public GameObject {
 	public:
 		Platform(Resources& resources, sf::RenderWindow& window);
-		virtual ~Platform() {}
 
 		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;

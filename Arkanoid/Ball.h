@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class Ball final : public GameObject {
 	public:
 		Ball(Resources& resources, sf::RenderWindow& window);
-		virtual ~Ball() {}
 
 		void init(float size, float speed, sf::Vector2f position) override;
 		void update(const float& deltaTime) override;

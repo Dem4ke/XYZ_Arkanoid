@@ -11,30 +11,43 @@ namespace ArkanoidGame {
 
 	// Load texures from resources path
 	void Resources::setTextures() {
-		assert(mainMenuBackground.loadFromFile(resourcesPath_ + texturesPath_ + "block.png"));
+		bool isLoaded = normalBlock.loadFromFile(resourcesPath_ + texturesPath_ + "blocks_bricks.png");
+		assert(isLoaded);
 	}
 
 	// Loads backgrounds from resources path
 	void Resources::setBackgrounds() {
-		assert(mainMenuBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg"));
-		assert(gameBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg"));
+		bool isLoaded = mainMenuBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg");
+		assert(isLoaded);
+
+		isLoaded = gameBackground.loadFromFile(resourcesPath_ + backgroundsPath_ + "Main_background.jpg");
+		assert(isLoaded);
 	}
 
 	// Load sounds from resources path
 	void Resources::setSounds() {
 		// Little sounds
-		assert(menuMove.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav"));
-		assert(gameOverSound.loadFromFile(resourcesPath_ + soundsPath_ + "Maodin204__Lose.wav"));
-		assert(hitSound.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav"));
-		assert(soundOfChoose.loadFromFile(resourcesPath_ + soundsPath_ + "Theevilsocks__menu-hover.wav"));
+		bool isLoaded = menuMove.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav");
+		assert(isLoaded);
+
+		isLoaded = gameOverSound.loadFromFile(resourcesPath_ + soundsPath_ + "Maodin204__Lose.wav");
+		assert(isLoaded);
+
+		isLoaded = hitSound.loadFromFile(resourcesPath_ + soundsPath_ + "Owlstorm__Snake_hit.wav");
+		assert(isLoaded);
+
+		isLoaded = soundOfChoose.loadFromFile(resourcesPath_ + soundsPath_ + "Theevilsocks__menu-hover.wav");
+		assert(isLoaded);
 
 		// Long sounds or background music (not loads file but opens it for a whole session)
-		assert(backMusic.openFromFile(resourcesPath_ + soundsPath_ + "Clinthammer__Background_Music.wav"));
+		isLoaded = backMusic.openFromFile(resourcesPath_ + soundsPath_ + "Clinthammer__Background_Music.wav");
+		assert(isLoaded);
 	}
 
 	// Load fonts from resources path
 	void Resources::setFont() {
-		assert(font.loadFromFile(resourcesPath_ + fontsPath_ + "Roboto-Regular.ttf"));
+		bool isLoaded = font.loadFromFile(resourcesPath_ + fontsPath_ + "Roboto-Regular.ttf");
+		assert(isLoaded);
 	}
 
 	void Resources::changeWindowWidth(float newWidth) { width_ = newWidth; }

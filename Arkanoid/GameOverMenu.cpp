@@ -7,8 +7,6 @@ namespace ArkanoidGame {
 		init();
 	}
 
-	GameOverMenu::~GameOverMenu() {}
-
 	// Initialization of all menu buttons
 	void GameOverMenu::init() {
 		std::vector<std::string> mainButtons = { "Play again", "Exit" };

@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class DifficultyLevelMenu final : public IMenu {
 	public:
 		DifficultyLevelMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~DifficultyLevelMenu();
 
 		void init() override;
 		void reset() override;

@@ -10,7 +10,6 @@ namespace ArkanoidGame {
 	class GameField {
 	public:
 		GameField(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		~GameField();
 
 		void init();
 		void reset();

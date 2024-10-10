@@ -9,7 +9,6 @@ namespace ArkanoidGame {
 	class GameOverMenu final : public IMenu {
 	public:
 		GameOverMenu(Resources& resources, GameState& gameState, sf::RenderWindow& window);
-		virtual ~GameOverMenu();
 
 		void init() override;
 		void reset() override;
