@@ -36,7 +36,7 @@ namespace ArkanoidGame {
 			blocks_[i]->init(20.f, 0, sf::Vector2f(i * 100.f + 40.f, 60.f));
 		}
 		for (int i = 0; i < 6; ++i) {
-			blocks_.emplace_back(std::make_shared<Block>(resources_, window_));
+			blocks_.emplace_back(std::make_shared<ThreeHitsBlock>(resources_, window_));
 			blocks_[i + 8]->init(20.f, 0, sf::Vector2f(i * 120.f + 100.f, 100.f));
 		}
 		for (int i = 0; i < 8; ++i) {
@@ -72,15 +72,14 @@ namespace ArkanoidGame {
 		for (int i = 0; i < blocks_.size(); ++i) {
 			if (blocks_[i]->checkCollide(ball) == 1) {
 				ball->needToChangeY();
-				blocks_.erase(blocks_.cbegin() + i);
-
-				gameState_.scoreIncrease(1);
 			}
 			else if (blocks_[i]->checkCollide(ball) == 2) {
 				ball->needToChangeX();
-				blocks_.erase(blocks_.cbegin() + i);
+			}
 
-				gameState_.scoreIncrease(1);
+			if (blocks_[i]->isCrashed()) {
+				gameState_.scoreIncrease(blocks_[i]->getCost());
+				blocks_.erase(blocks_.cbegin() + i);
 			}
 		}
 

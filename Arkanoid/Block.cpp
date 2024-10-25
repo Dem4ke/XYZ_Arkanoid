@@ -7,11 +7,13 @@ namespace ArkanoidGame {
 	void Block::init(float size, float speed, sf::Vector2f position) {
 		height_ = size;
 		width_ = size * 4.f;
-		isCrashed_ = false;
+		health_ = 1;
 
 		// Set sprite's options 
 		sprite_.setTexture(resources_.normalBlock);
+		sprite_.setTextureRect(textureRect_);
 		sprite_.setColor(GetRandomColor());
+
 		SetSize(sprite_, width_, height_);
 		SetRelativeOrigin(sprite_, 0.5f, 0.5f);
 
@@ -80,15 +82,27 @@ namespace ArkanoidGame {
 		}
 
 		if (yNormal < object->getWidth() / 2.f) {
-			isCrashed_ = true;
+			--health_;
 			return 1;
 		}
 		else if (xNormal < object->getWidth() / 2.f) {
-			isCrashed_ = true;
+			--health_;
 			return 2;
 		}
 
 		return 0;
+	}
+
+	int Block::getCost() const {
+		return cost_;
+	}
+
+	bool Block::isCrashed() const {
+		if (health_ <= 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	float Block::getOriginX() const {
@@ -106,4 +120,40 @@ namespace ArkanoidGame {
 	float Block::getHeight() const {
 		return height_;
 	}
+
+	//-------------------------------------------------
+	// THREE HITS BLOCK
+	ThreeHitsBlock::ThreeHitsBlock(Resources& resources, sf::RenderWindow& window)
+		: Block(resources, window) {}
+
+	void ThreeHitsBlock::init(float size, float speed, sf::Vector2f position) {
+		height_ = size;
+		width_ = size * 4.f;
+		health_ = 3;
+
+		// Set sprite's options 
+		sprite_.setTexture(resources_.normalBlock);
+		sprite_.setTextureRect(textureRect1_);
+		sprite_.setColor(GetRandomColor());
+
+		SetSize(sprite_, width_, height_);
+		SetRelativeOrigin(sprite_, 0.5f, 0.5f);
+
+		position_ = position;
+		sprite_.setPosition(position_.x, position_.y);
+	}
+
+	void ThreeHitsBlock::update(const float& deltaTime) {
+		if (health_ == 2) {
+			sprite_.setTextureRect(textureRect2_);
+		}
+		else if (health_ == 1) {
+			sprite_.setTextureRect(textureRect3_);
+		}
+	}
+
+	int ThreeHitsBlock::getCost() const {
+		return cost_;
+	}
 }
+
