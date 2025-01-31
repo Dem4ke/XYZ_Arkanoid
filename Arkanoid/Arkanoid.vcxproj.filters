@@ -1,145 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{665fbae8-b648-47cd-86e7-e43a95895fa9}</UniqueIdentifier>
+    <Filter Include="Game">
+      <UniqueIdentifier>{69cdf450-6538-47a4-8b0f-9dc0096ec5a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{b6694a5f-fc02-486d-8dc2-26ea600819dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates">
+      <UniqueIdentifier>{902878bd-9cd0-4efb-ba60-6f00b99debd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Resources">
+      <UniqueIdentifier>{e1f3e2ef-ba6b-4961-9dad-4b264bb5569f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainMenu">
+      <UniqueIdentifier>{7e04a15b-e686-4470-8d16-6da9b08a99b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu">
+      <UniqueIdentifier>{cbccbd44-be3a-4c1b-bcba-54b38e050f24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameMain.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Platform.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Resources.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameStates.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ChooseNamePopUp.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="LeaderBoard.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameField.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Math.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Block.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="OptionsMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowPropertyMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="DifficultyLevelMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="PauseMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ExitMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverMenu.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverPopUp.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="GameWinPopUp.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    <ClInclude Include="Game\GameStates\IGameState.h">
+      <Filter>Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Resources\Resources.h">
+      <Filter>Game\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h">
+      <Filter>Game\GameStates\MainMenu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Platform.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Resources.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameStates.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ChooseNamePopUp.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="LeaderBoard.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameField.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="IMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="OptionsMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowPropertyMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="DifficultyLevelMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="ExitMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverPopUp.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="GameWinPopUp.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
+    <ClCompile Include="Game\Main.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Resources\Resources.cpp">
+      <Filter>Game\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp">
+      <Filter>Game\GameStates\MainMenu</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
