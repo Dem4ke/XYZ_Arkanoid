@@ -10,9 +10,6 @@
     <Filter Include="Game\GameStates">
       <UniqueIdentifier>{902878bd-9cd0-4efb-ba60-6f00b99debd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Resources">
-      <UniqueIdentifier>{e1f3e2ef-ba6b-4961-9dad-4b264bb5569f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameStates\MainMenu">
       <UniqueIdentifier>{7e04a15b-e686-4470-8d16-6da9b08a99b1}</UniqueIdentifier>
     </Filter>
@@ -33,9 +30,6 @@
     <ClInclude Include="Game\Game.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Resources\Resources.h">
-      <Filter>Game\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h">
       <Filter>Game\GameStates\MainMenu</Filter>
     </ClInclude>
@@ -52,9 +46,6 @@
     </ClCompile>
     <ClCompile Include="Game\Game.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Resources\Resources.cpp">
-      <Filter>Game\Resources</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp">
       <Filter>Game\GameStates\MainMenu</Filter>

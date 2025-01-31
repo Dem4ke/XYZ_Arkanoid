@@ -1,5 +1,8 @@
 #pragma once
+
 #include <string>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 namespace Arkanoid
 {
@@ -8,6 +11,26 @@ namespace Arkanoid
 	{
 		float X = 1.f;	
 		float Y = 1.f;
+	};
+
+	// Structure to work with common assets
+	struct CResources
+	{
+	public:
+		CResources();
+		
+		void SetSoundsVolume(float Value);
+		void SetBackgroundMusicVolume(float Value);
+		void PlaySound(sf::SoundBuffer& SoundAsset);
+		void PlayBackgroundMusic();
+		void StopBackgroundMusic();
+
+		const sf::Font& GetFont();
+
+	private:
+		sf::Sound Sound;
+		sf::Music BackgroundMusic;
+		sf::Font Font;
 	};
 
 	// Class for work with game settings which player can change
@@ -28,6 +51,7 @@ namespace Arkanoid
 		float GetSoundPower() const;
 
 		const CScaleFactor& GetScaleFactor();
+		const CResources& GetResources();
 
 	private:
 		UGameSettings();
@@ -38,10 +62,12 @@ namespace Arkanoid
 
 		float TimePerFrame = 0.f;			// Frame rate limit which user sets in settings
 		float SoundPower = 0.f;				// Power of sounds in the game
+		float MusicPower = 0.f;				// Power of music in the game
 
 		// Path to config (settings) file
 		const std::string PathToConfig = "Config/GameSettings.conf";		
 
 		CScaleFactor ScaleFactor;
+		CResources Resources;
 	};
 }

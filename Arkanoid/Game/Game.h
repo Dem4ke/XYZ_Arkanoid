@@ -1,14 +1,21 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 
 namespace Arkanoid 
 {
-	class AGame
+	class IGameState;
+	class IGameObject;
+
+	class UGame
 	{
 	public:
-		AGame();
-
+		UGame();
+		
+		void EventUpdate(const sf::Event& Event);
+		void GameplayUpdate(const float DeltaTime, sf::RenderWindow& Window);
 
 	private:
-		CResourses resources;
+		std::shared_ptr<IGameState> GameState;
+		std::vector<std::shared_ptr<IGameObject>> GameObjects;
 	};
 }
