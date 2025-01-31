@@ -2,10 +2,10 @@
 
 namespace Arkanoid 
 {
-	class UGame
+	class AGame
 	{
 	public:
-		UGame();
+		AGame();
 
 
 	private:

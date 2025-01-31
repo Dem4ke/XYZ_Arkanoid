@@ -19,6 +19,12 @@
     <Filter Include="Game\GameStates\SettingsMenu">
       <UniqueIdentifier>{cbccbd44-be3a-4c1b-bcba-54b38e050f24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Settings">
+      <UniqueIdentifier>{255e03a2-848b-4df5-9693-a017cd57aecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\FileSystem">
+      <UniqueIdentifier>{a9993f72-d5a4-4c20-97df-c4a5eb812948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameStates\IGameState.h">
@@ -33,6 +39,12 @@
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h">
       <Filter>Game\GameStates\MainMenu</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Settings\Settings.h">
+      <Filter>Game\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FileSystem\FileSystem.h">
+      <Filter>Game\FileSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -46,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp">
       <Filter>Game\GameStates\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Settings\Settings.cpp">
+      <Filter>Game\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FileSystem\FileSystem.cpp">
+      <Filter>Game\FileSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

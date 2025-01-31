@@ -2,4 +2,11 @@
 
 namespace Arkanoid
 {
+	class UResources
+	{
+	public:
+
+	private:
+
+	};
 }
