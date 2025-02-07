@@ -51,7 +51,7 @@ namespace Arkanoid
 		float GetSoundPower() const;
 
 		const CScaleFactor& GetScaleFactor();
-		const CResources& GetResources();
+		CResources* GetResources();
 
 	private:
 		UGameSettings();

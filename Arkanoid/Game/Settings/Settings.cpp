@@ -13,11 +13,11 @@ namespace Arkanoid
 	CResources::CResources()
 	{
 		// Load font from file
-		bool bIsLoaded = Font.loadFromFile("Resources/Fonts/Roboto-Regular.ttf");
+		bool bIsLoaded = Font.loadFromFile("../../../Game/Resources/Fonts/Roboto-Regular.ttf");
 		assert(bIsLoaded);
 
 		// Long sounds or background music (not loads file but opens it for a whole session)
-		bIsLoaded = BackgroundMusic.openFromFile("Resources/Sounds/Clinthammer__Background_Music.wav");
+		bIsLoaded = BackgroundMusic.openFromFile("../../../Game/Resources/Sounds/Clinthammer__Background_Music.wav");
 		assert(bIsLoaded);
 	}
 
@@ -58,6 +58,8 @@ namespace Arkanoid
 	/*	         UGameSettings          */
 	/*                                  */
 	/*//////////////////////////////////*/
+
+	UGameSettings* UGameSettings::GameSettings = nullptr;
 
 	UGameSettings* UGameSettings::GetGameSettings()
 	{
@@ -136,9 +138,9 @@ namespace Arkanoid
 		return ScaleFactor;
 	}
 
-	const CResources& UGameSettings::GetResources()
+	CResources* UGameSettings::GetResources()
 	{
-		return Resources;
+		return &Resources;
 	}
 
 	/*//////////////////////////////////*/

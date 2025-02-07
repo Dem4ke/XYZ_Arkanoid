@@ -22,6 +22,12 @@
     <Filter Include="Game\FileSystem">
       <UniqueIdentifier>{a9993f72-d5a4-4c20-97df-c4a5eb812948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Math">
+      <UniqueIdentifier>{17d87739-c373-4c9e-9e62-70ad01276975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AppStates">
+      <UniqueIdentifier>{80ab0514-d1f7-4d7d-8a4a-0e381176c54c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameStates\IGameState.h">
@@ -39,6 +45,12 @@
     <ClInclude Include="Game\FileSystem\FileSystem.h">
       <Filter>Game\FileSystem</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Math\Math.h">
+      <Filter>Game\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AppStates\AppStates.h">
+      <Filter>Game\AppStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -55,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="Game\FileSystem\FileSystem.cpp">
       <Filter>Game\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Math\Math.cpp">
+      <Filter>Game\Math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
