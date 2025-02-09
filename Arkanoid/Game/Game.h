@@ -23,8 +23,8 @@ namespace Arkanoid
 		void InitGameState(EGameStateType State);
 
 	private:
-		EGameStateType CurrentGameStateType = EGameStateType::MainMenu;
-		std::shared_ptr<IGameState> GameState;
-		std::vector<std::shared_ptr<IGameObject>> GameObjects;
+		EGameStateType CurrentGameStateType = EGameStateType::MainMenu;	// Game state type which plays now
+		std::shared_ptr<IGameState> GameState;							// Game state object to play
+		std::vector<std::shared_ptr<IGameObject>> GameObjects;			// Game objects to main gameplay
 	};
 }

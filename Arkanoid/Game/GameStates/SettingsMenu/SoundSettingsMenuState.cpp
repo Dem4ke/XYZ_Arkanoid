@@ -1,14 +1,14 @@
 #include <cassert>
-#include "MainMenuState.h"
+#include "SettingsMenuState.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SMainMenu::SMainMenu()
+	SSettingsMenu::SSettingsMenu()
 	{
 		// Load textures
-		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_menu_background.jpg");
+		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
 		assert(bIsLoaded);
 
 		// Load sounds
@@ -19,7 +19,7 @@ namespace Arkanoid
 		assert(bIsLoaded);
 
 		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Play game", "Leader board", "Settings", "Exit" };
+		std::vector<std::string> InputButtons = { "Sounds : on", "Music : on", "Screen", "Back" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -35,7 +35,7 @@ namespace Arkanoid
 		MenuTitle.setFont(SETTINGS.GetResources()->GetFont());
 		MenuTitle.setCharacterSize(TitleTextSize);
 		MenuTitle.setFillColor(CommonButtonColor);
-		MenuTitle.setString(" ");
+		MenuTitle.setString("Settings");
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
 
@@ -56,11 +56,12 @@ namespace Arkanoid
 		}
 
 		// Color of the first button
-		Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+		int selectedButton_ = 0;
+		Buttons[selectedButton_].setFillColor(ChosenButtonColor);
 	}
 
 	// All menu movement and events
-	void SMainMenu::EventUpdate(const sf::Event& Event) 
+	void SSettingsMenu::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
@@ -74,11 +75,11 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == EscapeKey || Event.key.code == EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::ExitMenu);
+				SetNewGameState(EGameStateType::MainMenu);
 			}
 			else if (Event.key.code == EnterKey)
 			{
-				if (SelectedButton == 0) 
+				if (SelectedButton == 0)
 				{
 					SetNewGameState(EGameStateType::MainGameplay);
 				}
@@ -92,15 +93,15 @@ namespace Arkanoid
 				}
 				else if (SelectedButton == 3)
 				{
-					SetNewGameState(EGameStateType::ExitMenu);
+					SetNewGameState(EGameStateType::MainMenu);
 				}
 			}
 		}
 	}
 
-	void SMainMenu::GameplayUpdate(const float DeltaTime) {}
+	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {}
 
-	void SMainMenu::Draw(sf::RenderWindow& Window) 
+	void SSettingsMenu::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(BackgroundSprite);
 		Window.draw(MenuTitle);
@@ -110,12 +111,12 @@ namespace Arkanoid
 		}
 	}
 
-	bool SMainMenu::IsGameStateUpdated() const
+	bool SSettingsMenu::IsGameStateUpdated() const
 	{
 		return bIsGameStateUpdated;
 	}
 
-	EGameStateType SMainMenu::GetNewGameStateType() const
+	EGameStateType SSettingsMenu::GetNewGameStateType() const
 	{
 		return NewGameStateType;
 	}
@@ -127,9 +128,9 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void SMainMenu::MoveUp()
+	void SSettingsMenu::MoveUp()
 	{
-		if (SelectedButton >= 0) 
+		if (SelectedButton >= 0)
 		{
 			Buttons[SelectedButton].setFillColor(CommonButtonColor);
 			--SelectedButton;
@@ -145,7 +146,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void SMainMenu::MoveDown()
+	void SSettingsMenu::MoveDown()
 	{
 		size_t end = Buttons.size();
 
@@ -166,7 +167,7 @@ namespace Arkanoid
 	}
 
 	// Change flag and state type 
-	void SMainMenu::SetNewGameState(EGameStateType NewState)
+	void SSettingsMenu::SetNewGameState(EGameStateType NewState)
 	{
 		bIsGameStateUpdated = true;
 		NewGameStateType = NewState;

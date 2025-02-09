@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "GameStates/MainMenu/MainMenuState.h"
+#include "GameStates/SettingsMenu/SettingsMenuState.h"
 
 namespace Arkanoid
 {
@@ -20,13 +21,13 @@ namespace Arkanoid
 				CurrentGameStateType = GameState->GetNewGameStateType();
 				InitGameState(CurrentGameStateType);
 			}
-
-			GameState->EventUpdate(Event);
 		}
 		else
 		{
 			InitGameState(CurrentGameStateType);
 		}
+
+		GameState->EventUpdate(Event);
 	}
 
 	void UGame::GameplayUpdate(const float DeltaTime)
@@ -38,13 +39,13 @@ namespace Arkanoid
 				CurrentGameStateType = GameState->GetNewGameStateType();
 				InitGameState(CurrentGameStateType);
 			}
-
-			GameState->GameplayUpdate(DeltaTime);
 		}
 		else
 		{
 			InitGameState(CurrentGameStateType);
 		}
+
+		GameState->GameplayUpdate(DeltaTime);
 	}
 
 	void UGame::Draw(sf::RenderWindow& Window)
@@ -67,27 +68,37 @@ namespace Arkanoid
 
 	void UGame::InitGameState(EGameStateType State)
 	{
+		if (GameState) 
+		{
+			GameState = nullptr;
+		}
+
 		switch (State) 
 		{
 		case EGameStateType::MainMenu:
 		{
 			GameState = std::make_shared<SMainMenu>();
+			break;
 		}
 		case EGameStateType::SettingsMenu:
 		{
-			GameState = std::make_shared<SMainMenu>();
+			GameState = std::make_shared<SSettingsMenu>();
+			break;
 		}
 		case EGameStateType::LeaderBoardMenu:
 		{
-			GameState = std::make_shared<SMainMenu>();
+			GameState = std::make_shared<SMainMenu>(); 
+			break;
 		}
 		case EGameStateType::ExitMenu:
 		{
 			GameState = std::make_shared<SMainMenu>();
+			break;
 		}
 		case EGameStateType::MainGameplay:
 		{
 			GameState = std::make_shared<SMainMenu>();
+			break;
 		}
 		}
 	}

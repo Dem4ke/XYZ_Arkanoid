@@ -28,6 +28,15 @@
     <Filter Include="Game\AppStates">
       <UniqueIdentifier>{80ab0514-d1f7-4d7d-8a4a-0e381176c54c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameStates\MainGameplay">
+      <UniqueIdentifier>{87113f6d-1aeb-430d-a271-02ac41be7da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu\SoundSettings">
+      <UniqueIdentifier>{7b140ffa-1b1a-482d-ab35-cf1d26f64d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu\VideoSettings">
+      <UniqueIdentifier>{1b6ec277-f32f-4ee2-a6ab-b28f692e9f20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameStates\IGameState.h">
@@ -51,6 +60,18 @@
     <ClInclude Include="Game\AppStates\AppStates.h">
       <Filter>Game\AppStates</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\SettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu\SoundSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -70,6 +91,18 @@
     </ClCompile>
     <ClCompile Include="Game\Math\Math.cpp">
       <Filter>Game\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\SettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu\SoundSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

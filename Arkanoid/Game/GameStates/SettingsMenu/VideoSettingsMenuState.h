@@ -7,11 +7,18 @@
 
 namespace Arkanoid
 {
-	class SMainMenu final : public IGameState
+	enum class ESettingsType : int 
+	{
+		Main = 0,	// Main settings
+		Sounds,		// Sound settings
+		Video,		// Video settings
+	};
+
+	class SSettingsMenu final : public IGameState
 	{
 	public:
-		SMainMenu();
-		~SMainMenu() = default;
+		SSettingsMenu();
+		~SSettingsMenu() = default;
 
 		void EventUpdate(const sf::Event& Event) override;
 		void GameplayUpdate(const float DeltaTime) override;
@@ -22,19 +29,28 @@ namespace Arkanoid
 
 	private:
 		// Work tools
+		void InitMainSettingsMenu();
+		void InitSoundSettingsMenu();
+		void InitVideoSettingsMenu();
+
 		void MoveUp();
 		void MoveDown();
 		void SetNewGameState(EGameStateType NewState);
+		void ChangeSettingsType(ESettingsType NewType);
 
 	private:
+		STSoundSettingsMenu SoundMenu;
+		STVideoSettingMenu VideoMenu;
+
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size
 		int SelectedButton = 0;								// Index of a selected button
-		
+
 		bool bIsGameStateUpdated = false;					// Flag contains iformaion is user changed a game state type
 		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played
+		ESettingsType SettingsType = ESettingsType::Main;	// Current settings type which shows
 
-		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons
+		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
 
 		sf::Color CommonButtonColor = sf::Color::White;		// Color of all unchosen buttons

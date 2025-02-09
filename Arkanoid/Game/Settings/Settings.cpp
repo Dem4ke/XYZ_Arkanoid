@@ -13,11 +13,11 @@ namespace Arkanoid
 	CResources::CResources()
 	{
 		// Load font from file
-		bool bIsLoaded = Font.loadFromFile("../../../Game/Resources/Fonts/Roboto-Regular.ttf");
+		bool bIsLoaded = Font.loadFromFile("Resources/Fonts/Roboto-Regular.ttf");
 		assert(bIsLoaded);
 
 		// Long sounds or background music (not loads file but opens it for a whole session)
-		bIsLoaded = BackgroundMusic.openFromFile("../../../Game/Resources/Sounds/Clinthammer__Background_Music.wav");
+		bIsLoaded = BackgroundMusic.openFromFile("Resources/Sounds/Clinthammer__Background_Music.wav");
 		assert(bIsLoaded);
 	}
 
@@ -59,15 +59,34 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	UGameSettings* UGameSettings::GameSettings = nullptr;
-
-	UGameSettings* UGameSettings::GetGameSettings()
+	UGameSettings::UGameSettings()
 	{
-		if (!GameSettings)
-		{
-			GameSettings = new UGameSettings();
-		}
+		UFileSystem FileSystem;
+		std::vector<std::string> Info;
 
+		// Get info from config file and set game properties
+		bool bIsDeserialized = FileSystem.Deserialize(PathToConfig, Info);
+		assert(bIsDeserialized);
+
+		ScreenWidth = std::stoi(Info[0]);
+		ScreenHeight = std::stoi(Info[1]);
+		IsFullScreen = std::stoi(Info[2]);
+		TimePerFrame = std::stof(Info[3]);
+		SoundPower = std::stof(Info[4]);
+		MusicPower = std::stof(Info[4]);
+
+		// For 800 pixels in width and 600 in height ScaleFactor equals 1
+		ScaleFactor.X = static_cast<float>(ScreenWidth) / 800.f;
+		ScaleFactor.Y = static_cast<float>(ScreenHeight) / 600.f;
+
+		Resources.SetSoundsVolume(SoundPower);
+		Resources.SetBackgroundMusicVolume(MusicPower);
+		Resources.PlayBackgroundMusic();
+	}
+
+	UGameSettings& UGameSettings::Instance()
+	{
+		static UGameSettings GameSettings;
 		return GameSettings;
 	}
 	
@@ -78,12 +97,14 @@ namespace Arkanoid
 
 		std::string ScreenWidthText = std::to_string(ScreenWidth) + "\n";
 		std::string ScreenHeightText = std::to_string(ScreenHeight) + "\n";
+		std::string IsFullScreenText = std::to_string(IsFullScreen) + "\n";
 		std::string TimePerFrameText = std::to_string(TimePerFrame) + "\n";
 		std::string SoundPowerText = std::to_string(SoundPower) + "\n";
 		std::string MusicPowerText = std::to_string(MusicPower) + "\n";
 
 		Info.push_back(ScreenWidthText);
 		Info.push_back(ScreenHeightText);
+		Info.push_back(IsFullScreenText);
 		Info.push_back(TimePerFrameText);
 		Info.push_back(SoundPowerText);
 		Info.push_back(MusicPowerText);
@@ -141,35 +162,5 @@ namespace Arkanoid
 	CResources* UGameSettings::GetResources()
 	{
 		return &Resources;
-	}
-
-	/*//////////////////////////////////*/
-	/*                                  */
-	/*	      PRIVATE WORKTOOLS         */
-	/*                                  */
-	/*//////////////////////////////////*/
-
-	UGameSettings::UGameSettings()
-	{
-		UFileSystem FileSystem;
-		std::vector<std::string> Info;
-
-		// Get info from config file and set game properties
-		bool bIsDeserialized = FileSystem.Deserialize(PathToConfig, Info);
-		assert(bIsDeserialized);
-		
-		ScreenWidth = std::stoi(Info[0]);
-		ScreenHeight = std::stoi(Info[1]);
-		TimePerFrame = std::stof(Info[2]);
-		SoundPower = std::stof(Info[3]);
-		MusicPower = std::stof(Info[3]);
-
-		// For 800 pixels in width and 600 in height ScaleFactor equals 1
-		ScaleFactor.X = static_cast<float>(ScreenWidth) / 800.f;
-		ScaleFactor.Y = static_cast<float>(ScreenHeight) / 600.f;
-
-		Resources.SetSoundsVolume(SoundPower);
-		Resources.SetBackgroundMusicVolume(MusicPower);
-		Resources.PlayBackgroundMusic();
 	}
 }

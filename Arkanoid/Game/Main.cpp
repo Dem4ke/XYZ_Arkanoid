@@ -6,12 +6,9 @@ int main()
 	int Seed = static_cast<int>(time(nullptr));
 	srand(Seed);
 
-	// Construct UGameSettings at first time and load configurate file
-	Arkanoid::UGameSettings* GameSettings = Arkanoid::UGameSettings::GetGameSettings();
-
 	// Set game window
-	unsigned int WIndowWidth = GameSettings->GetScreenWidth();
-	unsigned int WIndowHeight = GameSettings->GetScreenHeight();
+	unsigned int WIndowWidth = SETTINGS.GetScreenWidth();
+	unsigned int WIndowHeight = SETTINGS.GetScreenHeight();
 	sf::RenderWindow Window(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!");
 	
 	// Initialization of game object
@@ -44,14 +41,14 @@ int main()
 		}
 
 		// Update main gameplay 
-		if (DeltaTime < GameSettings->GetTimePerFrame())
+		if (DeltaTime < SETTINGS.GetTimePerFrame())
 		{
 			// Reduce framerate to not spam CPU and GPU
-			sf::sleep(sf::seconds(GameSettings->GetTimePerFrame() - DeltaTime));
+			sf::sleep(sf::seconds(SETTINGS.GetTimePerFrame() - DeltaTime));
 		}
 
 		// Core gameplay update
-		Game.GameplayUpdate(GameSettings->GetTimePerFrame());
+		Game.GameplayUpdate(SETTINGS.GetTimePerFrame());
 
 		// Draw game
 		Window.clear();

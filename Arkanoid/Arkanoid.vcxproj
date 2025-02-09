@@ -23,14 +23,22 @@
     <ClInclude Include="Game\FileSystem\FileSystem.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\GameStates\IGameState.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />
+    <ClInclude Include="Game\GameStates\SettingsMenu\SettingsMenuState.h" />
+    <ClInclude Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.h" />
+    <ClInclude Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.h" />
     <ClInclude Include="Game\Math\Math.h" />
     <ClInclude Include="Game\Settings\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\FileSystem\FileSystem.cpp" />
     <ClCompile Include="Game\Game.cpp" />
+    <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp" />
     <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp" />
+    <ClCompile Include="Game\GameStates\SettingsMenu\SettingsMenuState.cpp" />
+    <ClCompile Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.cpp" />
+    <ClCompile Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.cpp" />
     <ClCompile Include="Game\Main.cpp" />
     <ClCompile Include="Game\Math\Math.cpp" />
     <ClCompile Include="Game\Settings\Settings.cpp" />

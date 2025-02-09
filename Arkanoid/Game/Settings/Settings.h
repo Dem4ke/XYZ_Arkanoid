@@ -36,8 +36,12 @@ namespace Arkanoid
 	// Class for work with game settings which player can change
 	class UGameSettings
 	{
+	private:
+		UGameSettings();
+		~UGameSettings() = default;
+
 	public:
-		static UGameSettings* GetGameSettings();
+		static UGameSettings& Instance();
 
 		void SaveSettings();
 		void SetScreenWidth(int Value);
@@ -53,12 +57,10 @@ namespace Arkanoid
 		const CScaleFactor& GetScaleFactor();
 		CResources* GetResources();
 
-	private:
-		UGameSettings();
-		static UGameSettings* GameSettings;	// Pointer to only one UGameSettings object;
-		
+	private:		
 		int ScreenWidth = 0;				// Width of rendered window
 		int ScreenHeight = 0;				// Height of rendered window
+		int IsFullScreen = 0;				// Checks is window has fullscreen mode or not 1 -yes, 2 - not
 
 		float TimePerFrame = 0.f;			// Frame rate limit which user sets in settings
 		float SoundPower = 0.f;				// Power of sounds in the game
@@ -71,3 +73,5 @@ namespace Arkanoid
 		CResources Resources;
 	};
 }
+
+#define SETTINGS Arkanoid::UGameSettings::Instance()
