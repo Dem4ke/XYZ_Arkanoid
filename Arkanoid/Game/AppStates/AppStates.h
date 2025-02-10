@@ -16,4 +16,12 @@ namespace Arkanoid
 		// DIALOGS, POP UPS
 		PauseDialog,			// Pause pop up
 	};
+
+	// Types of a settings menu
+	enum class ESettingsType : int
+	{
+		Main = 0,	// Main settings
+		Sounds,		// Sound settings
+		Video,		// Video settings
+	};
 }

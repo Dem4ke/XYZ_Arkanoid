@@ -64,19 +64,19 @@ namespace Arkanoid
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
-			if (Event.key.code == UpKey)
+			if (Event.key.code == Button.UpKey)
 			{
 				MoveUp();
 			}
-			else if (Event.key.code == DownKey)
+			else if (Event.key.code == Button.DownKey)
 			{
 				MoveDown();
 			}
-			else if (Event.key.code == EscapeKey || Event.key.code == EscapeKeyB)
+			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
 				SetNewGameState(EGameStateType::ExitMenu);
 			}
-			else if (Event.key.code == EnterKey)
+			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0) 
 				{

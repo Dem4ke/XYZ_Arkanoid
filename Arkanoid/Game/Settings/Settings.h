@@ -46,11 +46,13 @@ namespace Arkanoid
 		void SaveSettings();
 		void SetScreenWidth(int Value);
 		void SetScreenHeight(int Value);
+		void SetFullscreenInfo(int Value);
 		void SetTimePerFrame(float Value);
 		void SetSoundPower(float Value);
 
 		int GetScreenWidth() const;
 		int GetScreenHeight() const;
+		int GetFullscreenInfo() const;
 		float GetTimePerFrame() const;
 		float GetSoundPower() const;
 
@@ -60,7 +62,7 @@ namespace Arkanoid
 	private:		
 		int ScreenWidth = 0;				// Width of rendered window
 		int ScreenHeight = 0;				// Height of rendered window
-		int IsFullScreen = 0;				// Checks is window has fullscreen mode or not 1 -yes, 2 - not
+		int IsFullscreen = 0;				// Checks is window has fullscreen mode or not 1 - yes, 0 - not
 
 		float TimePerFrame = 0.f;			// Frame rate limit which user sets in settings
 		float SoundPower = 0.f;				// Power of sounds in the game

@@ -70,7 +70,7 @@ namespace Arkanoid
 
 		ScreenWidth = std::stoi(Info[0]);
 		ScreenHeight = std::stoi(Info[1]);
-		IsFullScreen = std::stoi(Info[2]);
+		IsFullscreen = std::stoi(Info[2]);
 		TimePerFrame = std::stof(Info[3]);
 		SoundPower = std::stof(Info[4]);
 		MusicPower = std::stof(Info[4]);
@@ -97,14 +97,14 @@ namespace Arkanoid
 
 		std::string ScreenWidthText = std::to_string(ScreenWidth) + "\n";
 		std::string ScreenHeightText = std::to_string(ScreenHeight) + "\n";
-		std::string IsFullScreenText = std::to_string(IsFullScreen) + "\n";
+		std::string IsFullscreenText = std::to_string(IsFullscreen) + "\n";
 		std::string TimePerFrameText = std::to_string(TimePerFrame) + "\n";
 		std::string SoundPowerText = std::to_string(SoundPower) + "\n";
 		std::string MusicPowerText = std::to_string(MusicPower) + "\n";
 
 		Info.push_back(ScreenWidthText);
 		Info.push_back(ScreenHeightText);
-		Info.push_back(IsFullScreenText);
+		Info.push_back(IsFullscreenText);
 		Info.push_back(TimePerFrameText);
 		Info.push_back(SoundPowerText);
 		Info.push_back(MusicPowerText);
@@ -122,6 +122,11 @@ namespace Arkanoid
 	void UGameSettings::SetScreenHeight(int Value)
 	{
 		ScreenHeight = Value;
+	}
+
+	void UGameSettings::SetFullscreenInfo(int Value)
+	{
+		IsFullscreen = Value;
 	}
 
 	void UGameSettings::SetTimePerFrame(float Value)
@@ -142,6 +147,11 @@ namespace Arkanoid
 	int UGameSettings::GetScreenHeight() const
 	{
 		return ScreenHeight;
+	}
+
+	int UGameSettings::GetFullscreenInfo() const
+	{
+		return IsFullscreen;
 	}
 
 	float UGameSettings::GetTimePerFrame() const

@@ -1,25 +1,23 @@
 #include <cassert>
-#include "SettingsMenuState.h"
+#include "VideoSettingsMenuState.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SSettingsMenu::SSettingsMenu()
+	STVideoSettingMenu::STVideoSettingMenu()
 	{
-		// Load textures
-		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
-		assert(bIsLoaded);
-
 		// Load sounds
-		bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
+		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
 		assert(bIsLoaded);
 
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
 		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Sound", "Video", "Back" };
+		std::string Fullscreen = SETTINGS.GetFullscreenInfo() == 1 ? "Fullscreen: Yes" : "Fullscreen: No";
+		std::string Resolution = "Resolution" + std::to_string(SETTINGS.GetScreenWidth()) + " x " + std::to_string(SETTINGS.GetScreenHeight());
+		std::vector<std::string> InputButtons = { Fullscreen, Resolution, "Apply", "Back"};
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -27,15 +25,12 @@ namespace Arkanoid
 		float X = Width / 2.f;
 		float Y = Height / 3.f;
 
-		// Initialization of a background of the menu
-		BackgroundSprite.setTexture(BackgroundTexture);
-		Math::SetSize(BackgroundSprite, Width, Height);
 
 		// Initialization of a menu title
 		MenuTitle.setFont(SETTINGS.GetResources()->GetFont());
 		MenuTitle.setCharacterSize(TitleTextSize);
 		MenuTitle.setFillColor(CommonButtonColor);
-		MenuTitle.setString("Settings");
+		MenuTitle.setString("Video settings");
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
 
@@ -56,54 +51,68 @@ namespace Arkanoid
 		}
 
 		// Color of the first button
-		int selectedButton_ = 0;
-		Buttons[selectedButton_].setFillColor(ChosenButtonColor);
+		Buttons[SelectedButton].setFillColor(ChosenButtonColor);
 	}
 
 	// All menu movement and events
-	void SSettingsMenu::EventUpdate(const sf::Event& Event)
+	void STVideoSettingMenu::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
-			if (Event.key.code == UpKey)
+			if (Event.key.code == Button.UpKey)
 			{
 				MoveUp();
 			}
-			else if (Event.key.code == DownKey)
+			else if (Event.key.code == Button.DownKey)
 			{
 				MoveDown();
 			}
-			else if (Event.key.code == EscapeKey || Event.key.code == EscapeKeyB)
+			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::MainMenu);
+				ChangeSettingsType(ESettingsType::Main);
 			}
-			else if (Event.key.code == EnterKey)
+			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0)
 				{
-					SetNewGameState(EGameStateType::MainGameplay);
+					if (Buttons[0].getString() == "Fullscreen: Yes")
+					{
+						Buttons[0].setString("Fullscreen: No");
+						SETTINGS.GetResources()->PlaySound(ChoiceSound);
+						SETTINGS.SetFullscreenInfo(0);
+					}
+					else if (Buttons[0].getString() == "Fullscreen: No")
+					{
+						Buttons[0].setString("Fullscreen: Yes");
+						SETTINGS.GetResources()->PlaySound(ChoiceSound);
+						SETTINGS.SetFullscreenInfo(1);
+					}
 				}
 				else if (SelectedButton == 1)
 				{
-					SetNewGameState(EGameStateType::LeaderBoardMenu);
+					if (Buttons[1].getString() == "Music: On")
+					{
+						Buttons[1].setString("Music: Off");
+						SETTINGS.GetResources()->PlaySound(ChoiceSound);
+						SETTINGS.GetResources()->StopBackgroundMusic();
+					}
+					else if (Buttons[1].getString() == "Music: Off")
+					{
+						Buttons[1].setString("Music: On");
+						SETTINGS.GetResources()->PlaySound(ChoiceSound);
+						SETTINGS.GetResources()->PlayBackgroundMusic();
+					}
 				}
 				else if (SelectedButton == 2)
 				{
-					SetNewGameState(EGameStateType::SettingsMenu);
-				}
-				else if (SelectedButton == 3)
-				{
-					SetNewGameState(EGameStateType::MainMenu);
+					ChangeSettingsType(ESettingsType::Main);
 				}
 			}
 		}
 	}
 
-	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {}
-
-	void SSettingsMenu::Draw(sf::RenderWindow& Window)
+	void STVideoSettingMenu::Draw(sf::RenderWindow& Window)
 	{
-		Window.draw(BackgroundSprite);
 		Window.draw(MenuTitle);
 
 		for (auto& i : Buttons) {
@@ -111,14 +120,14 @@ namespace Arkanoid
 		}
 	}
 
-	bool SSettingsMenu::IsGameStateUpdated() const
+	bool STVideoSettingMenu::IsSettingsTypeChanged() const
 	{
-		return bIsGameStateUpdated;
+		return bIsSettingsTypeUpdated;
 	}
 
-	EGameStateType SSettingsMenu::GetNewGameStateType() const
+	ESettingsType STVideoSettingMenu::GetNewSettingsType() const
 	{
-		return NewGameStateType;
+		return SettingsType;
 	}
 
 	/*//////////////////////////////////*/
@@ -128,7 +137,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void SSettingsMenu::MoveUp()
+	void STVideoSettingMenu::MoveUp()
 	{
 		if (SelectedButton >= 0)
 		{
@@ -146,7 +155,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void SSettingsMenu::MoveDown()
+	void STVideoSettingMenu::MoveDown()
 	{
 		size_t end = Buttons.size();
 
@@ -166,11 +175,11 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	// Change flag and state type 
-	void SSettingsMenu::SetNewGameState(EGameStateType NewState)
+	// Method to change type of settings menu
+	void STVideoSettingMenu::ChangeSettingsType(ESettingsType NewType)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
+		bIsSettingsTypeUpdated = true;
+		SettingsType = NewType;
 
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 	}

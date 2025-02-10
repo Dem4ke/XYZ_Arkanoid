@@ -22,6 +22,7 @@
     <ClInclude Include="Game\AppStates\AppStates.h" />
     <ClInclude Include="Game\FileSystem\FileSystem.h" />
     <ClInclude Include="Game\Game.h" />
+    <ClInclude Include="Game\GameStates\CButton.h" />
     <ClInclude Include="Game\GameStates\IGameState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />

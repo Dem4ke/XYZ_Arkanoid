@@ -72,6 +72,9 @@
     <ClInclude Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.h">
       <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\CButton.h">
+      <Filter>Game\GameStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../IGameState.h"
+#include "../CButton.h"
 
 namespace Arkanoid
 {
@@ -45,13 +46,6 @@ namespace Arkanoid
 		sf::SoundBuffer MovesSound;							// Sound of menu moves
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
-		// Keys to work with menu
-		sf::Keyboard::Key UpKey = sf::Keyboard::W;
-		sf::Keyboard::Key DownKey = sf::Keyboard::S;
-		sf::Keyboard::Key LeftKey = sf::Keyboard::A;
-		sf::Keyboard::Key RightKey = sf::Keyboard::D;
-		sf::Keyboard::Key EscapeKey = sf::Keyboard::End;
-		sf::Keyboard::Key EscapeKeyB = sf::Keyboard::B;
-		sf::Keyboard::Key EnterKey = sf::Keyboard::Enter;
+		CButton Button;										// Keys to work with menu
 	};
 }

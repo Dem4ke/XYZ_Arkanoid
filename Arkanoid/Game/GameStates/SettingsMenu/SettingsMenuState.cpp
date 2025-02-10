@@ -19,7 +19,7 @@ namespace Arkanoid
 		assert(bIsLoaded);
 
 		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Sounds : on", "Music : on", "Screen", "Back" };
+		std::vector<std::string> InputButtons = { "Sounds", "Screen", "Back" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -56,8 +56,7 @@ namespace Arkanoid
 		}
 
 		// Color of the first button
-		int selectedButton_ = 0;
-		Buttons[selectedButton_].setFillColor(ChosenButtonColor);
+		Buttons[SelectedButton].setFillColor(ChosenButtonColor);
 	}
 
 	// All menu movement and events
@@ -65,33 +64,29 @@ namespace Arkanoid
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
-			if (Event.key.code == UpKey)
+			if (Event.key.code == Button.UpKey)
 			{
 				MoveUp();
 			}
-			else if (Event.key.code == DownKey)
+			else if (Event.key.code == Button.DownKey)
 			{
 				MoveDown();
 			}
-			else if (Event.key.code == EscapeKey || Event.key.code == EscapeKeyB)
+			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
 				SetNewGameState(EGameStateType::MainMenu);
 			}
-			else if (Event.key.code == EnterKey)
+			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0)
 				{
-					SetNewGameState(EGameStateType::MainGameplay);
+					ChangeSettingsType(ESettingsType::Sounds);
 				}
 				else if (SelectedButton == 1)
 				{
-					SetNewGameState(EGameStateType::LeaderBoardMenu);
+					ChangeSettingsType(ESettingsType::Video);
 				}
 				else if (SelectedButton == 2)
-				{
-					SetNewGameState(EGameStateType::SettingsMenu);
-				}
-				else if (SelectedButton == 3)
 				{
 					SetNewGameState(EGameStateType::MainMenu);
 				}
@@ -104,10 +99,29 @@ namespace Arkanoid
 	void SSettingsMenu::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(BackgroundSprite);
-		Window.draw(MenuTitle);
 
-		for (auto& i : Buttons) {
-			Window.draw(i);
+		switch (SettingsType)
+		{
+		case ESettingsType::Main:
+		{
+			Window.draw(MenuTitle);
+
+			for (auto& i : Buttons) {
+				Window.draw(i);
+			}
+
+			break;
+		}
+		case ESettingsType::Sounds:
+		{
+			//SoundMenu->Draw(Window);
+			break;
+		}
+		case ESettingsType::Video:
+		{
+			//VideoMenu->Draw(Window);
+			break;
+		}
 		}
 	}
 
@@ -173,5 +187,23 @@ namespace Arkanoid
 		NewGameStateType = NewState;
 
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+	}
+
+	// Create new sub settings menu
+	void SSettingsMenu::ChangeSettingsType(ESettingsType NewType)
+	{
+		SettingsType = NewType;
+
+		switch (SettingsType)
+		{
+		case ESettingsType::Sounds: 
+		{
+			break;
+		}
+		case ESettingsType::Video:
+		{
+			break;
+		}
+		}
 	}
 }

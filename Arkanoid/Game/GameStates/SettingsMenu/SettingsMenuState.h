@@ -4,15 +4,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../IGameState.h"
+#include "../CButton.h"
 
 namespace Arkanoid
 {
-	enum class ESettingsType : int 
-	{
-		Main = 0,	// Main settings
-		Sounds,		// Sound settings
-		Video,		// Video settings
-	};
+	class STSoundSettingsMenu;
+	class STVideoSettingMenu;
 
 	class SSettingsMenu final : public IGameState
 	{
@@ -29,18 +26,14 @@ namespace Arkanoid
 
 	private:
 		// Work tools
-		void InitMainSettingsMenu();
-		void InitSoundSettingsMenu();
-		void InitVideoSettingsMenu();
-
 		void MoveUp();
 		void MoveDown();
 		void SetNewGameState(EGameStateType NewState);
 		void ChangeSettingsType(ESettingsType NewType);
 
 	private:
-		STSoundSettingsMenu SoundMenu;
-		STVideoSettingMenu VideoMenu;
+		std::shared_ptr<STSoundSettingsMenu> SoundMenu;		// Sound settings menu
+		std::shared_ptr<STVideoSettingMenu> VideoMenu;		// Video settings menu
 
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size
@@ -61,13 +54,6 @@ namespace Arkanoid
 		sf::SoundBuffer MovesSound;							// Sound of menu moves
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
-		// Keys to work with menu
-		sf::Keyboard::Key UpKey = sf::Keyboard::W;
-		sf::Keyboard::Key DownKey = sf::Keyboard::S;
-		sf::Keyboard::Key LeftKey = sf::Keyboard::A;
-		sf::Keyboard::Key RightKey = sf::Keyboard::D;
-		sf::Keyboard::Key EscapeKey = sf::Keyboard::End;
-		sf::Keyboard::Key EscapeKeyB = sf::Keyboard::B;
-		sf::Keyboard::Key EnterKey = sf::Keyboard::Enter;
+		CButton Button;										// Keys to work with menu
 	};
 }
