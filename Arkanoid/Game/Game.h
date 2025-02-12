@@ -6,7 +6,6 @@
 namespace Arkanoid 
 {
 	class IGameState;
-	class IGameObject;
 
 	class UGame
 	{
@@ -25,6 +24,5 @@ namespace Arkanoid
 	private:
 		EGameStateType CurrentGameStateType = EGameStateType::MainMenu;	// Game state type which plays now
 		std::shared_ptr<IGameState> GameState;							// Game state object to play
-		std::vector<std::shared_ptr<IGameObject>> GameObjects;			// Game objects to main gameplay
 	};
 }

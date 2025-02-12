@@ -9,7 +9,7 @@ int main()
 	// Set game window
 	unsigned int WIndowWidth = SETTINGS.GetScreenWidth();
 	unsigned int WIndowHeight = SETTINGS.GetScreenHeight();
-	sf::Uint32 Style = SETTINGS.GetFullscreenInfo() == 1 ?  sf::Style::Fullscreen : sf::Style::Default;
+	sf::Uint32 Style = SETTINGS.IsFullscreenMode() ?  sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow Window(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
 	
 	// Initialization of game object

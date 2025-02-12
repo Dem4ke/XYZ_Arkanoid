@@ -1,5 +1,7 @@
 #include <cassert>
 #include "SettingsMenuState.h"
+#include "SoundSettingsMenuState.h"
+#include "VideoSettingsMenuState.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -62,66 +64,81 @@ namespace Arkanoid
 	// All menu movement and events
 	void SSettingsMenu::EventUpdate(const sf::Event& Event)
 	{
-		if (Event.type == sf::Event::KeyReleased)
-		{
-			if (Event.key.code == Button.UpKey)
+		if (SettingsType == ESettingsType::Main) {
+			if (Event.type == sf::Event::KeyReleased)
 			{
-				MoveUp();
-			}
-			else if (Event.key.code == Button.DownKey)
-			{
-				MoveDown();
-			}
-			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
-			{
-				SetNewGameState(EGameStateType::MainMenu);
-			}
-			else if (Event.key.code == Button.EnterKey)
-			{
-				if (SelectedButton == 0)
+				if (Event.key.code == Button.UpKey)
 				{
-					ChangeSettingsType(ESettingsType::Sounds);
+					MoveUp();
 				}
-				else if (SelectedButton == 1)
+				else if (Event.key.code == Button.DownKey)
 				{
-					ChangeSettingsType(ESettingsType::Video);
+					MoveDown();
 				}
-				else if (SelectedButton == 2)
+				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 				{
 					SetNewGameState(EGameStateType::MainMenu);
 				}
+				else if (Event.key.code == Button.EnterKey)
+				{
+					if (SelectedButton == 0)
+					{
+						SettingsType = ESettingsType::Sounds;
+						InitSubSettingsMenu(SettingsType);
+					}
+					else if (SelectedButton == 1)
+					{
+						SettingsType = ESettingsType::Video;
+						InitSubSettingsMenu(SettingsType);
+					}
+					else if (SelectedButton == 2)
+					{
+						SetNewGameState(EGameStateType::MainMenu);
+					}
+				}
+			}
+		}
+		else 
+		{
+			if (SubMenu->IsSettingsTypeChanged())
+			{
+				SettingsType = SubMenu->GetNewSettingsType();
+				InitSubSettingsMenu(SettingsType);
+			}
+
+			if (SubMenu)
+			{
+				SubMenu->EventUpdate(Event);
 			}
 		}
 	}
 
-	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {}
+	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {
+		if (SettingsType != ESettingsType::Main) {
+			if (SubMenu->IsSettingsTypeChanged())
+			{
+				SettingsType = SubMenu->GetNewSettingsType();
+				InitSubSettingsMenu(SettingsType);
+			}
+		}
+	}
 
 	void SSettingsMenu::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(BackgroundSprite);
 
-		switch (SettingsType)
-		{
-		case ESettingsType::Main:
+		if (SettingsType == ESettingsType::Main)
 		{
 			Window.draw(MenuTitle);
 
-			for (auto& i : Buttons) {
+			for (auto& i : Buttons)
+			{
 				Window.draw(i);
 			}
-
-			break;
 		}
-		case ESettingsType::Sounds:
+		else
 		{
-			//SoundMenu->Draw(Window);
-			break;
-		}
-		case ESettingsType::Video:
-		{
-			//VideoMenu->Draw(Window);
-			break;
-		}
+			SubMenu->Draw(Window);
 		}
 	}
 
@@ -189,19 +206,23 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 	}
 
-	// Create new sub settings menu
-	void SSettingsMenu::ChangeSettingsType(ESettingsType NewType)
+	void SSettingsMenu::InitSubSettingsMenu(ESettingsType Type)
 	{
-		SettingsType = NewType;
+		if (SubMenu)
+		{
+			SubMenu = nullptr;
+		}
 
-		switch (SettingsType)
+		switch (Type)
 		{
-		case ESettingsType::Sounds: 
+		case ESettingsType::Sounds:
 		{
+			SubMenu = std::make_shared<STSoundSettingsMenu>();
 			break;
 		}
 		case ESettingsType::Video:
 		{
+			SubMenu = std::make_shared<STVideoSettingMenu>();
 			break;
 		}
 		}

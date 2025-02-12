@@ -46,15 +46,23 @@ namespace Arkanoid
 		void SaveSettings();
 		void SetScreenWidth(int Value);
 		void SetScreenHeight(int Value);
-		void SetFullscreenInfo(int Value);
+
 		void SetTimePerFrame(float Value);
 		void SetSoundPower(float Value);
 
+		void SetFullscreenMode(bool bIsOn);
+		void SetSoundsOn(bool bIsOn); 
+		void SetMusicOn(bool bIsOn);
+
 		int GetScreenWidth() const;
 		int GetScreenHeight() const;
-		int GetFullscreenInfo() const;
+
 		float GetTimePerFrame() const;
 		float GetSoundPower() const;
+
+		bool IsFullscreenMode() const;
+		bool IsSoundsOn() const;
+		bool IsMusicOn() const;
 
 		const CScaleFactor& GetScaleFactor();
 		CResources* GetResources();
@@ -62,11 +70,14 @@ namespace Arkanoid
 	private:		
 		int ScreenWidth = 0;				// Width of rendered window
 		int ScreenHeight = 0;				// Height of rendered window
-		int IsFullscreen = 0;				// Checks is window has fullscreen mode or not 1 - yes, 0 - not
 
 		float TimePerFrame = 0.f;			// Frame rate limit which user sets in settings
 		float SoundPower = 0.f;				// Power of sounds in the game
 		float MusicPower = 0.f;				// Power of music in the game
+
+		bool bIsFullscreen = true;			// Flag which contains informaion is fullscreen mode on
+		bool bIsSoundsOn = true;			// Flag which contains informaion is sounds on
+		bool bIsMusicOn = true;				// Flag which contains informaion is music on
 
 		// Path to config (settings) file
 		const std::string PathToConfig = "Config/GameSettings.conf";		

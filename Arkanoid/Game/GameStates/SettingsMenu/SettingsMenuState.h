@@ -8,8 +8,7 @@
 
 namespace Arkanoid
 {
-	class STSoundSettingsMenu;
-	class STVideoSettingMenu;
+	class ISubSettingsMenu;
 
 	class SSettingsMenu final : public IGameState
 	{
@@ -29,11 +28,10 @@ namespace Arkanoid
 		void MoveUp();
 		void MoveDown();
 		void SetNewGameState(EGameStateType NewState);
-		void ChangeSettingsType(ESettingsType NewType);
+		void InitSubSettingsMenu(ESettingsType Type);
 
 	private:
-		std::shared_ptr<STSoundSettingsMenu> SoundMenu;		// Sound settings menu
-		std::shared_ptr<STVideoSettingMenu> VideoMenu;		// Video settings menu
+		std::shared_ptr<ISubSettingsMenu> SubMenu;			// Sub settings menu
 
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size

@@ -14,8 +14,13 @@ namespace Arkanoid
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
+		bIsSoundsOn = SETTINGS.IsSoundsOn();
+		bIsMusicOn = SETTINGS.IsMusicOn();
+
 		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Sounds : on", "Music : on", "Apply", "Back"};
+		std::string SoundsText = bIsSoundsOn ? "Sounds : On" : "Sounds : Off";
+		std::string MusicText = bIsMusicOn ? "Music : On" : "Music : Off";
+		std::vector<std::string> InputButtons = { SoundsText, MusicText, "Apply", "Back"};
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -73,35 +78,41 @@ namespace Arkanoid
 			{
 				if (SelectedButton == 0)
 				{
-					if (Buttons[0].getString() == "Sounds: On") 
-					{
-						Buttons[0].setString("Sounds: Off");
-						SETTINGS.GetResources()->PlaySound(ChoiceSound);
-						SETTINGS.GetResources()->SetSoundsVolume(0.f);
-					}
-					else if (Buttons[0].getString() == "Sounds: Off")
-					{
-						Buttons[0].setString("Sounds: On");
-						SETTINGS.GetResources()->PlaySound(ChoiceSound);
-						SETTINGS.GetResources()->SetSoundsVolume(5.f);
-					}
+					bIsSoundsOn = !bIsSoundsOn;
+					UpdateUi(EGUIType::Sounds);
 				}
 				else if (SelectedButton == 1)
 				{
-					if (Buttons[1].getString() == "Music: On")
-					{
-						Buttons[1].setString("Music: Off");
-						SETTINGS.GetResources()->PlaySound(ChoiceSound);
-						SETTINGS.GetResources()->StopBackgroundMusic();
-					}
-					else if (Buttons[1].getString() == "Music: Off")
-					{
-						Buttons[1].setString("Music: On");
-						SETTINGS.GetResources()->PlaySound(ChoiceSound);
-						SETTINGS.GetResources()->PlayBackgroundMusic();
-					}
+					bIsMusicOn = !bIsMusicOn;
+					UpdateUi(EGUIType::Music);
 				}
 				else if (SelectedButton == 2)
+				{
+					SETTINGS.SetSoundsOn(bIsSoundsOn);
+
+					if (SETTINGS.IsSoundsOn())
+					{
+						SETTINGS.GetResources()->SetSoundsVolume(5.f);
+					}
+					else
+					{
+						SETTINGS.GetResources()->SetSoundsVolume(0.f);
+					}
+
+					SETTINGS.SetMusicOn(bIsMusicOn);
+
+					if (SETTINGS.IsMusicOn())
+					{
+						SETTINGS.GetResources()->PlayBackgroundMusic();
+					}
+					else
+					{
+						SETTINGS.GetResources()->StopBackgroundMusic();
+					}
+
+					SETTINGS.SaveSettings();
+				}
+				else if (SelectedButton == 3)
 				{
 					ChangeSettingsType(ESettingsType::Main);
 				}
@@ -171,6 +182,27 @@ namespace Arkanoid
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
+	}
+
+	void STSoundSettingsMenu::UpdateUi(EGUIType ChangedType)
+	{
+		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+
+		switch (ChangedType)
+		{
+		case EGUIType::Sounds:
+		{
+			std::string SoundsText = bIsSoundsOn ? "Sounds : On" : "Sounds : Off";
+			Buttons[0].setString(SoundsText);
+			break;
+		}
+		case EGUIType::Music:
+		{
+			std::string MusicText = bIsMusicOn ? "Music : On" : "Music : Off";
+			Buttons[1].setString(MusicText);
+			break;
+		}
+		}
 	}
 
 	// Method to change type of settings menu

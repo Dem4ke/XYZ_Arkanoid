@@ -70,10 +70,13 @@ namespace Arkanoid
 
 		ScreenWidth = std::stoi(Info[0]);
 		ScreenHeight = std::stoi(Info[1]);
-		IsFullscreen = std::stoi(Info[2]);
-		TimePerFrame = std::stof(Info[3]);
-		SoundPower = std::stof(Info[4]);
+		TimePerFrame = std::stof(Info[2]);
+		SoundPower = std::stof(Info[3]);
 		MusicPower = std::stof(Info[4]);
+
+		bIsFullscreen = std::stoi(Info[5]);
+		bIsSoundsOn = std::stoi(Info[6]);
+		bIsMusicOn = std::stoi(Info[7]);
 
 		// For 800 pixels in width and 600 in height ScaleFactor equals 1
 		ScaleFactor.X = static_cast<float>(ScreenWidth) / 800.f;
@@ -81,7 +84,16 @@ namespace Arkanoid
 
 		Resources.SetSoundsVolume(SoundPower);
 		Resources.SetBackgroundMusicVolume(MusicPower);
-		Resources.PlayBackgroundMusic();
+
+		if (!bIsSoundsOn)
+		{
+			Resources.SetSoundsVolume(0.f);
+		}
+
+		if (bIsMusicOn) 
+		{
+			Resources.PlayBackgroundMusic();
+		} 
 	}
 
 	UGameSettings& UGameSettings::Instance()
@@ -97,17 +109,23 @@ namespace Arkanoid
 
 		std::string ScreenWidthText = std::to_string(ScreenWidth) + "\n";
 		std::string ScreenHeightText = std::to_string(ScreenHeight) + "\n";
-		std::string IsFullscreenText = std::to_string(IsFullscreen) + "\n";
 		std::string TimePerFrameText = std::to_string(TimePerFrame) + "\n";
 		std::string SoundPowerText = std::to_string(SoundPower) + "\n";
 		std::string MusicPowerText = std::to_string(MusicPower) + "\n";
 
+		std::string IsFullscreenText = std::to_string(bIsFullscreen) + "\n";
+		std::string SoundsOnText = std::to_string(bIsSoundsOn) + "\n";
+		std::string MusicOnText = std::to_string(bIsMusicOn) + "\n";
+
 		Info.push_back(ScreenWidthText);
 		Info.push_back(ScreenHeightText);
-		Info.push_back(IsFullscreenText);
 		Info.push_back(TimePerFrameText);
 		Info.push_back(SoundPowerText);
 		Info.push_back(MusicPowerText);
+
+		Info.push_back(IsFullscreenText);
+		Info.push_back(SoundsOnText);
+		Info.push_back(MusicOnText);
 
 		// Get info from config file and set game properties
 		bool bIsSerialized = FileSystem.Serialize(PathToConfig, Info);
@@ -124,11 +142,6 @@ namespace Arkanoid
 		ScreenHeight = Value;
 	}
 
-	void UGameSettings::SetFullscreenInfo(int Value)
-	{
-		IsFullscreen = Value;
-	}
-
 	void UGameSettings::SetTimePerFrame(float Value)
 	{
 		TimePerFrame = Value;
@@ -137,6 +150,21 @@ namespace Arkanoid
 	void UGameSettings::SetSoundPower(float Value)
 	{
 		SoundPower = Value;
+	}
+
+	void UGameSettings::SetFullscreenMode(bool bIsOn)
+	{
+		bIsFullscreen = bIsOn;
+	}
+
+	void UGameSettings::SetSoundsOn(bool bIsOn)
+	{
+		bIsSoundsOn = bIsOn;
+	}
+
+	void UGameSettings::SetMusicOn(bool bIsOn)
+	{
+		bIsMusicOn = bIsOn;
 	}
 
 	int UGameSettings::GetScreenWidth() const
@@ -149,11 +177,6 @@ namespace Arkanoid
 		return ScreenHeight;
 	}
 
-	int UGameSettings::GetFullscreenInfo() const
-	{
-		return IsFullscreen;
-	}
-
 	float UGameSettings::GetTimePerFrame() const
 	{
 		return TimePerFrame;
@@ -162,6 +185,21 @@ namespace Arkanoid
 	float UGameSettings::GetSoundPower() const
 	{
 		return SoundPower;
+	}
+
+	bool UGameSettings::IsFullscreenMode() const
+	{
+		return bIsFullscreen;
+	}
+
+	bool UGameSettings::IsSoundsOn() const
+	{
+		return bIsSoundsOn;
+	}
+
+	bool UGameSettings::IsMusicOn() const
+	{
+		return bIsMusicOn;
 	}
 
 	const CScaleFactor& UGameSettings::GetScaleFactor()
