@@ -15,5 +15,8 @@ namespace Arkanoid
 		const sf::Keyboard::Key EscapeKey = sf::Keyboard::End;
 		const sf::Keyboard::Key EscapeKeyB = sf::Keyboard::B;
 		const sf::Keyboard::Key EnterKey = sf::Keyboard::Enter;
+
+		const sf::Color CommonColor = sf::Color::White;		// Color of all unchosen buttons
+		const sf::Color ChosenColor = sf::Color::Blue;		// Color of a selected button
 	};
 }

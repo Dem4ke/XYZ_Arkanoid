@@ -1,43 +1,26 @@
 #include <cassert>
-#include "MainMenuState.h"
+#include "ResolutionSettingsMenu.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SMainMenu::SMainMenu()
+	STResolutionSettingsMenu::STResolutionSettingsMenu()
 	{
-		// Load textures
-		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_menu_background.jpg");
-		assert(bIsLoaded);
-
 		// Load sounds
-		bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
+		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
 		assert(bIsLoaded);
 
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
-		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Play game", "Leader board", "Settings", "Exit" };
+		std::vector<std::string> InputButtons = { "1280 x 720", "1920 x 1080", "2560 x 1440" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
 		float Height = static_cast<float>(SETTINGS.GetScreenHeight());
-		float X = Width / 2.f;
+		float X = Width / 2.f + ButtonsTextSize * 10.f;
 		float Y = Height / 3.f;
-
-		// Initialization of a background of the menu
-		BackgroundSprite.setTexture(BackgroundTexture);
-		Math::SetSize(BackgroundSprite, Width, Height);
-
-		// Initialization of a menu title
-		MenuTitle.setFont(SETTINGS.GetResources()->GetFont());
-		MenuTitle.setCharacterSize(TitleTextSize);
-		MenuTitle.setFillColor(Button.CommonColor);
-		MenuTitle.setString(" ");
-		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
-		MenuTitle.setPosition(X, Y - TitleTextSize);
 
 		// Initialization of menu's buttons
 		sf::Text MenuButton;
@@ -60,7 +43,7 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void SMainMenu::EventUpdate(const sf::Event& Event) 
+	void STResolutionSettingsMenu::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
@@ -74,52 +57,58 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::ExitMenu);
+				bIsExit = true;
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
-				if (SelectedButton == 0) 
+				if (SelectedButton == 0)
 				{
-					SetNewGameState(EGameStateType::MainGameplay);
+					ScreenWidth = 1280;
+					ScreenHeight = 720;
 				}
 				else if (SelectedButton == 1)
 				{
-					SetNewGameState(EGameStateType::LeaderBoardMenu);
+					ScreenWidth = 1920;
+					ScreenHeight = 1080;
 				}
 				else if (SelectedButton == 2)
 				{
-					SetNewGameState(EGameStateType::SettingsMenu);
+					ScreenWidth = 2560;
+					ScreenHeight = 1440;
 				}
-				else if (SelectedButton == 3)
-				{
-					SetNewGameState(EGameStateType::ExitMenu);
-				}
+
+				bIsChosen = true;
 			}
 		}
 	}
 
-	void SMainMenu::GameplayUpdate(const float DeltaTime) {}
-
-	void SMainMenu::Draw(sf::RenderWindow& Window) 
+	void STResolutionSettingsMenu::Draw(sf::RenderWindow& Window)
 	{
-		Window.draw(BackgroundSprite);
-		Window.draw(MenuTitle);
-
 		for (auto& i : Buttons) {
 			Window.draw(i);
 		}
 	}
 
-	bool SMainMenu::IsGameStateUpdated() const
+	int STResolutionSettingsMenu::GetWidth() const
 	{
-		return bIsGameStateUpdated;
+		return ScreenWidth;
 	}
 
-	EGameStateType SMainMenu::GetNewGameStateType() const
+	int STResolutionSettingsMenu::GetHeight() const
 	{
-		return NewGameStateType;
+		return ScreenHeight;
 	}
 
+	bool STResolutionSettingsMenu::IsExit() const
+	{
+		return bIsExit;
+	}
+
+	bool STResolutionSettingsMenu::IsChosen() const
+	{
+		return bIsChosen;
+	}
+	
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	      PRIVATE WORKTOOLS         */
@@ -127,9 +116,9 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void SMainMenu::MoveUp()
+	void STResolutionSettingsMenu::MoveUp()
 	{
-		if (SelectedButton >= 0) 
+		if (SelectedButton >= 0)
 		{
 			Buttons[SelectedButton].setFillColor(Button.CommonColor);
 			--SelectedButton;
@@ -145,7 +134,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void SMainMenu::MoveDown()
+	void STResolutionSettingsMenu::MoveDown()
 	{
 		int end = static_cast<int> (Buttons.size());
 
@@ -163,14 +152,5 @@ namespace Arkanoid
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
-	}
-
-	// Change flag and state type 
-	void SMainMenu::SetNewGameState(EGameStateType NewState)
-	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
-		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 	}
 }

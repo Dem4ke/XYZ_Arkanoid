@@ -78,7 +78,7 @@
     <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h">
       <Filter>Game\GameStates\SettingsMenu</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameStates\SettingsMenu\Resolution.h">
+    <ClInclude Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.h">
       <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,7 +113,7 @@
     <ClCompile Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.cpp">
       <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameStates\SettingsMenu\Resolution.cpp">
+    <ClCompile Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.cpp">
       <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClCompile>
   </ItemGroup>

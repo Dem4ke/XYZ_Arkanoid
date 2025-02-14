@@ -38,9 +38,6 @@ namespace Arkanoid
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons
 		sf::Text MenuTitle;									// Menu title
 
-		sf::Color CommonButtonColor = sf::Color::White;		// Color of all unchosen buttons
-		sf::Color ChosenButtonColor = sf::Color::Blue;		// Color of a selected button
-
 		sf::Texture BackgroundTexture;						// Texture for background
 		sf::Sprite BackgroundSprite;						// Sprite which shows on a background
 		sf::SoundBuffer MovesSound;							// Sound of menu moves

@@ -9,7 +9,7 @@
 namespace Arkanoid
 {
 	// What type of GUI has changed
-	enum class EGUIType : int
+	enum class ESGUIType : int
 	{
 		Sounds = 0,
 		Music,
@@ -31,7 +31,7 @@ namespace Arkanoid
 		// Work tools
 		void MoveUp();
 		void MoveDown();
-		void UpdateUi(EGUIType ChangedType);
+		void UpdateUi(ESGUIType ChangedType);
 		void ChangeSettingsType(ESettingsType NewType);
 
 	private:
@@ -46,9 +46,6 @@ namespace Arkanoid
 
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
-
-		sf::Color CommonButtonColor = sf::Color::White;		// Color of all unchosen buttons
-		sf::Color ChosenButtonColor = sf::Color::Blue;		// Color of a selected button
 
 		sf::SoundBuffer MovesSound;							// Sound of menu moves
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices

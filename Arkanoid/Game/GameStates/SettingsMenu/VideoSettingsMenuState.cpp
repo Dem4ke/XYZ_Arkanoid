@@ -1,6 +1,6 @@
 #include <cassert>
 #include "VideoSettingsMenuState.h"
-#include "Resolution.h"
+#include "ResolutionSettingsMenu.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -34,7 +34,7 @@ namespace Arkanoid
 		// Initialization of a menu title
 		MenuTitle.setFont(SETTINGS.GetResources()->GetFont());
 		MenuTitle.setCharacterSize(TitleTextSize);
-		MenuTitle.setFillColor(CommonButtonColor);
+		MenuTitle.setFillColor(Button.CommonColor);
 		MenuTitle.setString("Video settings");
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
@@ -44,7 +44,7 @@ namespace Arkanoid
 		float space = static_cast<float> (ButtonsTextSize);
 		MenuButton.setFont(SETTINGS.GetResources()->GetFont());
 		MenuButton.setCharacterSize(ButtonsTextSize);
-		MenuButton.setFillColor(CommonButtonColor);
+		MenuButton.setFillColor(Button.CommonColor);
 
 		Buttons.clear();
 		for (auto& i : InputButtons) {
@@ -56,41 +56,87 @@ namespace Arkanoid
 		}
 
 		// Color of the first button
-		Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
 	// All menu movement and events
 	void STVideoSettingMenu::EventUpdate(const sf::Event& Event)
 	{
-		if (Event.type == sf::Event::KeyReleased)
+		if (bIsResolutionsSnow)
 		{
-			if (Event.key.code == Button.UpKey)
+			Resolution->EventUpdate(Event);
+			
+			if (Resolution->IsChosen())
 			{
-				MoveUp();
+				ScreenWidth = Resolution->GetWidth();
+				ScreenHeight = Resolution->GetHeight();
+
+				UpdateUi(EVGUIType::Resolution);
+				bIsResolutionsSnow = false;
 			}
-			else if (Event.key.code == Button.DownKey)
+			else if (Resolution->IsExit())
 			{
-				MoveDown();
+				bIsResolutionsSnow = false;
 			}
-			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
+		}
+		else 
+		{
+			if (Event.type == sf::Event::KeyReleased)
 			{
-				ChangeSettingsType(ESettingsType::Main);
-			}
-			else if (Event.key.code == Button.EnterKey)
-			{
-				if (SelectedButton == 0)
+				if (Event.key.code == Button.UpKey)
 				{
-					bIsFullscreenOn = !bIsFullscreenOn;
-					UpdateUi(EGUIType::FullscreenMode);
+					MoveUp();
 				}
-				else if (SelectedButton == 1)
+				else if (Event.key.code == Button.DownKey)
 				{
-					bIsResolutionsSnow = !bIsResolutionsSnow;
-					UpdateUi(EGUIType::Resolution);
+					MoveDown();
 				}
-				else if (SelectedButton == 2)
+				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 				{
 					ChangeSettingsType(ESettingsType::Main);
+				}
+				else if (Event.key.code == Button.EnterKey)
+				{
+					if (SelectedButton == 0)
+					{
+						bIsFullscreenOn = !bIsFullscreenOn;
+						UpdateUi(EVGUIType::FullscreenMode);
+					}
+					else if (SelectedButton == 1)
+					{
+						bIsResolutionsSnow = !bIsResolutionsSnow;
+
+						if (bIsResolutionsSnow)
+						{
+							if (Resolution)
+							{
+								Resolution = nullptr;
+							}
+
+							Resolution = std::make_shared<STResolutionSettingsMenu>();
+						}
+					}
+					else if (SelectedButton == 2)
+					{
+						if (bIsFullscreenOn != SETTINGS.IsFullscreenMode())
+						{
+							bIsFullscreenModeChanged = true;
+							SETTINGS.SetFullscreenMode(bIsFullscreenOn);
+						}
+
+						if (ScreenWidth != SETTINGS.GetScreenWidth() && ScreenHeight != SETTINGS.GetScreenHeight())
+						{
+							bIsResolutionChanged = true;
+							SETTINGS.SetScreenWidth(ScreenWidth);
+							SETTINGS.SetScreenHeight(ScreenHeight);
+						}
+
+						SETTINGS.SaveSettings();
+					}
+					else if (SelectedButton == 3)
+					{
+						ChangeSettingsType(ESettingsType::Main);
+					}
 				}
 			}
 		}
@@ -102,6 +148,33 @@ namespace Arkanoid
 
 		for (auto& i : Buttons) {
 			Window.draw(i);
+		}
+
+		if (bIsResolutionsSnow)
+		{
+			Resolution->Draw(Window);
+		}
+
+		if (bIsFullscreenModeChanged)
+		{
+			unsigned int WIndowWidth = SETTINGS.GetScreenWidth();
+			unsigned int WIndowHeight = SETTINGS.GetScreenHeight();
+			sf::Uint32 Style = SETTINGS.IsFullscreenMode() ? sf::Style::Fullscreen : sf::Style::Default;
+			Window.create(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
+
+			bIsFullscreenModeChanged = false;
+			ChangeSettingsType(ESettingsType::Main);
+		}
+
+		if (bIsResolutionChanged)
+		{
+			unsigned int WIndowWidth = SETTINGS.GetScreenWidth();
+			unsigned int WIndowHeight = SETTINGS.GetScreenHeight();
+			sf::Uint32 Style = SETTINGS.IsFullscreenMode() ? sf::Style::Fullscreen : sf::Style::Default;
+			Window.create(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
+
+			bIsResolutionChanged = false;
+			ChangeSettingsType(ESettingsType::Main);
 		}
 	}
 
@@ -126,15 +199,15 @@ namespace Arkanoid
 	{
 		if (SelectedButton >= 0)
 		{
-			Buttons[SelectedButton].setFillColor(CommonButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.CommonColor);
 			--SelectedButton;
 
 			if (SelectedButton < 0)
 			{
-				SelectedButton = Buttons.size() - 1;
+				SelectedButton = static_cast<int> (Buttons.size()) - 1;
 			}
 
-			Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
@@ -142,11 +215,11 @@ namespace Arkanoid
 
 	void STVideoSettingMenu::MoveDown()
 	{
-		size_t end = Buttons.size();
+		int end = static_cast<int> (Buttons.size());
 
 		if (SelectedButton <= end)
 		{
-			Buttons[SelectedButton].setFillColor(CommonButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.CommonColor);
 			++SelectedButton;
 
 			if (SelectedButton == end)
@@ -154,25 +227,25 @@ namespace Arkanoid
 				SelectedButton = 0;
 			}
 
-			Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STVideoSettingMenu::UpdateUi(EGUIType ChangedType)
+	void STVideoSettingMenu::UpdateUi(EVGUIType ChangedType)
 	{
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 
 		switch (ChangedType)
 		{
-		case EGUIType::FullscreenMode:
+		case EVGUIType::FullscreenMode:
 		{
 			std::string FullscreenText = bIsFullscreenOn ? "Fullscreen: Yes" : "Fullscreen: No";
 			Buttons[0].setString(FullscreenText);
 			break;
 		}
-		case EGUIType::Resolution:
+		case EVGUIType::Resolution:
 		{
 			std::string ResolutionText = "Resolution: " + std::to_string(ScreenWidth) + " x " + std::to_string(ScreenHeight);
 			Buttons[1].setString(ResolutionText);

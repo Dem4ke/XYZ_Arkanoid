@@ -8,10 +8,10 @@
 
 namespace Arkanoid
 {
-	struct CResolution;
+	class STResolutionSettingsMenu;
 
 	// What type of GUI has changed
-	enum class EGUIType : int
+	enum class EVGUIType : int
 	{
 		FullscreenMode = 0,
 		Resolution,
@@ -33,7 +33,7 @@ namespace Arkanoid
 		// Work tools
 		void MoveUp();
 		void MoveDown();
-		void UpdateUi(EGUIType ChangedType);
+		void UpdateUi(EVGUIType ChangedType);
 		void ChangeSettingsType(ESettingsType NewType);
 
 	private:
@@ -45,19 +45,18 @@ namespace Arkanoid
 
 		bool bIsFullscreenOn = false;						// Flag which contains informaion is fullscreen mode on
 		bool bIsResolutionsSnow = false;					// Flag which contains are resolution variables showing
+		bool bIsFullscreenModeChanged = false;				// Flag which contains informaion is fullscreen mode changed
+		bool bIsResolutionChanged = false;					// Flag which contains information is resolution changed
 		bool bIsSettingsTypeUpdated = false;				// Flag contains informaion is user changed a settings type
 		ESettingsType SettingsType = ESettingsType::Video;	// Current settings type which shows
 
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
 
-		sf::Color CommonButtonColor = sf::Color::White;		// Color of all unchosen buttons
-		sf::Color ChosenButtonColor = sf::Color::Blue;		// Color of a selected button
-
 		sf::SoundBuffer MovesSound;							// Sound of menu moves
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
 		CButton Button;										// Keys to work with menu
-		std::shared_ptr<CResolution> Resolution;			// Struct which contains resolution's variables
+		std::shared_ptr<STResolutionSettingsMenu> Resolution;// Class which contains resolution's variables
 	};
 }

@@ -32,7 +32,7 @@ namespace Arkanoid
 		// Initialization of a menu title
 		MenuTitle.setFont(SETTINGS.GetResources()->GetFont());
 		MenuTitle.setCharacterSize(TitleTextSize);
-		MenuTitle.setFillColor(CommonButtonColor);
+		MenuTitle.setFillColor(Button.CommonColor);
 		MenuTitle.setString("Sound settings");
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
@@ -42,7 +42,7 @@ namespace Arkanoid
 		float space = static_cast<float> (ButtonsTextSize);
 		MenuButton.setFont(SETTINGS.GetResources()->GetFont());
 		MenuButton.setCharacterSize(ButtonsTextSize);
-		MenuButton.setFillColor(CommonButtonColor);
+		MenuButton.setFillColor(Button.CommonColor);
 
 		Buttons.clear();
 		for (auto& i : InputButtons) {
@@ -54,7 +54,7 @@ namespace Arkanoid
 		}
 
 		// Color of the first button
-		Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
 	// All menu movement and events
@@ -79,12 +79,12 @@ namespace Arkanoid
 				if (SelectedButton == 0)
 				{
 					bIsSoundsOn = !bIsSoundsOn;
-					UpdateUi(EGUIType::Sounds);
+					UpdateUi(ESGUIType::Sounds);
 				}
 				else if (SelectedButton == 1)
 				{
 					bIsMusicOn = !bIsMusicOn;
-					UpdateUi(EGUIType::Music);
+					UpdateUi(ESGUIType::Music);
 				}
 				else if (SelectedButton == 2)
 				{
@@ -150,15 +150,15 @@ namespace Arkanoid
 	{
 		if (SelectedButton >= 0)
 		{
-			Buttons[SelectedButton].setFillColor(CommonButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.CommonColor);
 			--SelectedButton;
 
 			if (SelectedButton < 0)
 			{
-				SelectedButton = Buttons.size() - 1;
+				SelectedButton = static_cast<int> (Buttons.size()) - 1;
 			}
 
-			Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
@@ -166,11 +166,11 @@ namespace Arkanoid
 
 	void STSoundSettingsMenu::MoveDown()
 	{
-		size_t end = Buttons.size();
+		int end = static_cast<int> (Buttons.size());
 
 		if (SelectedButton <= end)
 		{
-			Buttons[SelectedButton].setFillColor(CommonButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.CommonColor);
 			++SelectedButton;
 
 			if (SelectedButton == end)
@@ -178,25 +178,25 @@ namespace Arkanoid
 				SelectedButton = 0;
 			}
 
-			Buttons[SelectedButton].setFillColor(ChosenButtonColor);
+			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 		}
 
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STSoundSettingsMenu::UpdateUi(EGUIType ChangedType)
+	void STSoundSettingsMenu::UpdateUi(ESGUIType ChangedType)
 	{
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 
 		switch (ChangedType)
 		{
-		case EGUIType::Sounds:
+		case ESGUIType::Sounds:
 		{
 			std::string SoundsText = bIsSoundsOn ? "Sounds : On" : "Sounds : Off";
 			Buttons[0].setString(SoundsText);
 			break;
 		}
-		case EGUIType::Music:
+		case ESGUIType::Music:
 		{
 			std::string MusicText = bIsMusicOn ? "Music : On" : "Music : Off";
 			Buttons[1].setString(MusicText);

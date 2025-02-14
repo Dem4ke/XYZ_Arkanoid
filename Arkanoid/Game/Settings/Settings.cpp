@@ -78,9 +78,9 @@ namespace Arkanoid
 		bIsSoundsOn = std::stoi(Info[6]);
 		bIsMusicOn = std::stoi(Info[7]);
 
-		// For 800 pixels in width and 600 in height ScaleFactor equals 1
-		ScaleFactor.X = static_cast<float>(ScreenWidth) / 800.f;
-		ScaleFactor.Y = static_cast<float>(ScreenHeight) / 600.f;
+		// For 1280 pixels in width and 720 in height ScaleFactor equals 1
+		ScaleFactor.X = static_cast<float>(ScreenWidth) / 1280.f;
+		ScaleFactor.Y = static_cast<float>(ScreenHeight) / 720.f;
 
 		Resources.SetSoundsVolume(SoundPower);
 		Resources.SetBackgroundMusicVolume(MusicPower);
