@@ -9,7 +9,7 @@ namespace Arkanoid
 	SLeaderBoardMenu::SLeaderBoardMenu()
 	{
 		// Load textures
-		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_menu_background.jpg");
+		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
 		assert(bIsLoaded);
 
 		// Load sounds
@@ -37,6 +37,15 @@ namespace Arkanoid
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
 
+		// Initialization of the exit button
+		ExitButton.setFont(SETTINGS.GetResources()->GetFont());
+		ExitButton.setCharacterSize(ButtonsTextSize);
+		ExitButton.setFillColor(Button.CommonColor);
+		ExitButton.setString("Exit");
+		ExitButton.setOrigin(sf::Vector2f(ExitButton.getGlobalBounds().width / 2.f, ExitButton.getGlobalBounds().height / 2.f));
+		ExitButton.setPosition(X, Height - Height / 10.f);
+		ExitButton.setFillColor(Button.ChosenColor);
+
 		// Get information from leader board file
 		ULeaderBoard LeaderBoard;
 		std::vector<std::pair<std::string, int>> InputLeaderBoard = LeaderBoard.GetTable();
@@ -57,14 +66,15 @@ namespace Arkanoid
 
 		int PlayersToDraw = 0; // Counter to check how many players have added
 		Table.clear();
+
 		for (auto& i : InputLeaderBoard) {
 			PlayerName.setString(i.first);
 			PlayerName.setOrigin(sf::Vector2f(PlayerName.getGlobalBounds().width / 2.f, PlayerName.getGlobalBounds().height / 2.f));
-			PlayerName.setPosition(X, Y + space * 1.2f);
+			PlayerName.setPosition(X - ButtonsTextSize * 1.5f, Y + space * 1.2f);
 
 			PlayerScore.setString(std::to_string(i.second));
-			PlayerScore.setOrigin(sf::Vector2f(PlayerName.getGlobalBounds().width / 2.f, PlayerName.getGlobalBounds().height / 2.f));
-			PlayerScore.setPosition(X + ButtonsTextSize * 4.f, Y + space * 1.2f);
+			PlayerScore.setOrigin(sf::Vector2f(0.f, PlayerName.getGlobalBounds().height / 2.f));
+			PlayerScore.setPosition(X + ButtonsTextSize * 2.5f, Y + space * 1.2f);
 
 			Table.push_back({ PlayerName, PlayerScore });
 			space += ButtonsTextSize;
@@ -75,16 +85,6 @@ namespace Arkanoid
 				break;
 			}
 		}
-
-		// Initialization of the exit button
-		Y = Height - Height / 10.f;
-		ExitButton.setFont(SETTINGS.GetResources()->GetFont());
-		ExitButton.setCharacterSize(TitleTextSize);
-		ExitButton.setFillColor(Button.CommonColor);
-		ExitButton.setString("Exit");
-		ExitButton.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
-		ExitButton.setPosition(X, Y);
-		ExitButton.setFillColor(Button.ChosenColor);
 	}
 
 	// All menu movement and events

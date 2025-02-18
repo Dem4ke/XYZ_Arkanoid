@@ -8,7 +8,7 @@ namespace Arkanoid
 	SExitMenu::SExitMenu()
 	{
 		// Load textures
-		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_menu_background.jpg");
+		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
 		assert(bIsLoaded);
 
 		// Load sounds
