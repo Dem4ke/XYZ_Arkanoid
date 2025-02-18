@@ -93,6 +93,9 @@
     <ClInclude Include="Game\GameStates\ExitMenu\ExitMenuState.h">
       <Filter>Game\GameStates\ExitMenu</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.h">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="Game\GameStates\ExitMenu\ExitMenuState.cpp">
       <Filter>Game\GameStates\ExitMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

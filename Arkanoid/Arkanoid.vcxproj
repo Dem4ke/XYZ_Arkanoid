@@ -25,6 +25,7 @@
     <ClInclude Include="Game\GameStates\CButton.h" />
     <ClInclude Include="Game\GameStates\ExitMenu\ExitMenuState.h" />
     <ClInclude Include="Game\GameStates\IGameState.h" />
+    <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.h" />
     <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoardMenuState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="Game\FileSystem\FileSystem.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\GameStates\ExitMenu\ExitMenuState.cpp" />
+    <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp" />
     <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoardMenuState.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp" />
     <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp" />

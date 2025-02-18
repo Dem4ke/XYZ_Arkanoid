@@ -1,4 +1,5 @@
 #include <cassert>
+#include "LeaderBoard.h"
 #include "LeaderBoardMenuState.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
@@ -18,14 +19,11 @@ namespace Arkanoid
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
-		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Exit" };
-
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
 		float Height = static_cast<float>(SETTINGS.GetScreenHeight());
 		float X = Width / 2.f;
-		float Y = Height / 10.f;
+		float Y = Height / 7.f;
 
 		// Initialization of a background of the menu
 		BackgroundSprite.setTexture(BackgroundTexture);
@@ -39,25 +37,54 @@ namespace Arkanoid
 		MenuTitle.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
 		MenuTitle.setPosition(X, Y - TitleTextSize);
 
-		// Initialization of menu's buttons
-		sf::Text MenuButton;
-		float space = static_cast<float> (ButtonsTextSize);
-		MenuButton.setFont(SETTINGS.GetResources()->GetFont());
-		MenuButton.setCharacterSize(ButtonsTextSize);
-		MenuButton.setFillColor(Button.CommonColor);
+		// Get information from leader board file
+		ULeaderBoard LeaderBoard;
+		std::vector<std::pair<std::string, int>> InputLeaderBoard = LeaderBoard.GetTable();
 
-		Buttons.clear();
-		Y = Height - Height / 10.f;
-		for (auto& i : InputButtons) {
-			MenuButton.setString(i);
-			MenuButton.setOrigin(sf::Vector2f(MenuButton.getGlobalBounds().width / 2.f, MenuButton.getGlobalBounds().height / 2.f));
-			MenuButton.setPosition(X, Y + space * 1.2f);
-			Buttons.push_back(MenuButton);
+		// Initialization of the leader board
+		float space = static_cast<float> (ButtonsTextSize);
+
+		sf::Text PlayerName;
+		sf::Text PlayerScore;
+		
+		PlayerName.setFont(SETTINGS.GetResources()->GetFont());
+		PlayerName.setCharacterSize(ButtonsTextSize);
+		PlayerName.setFillColor(Button.CommonColor);
+
+		PlayerScore.setFont(SETTINGS.GetResources()->GetFont());
+		PlayerScore.setCharacterSize(ButtonsTextSize);
+		PlayerScore.setFillColor(Button.CommonColor);
+
+		int PlayersToDraw = 0; // Counter to check how many players have added
+		Table.clear();
+		for (auto& i : InputLeaderBoard) {
+			PlayerName.setString(i.first);
+			PlayerName.setOrigin(sf::Vector2f(PlayerName.getGlobalBounds().width / 2.f, PlayerName.getGlobalBounds().height / 2.f));
+			PlayerName.setPosition(X, Y + space * 1.2f);
+
+			PlayerScore.setString(std::to_string(i.second));
+			PlayerScore.setOrigin(sf::Vector2f(PlayerName.getGlobalBounds().width / 2.f, PlayerName.getGlobalBounds().height / 2.f));
+			PlayerScore.setPosition(X + ButtonsTextSize * 4.f, Y + space * 1.2f);
+
+			Table.push_back({ PlayerName, PlayerScore });
 			space += ButtonsTextSize;
+			++PlayersToDraw;
+
+			if (PlayersToDraw == DrawablePlayers)
+			{
+				break;
+			}
 		}
 
-		// Color of the first button
-		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
+		// Initialization of the exit button
+		Y = Height - Height / 10.f;
+		ExitButton.setFont(SETTINGS.GetResources()->GetFont());
+		ExitButton.setCharacterSize(TitleTextSize);
+		ExitButton.setFillColor(Button.CommonColor);
+		ExitButton.setString("Exit");
+		ExitButton.setOrigin(sf::Vector2f(MenuTitle.getGlobalBounds().width / 2.f, MenuTitle.getGlobalBounds().height / 2.f));
+		ExitButton.setPosition(X, Y);
+		ExitButton.setFillColor(Button.ChosenColor);
 	}
 
 	// All menu movement and events
@@ -65,24 +92,13 @@ namespace Arkanoid
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
-			if (Event.key.code == Button.UpKey)
-			{
-				MoveUp();
-			}
-			else if (Event.key.code == Button.DownKey)
-			{
-				MoveDown();
-			}
-			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
+			if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
 				SetNewGameState(EGameStateType::MainMenu);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
-				if (SelectedButton == 0)
-				{
-					SetNewGameState(EGameStateType::MainMenu);
-				}
+				SetNewGameState(EGameStateType::MainMenu);
 			}
 		}
 	}
@@ -93,9 +109,11 @@ namespace Arkanoid
 	{
 		Window.draw(BackgroundSprite);
 		Window.draw(MenuTitle);
+		Window.draw(ExitButton);
 
-		for (auto& i : Buttons) {
-			Window.draw(i);
+		for (auto& i : Table) {
+			Window.draw(i.first);
+			Window.draw(i.second);
 		}
 	}
 
@@ -114,45 +132,6 @@ namespace Arkanoid
 	/*	      PRIVATE WORKTOOLS         */
 	/*                                  */
 	/*//////////////////////////////////*/
-
-	// Menu movement methods
-	void SLeaderBoardMenu::MoveUp()
-	{
-		if (SelectedButton >= 0)
-		{
-			Buttons[SelectedButton].setFillColor(Button.CommonColor);
-			--SelectedButton;
-
-			if (SelectedButton < 0)
-			{
-				SelectedButton = static_cast<int> (Buttons.size()) - 1;
-			}
-
-			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
-		}
-
-		SETTINGS.GetResources()->PlaySound(MovesSound);
-	}
-
-	void SLeaderBoardMenu::MoveDown()
-	{
-		int end = static_cast<int> (Buttons.size());
-
-		if (SelectedButton <= end)
-		{
-			Buttons[SelectedButton].setFillColor(Button.CommonColor);
-			++SelectedButton;
-
-			if (SelectedButton == end)
-			{
-				SelectedButton = 0;
-			}
-
-			Buttons[SelectedButton].setFillColor(Button.ChosenColor);
-		}
-
-		SETTINGS.GetResources()->PlaySound(MovesSound);
-	}
 
 	// Change flag and state type 
 	void SLeaderBoardMenu::SetNewGameState(EGameStateType NewState)

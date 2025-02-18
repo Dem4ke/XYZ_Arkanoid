@@ -23,19 +23,18 @@ namespace Arkanoid
 
 	private:
 		// Work tools
-		void MoveUp();
-		void MoveDown();
 		void SetNewGameState(EGameStateType NewState);
 
 	private:
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size
-		int SelectedButton = 0;								// Index of a selected button
+		int DrawablePlayers = 10;							// Count of drawable positions of players in the table
 
 		bool bIsGameStateUpdated = false;					// Flag contains iformaion is user changed a game state type
 		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played
 
-		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons
+		std::vector<std::pair<sf::Text, sf::Text>> Table;	// Vector of visible players in leader board
+		sf::Text ExitButton;								// Exit button
 		sf::Text MenuTitle;									// Menu title
 
 		sf::Texture BackgroundTexture;						// Texture for background
