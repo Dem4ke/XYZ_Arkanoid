@@ -9,6 +9,8 @@
 namespace Arkanoid
 {
 	class ISubGameplayState;
+	class IGameObject;
+	class ULevelLoader;
 
 	class SMainGameplay final : public IGameState
 	{
@@ -29,17 +31,20 @@ namespace Arkanoid
 		void InitSubGameplayState(EGameplayType Type);
 
 	private:
-		std::shared_ptr<ISubGameplayState> SubGameplayState;// Sub settings menu
+		std::shared_ptr<ISubGameplayState> SubGameplayState;	// Sub gameplay menus (pause dialog and other)
+		std::shared_ptr<ULevelLoader> LevelLoader;				// Class to load levels from config file
+		std::vector<std::shared_ptr<IGameObject>> GameObjects;	// Vector of playable objects (ball, platform)
+		std::vector<std::shared_ptr<IGameObject>> Blocks;		// Vector of blocks
 
-		bool bIsGameStateUpdated = false;					// Flag contains iformaion is user changed a game state type
+		bool bIsGameStateUpdated = false;						// Flag contains iformaion is user changed a game state type
 		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played
-		EGameplayType GameplayType = EGameplayType::Main;	// Current settings type which shows
+		EGameplayType GameplayType = EGameplayType::Main;		// Current gameplay type which shows
 
-		sf::Texture BackgroundTexture;						// Texture for background
-		sf::Sprite BackgroundSprite;						// Sprite which shows on a background
-		sf::SoundBuffer MovesSound;							// Sound of menu moves
-		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
+		sf::Texture BackgroundTexture;							// Texture for background
+		sf::Sprite BackgroundSprite;							// Sprite which shows on a background
+		sf::SoundBuffer MovesSound;								// Sound of menu moves
+		sf::SoundBuffer ChoiceSound;							// Sound of menu choices
 
-		CButton Button;										// Keys to work with menu
+		CButton Button;											// Keys to work with game
 	};
 }

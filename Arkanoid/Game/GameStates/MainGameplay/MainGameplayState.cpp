@@ -1,5 +1,7 @@
 #include <cassert>
 #include "MainGameplayState.h"
+#include "ISubGameplayState.h"
+#include "LevelLoader.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -18,66 +20,24 @@ namespace Arkanoid
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
-		// Create level
-		// Create blocks from level config that loaded above
+		// Create level loader and load first level
+		LevelLoader = std::make_shared<ULevelLoader>();
+		LevelLoader->Load(1);
 	}
 
 	// All menu movement and events
 	void SMainGameplay::EventUpdate(const sf::Event& Event)
 	{
-		if (SettingsType == ESettingsType::Main) {
-			if (Event.type == sf::Event::KeyReleased)
-			{
-				if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
-				{
-					//SetNewGameState(EGameStateType::MainMenu);
-				}
-			}
-		}
-		else
-		{
-			if (SubMenu->IsSettingsTypeChanged())
-			{
-				Init();
-				SettingsType = SubMenu->GetNewSettingsType();
-				InitSubSettingsMenu(SettingsType);
-			}
-
-			if (SubMenu)
-			{
-				SubMenu->EventUpdate(Event);
-			}
-		}
+		
 	}
 
 	void SMainGameplay::GameplayUpdate(const float DeltaTime) {
-		if (SettingsType != ESettingsType::Main) {
-			if (SubMenu->IsSettingsTypeChanged())
-			{
-				Init();
-				SettingsType = SubMenu->GetNewSettingsType();
-				InitSubSettingsMenu(SettingsType);
-			}
-		}
+		
 	}
 
 	void SMainGameplay::Draw(sf::RenderWindow& Window)
 	{
-		Window.draw(BackgroundSprite);
-
-		if (SettingsType == ESettingsType::Main)
-		{
-			Window.draw(MenuTitle);
-
-			for (auto& i : Buttons)
-			{
-				Window.draw(i);
-			}
-		}
-		else
-		{
-			SubMenu->Draw(Window);
-		}
+		
 	}
 
 	bool SMainGameplay::IsGameStateUpdated() const
@@ -107,18 +67,6 @@ namespace Arkanoid
 
 	void SMainGameplay::InitSubGameplayState(EGameplayType Type)
 	{
-		if (SubGameplayState)
-		{
-			SubGameplayState = nullptr;
-		}
-
-		switch (Type)
-		{
-		case EGameplayType::Pause:
-		{
-			SubGameplayState = std::make_shared<STSoundSettingsMenu>();
-			break;
-		}
-		}
+		
 	}
 }

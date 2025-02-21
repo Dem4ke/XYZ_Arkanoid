@@ -96,6 +96,15 @@
     <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.h">
       <Filter>Game\GameStates\LeaderBoardMenu</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\IGameObject.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -139,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp">
       <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader.cpp">
+      <Filter>Game\GameStates\MainGameplay</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
