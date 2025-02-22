@@ -4,6 +4,8 @@
 
 namespace Arkanoid
 {
+	class IBlockFactory;
+
 	class ULevelLoader final
 	{
 	public:
@@ -12,10 +14,14 @@ namespace Arkanoid
 
 		void Load(int LevelIndex);
 
-		std::vector
+		const std::vector<std::shared_ptr<IGameObject>>& GetGameObjects();
+		const std::vector<std::shared_ptr<IGameObject>>& GetBlocks();
 
 	private:
-		std::vector<std::shared_ptr<IGameObject>> GameObjects;	// Vector of playable objects (ball, platform)
-		std::vector<std::shared_ptr<IGameObject>> Blocks;		// Vector of blocks
+		std::vector<std::shared_ptr<IBlockFactory>> BlockFactories;		// Block factories to create all blocks
+		std::vector<std::shared_ptr<IGameObject>> GameObjects;			// Vector of playable objects (ball, platform)
+		std::vector<std::shared_ptr<IGameObject>> Blocks;				// Vector of blocks
+
+		const std::string Path = "Config/Levels.conf";					// Path to levels config file
 	};
 }

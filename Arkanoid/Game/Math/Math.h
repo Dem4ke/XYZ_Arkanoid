@@ -6,7 +6,7 @@ namespace Math
 	sf::Color GetRandomColor();
 
 	// Sprites and rectangles
-	void SetSize(sf::Sprite& Sprite, float DesiredWidht, float DesiredHeight);
+	void SetSize(sf::Sprite& Sprite, float DesiredWidth, float DesiredHeight);
 
 	template <typename T>
 	void SetRelativeOrigin(T& Sprite, float OriginX, float OriginY)

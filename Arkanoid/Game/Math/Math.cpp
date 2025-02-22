@@ -39,11 +39,11 @@ namespace Math
 		}
 	}
 
-	void SetSize(sf::Sprite& Sprite, float DesiredWidht, float DesiredHeight)
+	void SetSize(sf::Sprite& Sprite, float DesiredWidth, float DesiredHeight)
 	{
 		// Get sprite size from the corner
 		sf::FloatRect SpriteRect = Sprite.getLocalBounds();
-		sf::Vector2f Scale = { DesiredWidht / SpriteRect.width, DesiredHeight / SpriteRect.height };
+		sf::Vector2f Scale = { DesiredWidth / SpriteRect.width, DesiredHeight / SpriteRect.height };
 		Sprite.setScale(Scale);
 	}
 }

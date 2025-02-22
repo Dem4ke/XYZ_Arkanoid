@@ -43,6 +43,21 @@
     <Filter Include="Game\GameStates\LeaderBoardMenu">
       <UniqueIdentifier>{c358f39a-4abf-4833-9b3d-aa6058c04642}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\LevelLoader">
+      <UniqueIdentifier>{09a97a4d-eb86-44e5-83a4-8b62460db546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects">
+      <UniqueIdentifier>{d7f0ef75-a232-4952-b604-4829e7699a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Ball">
+      <UniqueIdentifier>{e049bbcf-3f64-40d7-bd95-b2dd8bdfb1bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Block">
+      <UniqueIdentifier>{95b25d98-f793-46f5-95a5-543efcc79252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Platform">
+      <UniqueIdentifier>{41b66522-c53f-4d6e-9ec4-de21bb69ee5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameStates\IGameState.h">
@@ -102,8 +117,23 @@
     <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h">
       <Filter>Game\GameStates\MainGameplay</Filter>
     </ClInclude>
+    <ClInclude Include="Game\UI\UI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader.h">
-      <Filter>Game\GameStates\MainGameplay</Filter>
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Ball.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Block.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Platform.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,8 +179,23 @@
     <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp">
       <Filter>Game\GameStates\LeaderBoardMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Game\UI\UI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader.cpp">
-      <Filter>Game\GameStates\MainGameplay</Filter>
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Ball.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Block.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Platform.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
