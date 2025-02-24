@@ -2,4 +2,6 @@
 .vs
 x64
 x86
-*.user
+*.obj
+*.vcxproj
+*.vcxproj.*
