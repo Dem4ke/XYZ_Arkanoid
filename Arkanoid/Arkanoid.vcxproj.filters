@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{69cdf450-6538-47a4-8b0f-9dc0096ec5a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\UI">
+      <UniqueIdentifier>{b6694a5f-fc02-486d-8dc2-26ea600819dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates">
+      <UniqueIdentifier>{902878bd-9cd0-4efb-ba60-6f00b99debd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainMenu">
+      <UniqueIdentifier>{7e04a15b-e686-4470-8d16-6da9b08a99b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu">
+      <UniqueIdentifier>{cbccbd44-be3a-4c1b-bcba-54b38e050f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Settings">
+      <UniqueIdentifier>{255e03a2-848b-4df5-9693-a017cd57aecd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\FileSystem">
+      <UniqueIdentifier>{a9993f72-d5a4-4c20-97df-c4a5eb812948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Math">
+      <UniqueIdentifier>{17d87739-c373-4c9e-9e62-70ad01276975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\AppStates">
+      <UniqueIdentifier>{80ab0514-d1f7-4d7d-8a4a-0e381176c54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay">
+      <UniqueIdentifier>{87113f6d-1aeb-430d-a271-02ac41be7da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu\SoundSettings">
+      <UniqueIdentifier>{7b140ffa-1b1a-482d-ab35-cf1d26f64d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\SettingsMenu\VideoSettings">
+      <UniqueIdentifier>{1b6ec277-f32f-4ee2-a6ab-b28f692e9f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\ExitMenu">
+      <UniqueIdentifier>{6e2fe1ab-df27-4941-898d-926813b6d41f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\LeaderBoardMenu">
+      <UniqueIdentifier>{c358f39a-4abf-4833-9b3d-aa6058c04642}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\LevelLoader">
+      <UniqueIdentifier>{09a97a4d-eb86-44e5-83a4-8b62460db546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects">
+      <UniqueIdentifier>{d7f0ef75-a232-4952-b604-4829e7699a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Ball">
+      <UniqueIdentifier>{e049bbcf-3f64-40d7-bd95-b2dd8bdfb1bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Block">
+      <UniqueIdentifier>{95b25d98-f793-46f5-95a5-543efcc79252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Platform">
+      <UniqueIdentifier>{41b66522-c53f-4d6e-9ec4-de21bb69ee5b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game\GameStates\IGameState.h">
+      <Filter>Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h">
+      <Filter>Game\GameStates\MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Settings\Settings.h">
+      <Filter>Game\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\FileSystem\FileSystem.h">
+      <Filter>Game\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Math\Math.h">
+      <Filter>Game\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\AppStates\AppStates.h">
+      <Filter>Game\AppStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\SettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu\SoundSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\CButton.h">
+      <Filter>Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h">
+      <Filter>Game\GameStates\SettingsMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.h">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoardMenuState.h">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\ExitMenu\ExitMenuState.h">
+      <Filter>Game\GameStates\ExitMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.h">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\IGameObject.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\UI\UI.h">
+      <Filter>Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader.h">
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Ball.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Block.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Platform.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game\Main.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp">
+      <Filter>Game\GameStates\MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Settings\Settings.cpp">
+      <Filter>Game\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\FileSystem\FileSystem.cpp">
+      <Filter>Game\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Math\Math.cpp">
+      <Filter>Game\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\SettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp">
+      <Filter>Game\GameStates\MainGameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu\SoundSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\VideoSettingsMenuState.cpp">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.cpp">
+      <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoardMenuState.cpp">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\ExitMenu\ExitMenuState.cpp">
+      <Filter>Game\GameStates\ExitMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp">
+      <Filter>Game\GameStates\LeaderBoardMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\UI\UI.cpp">
+      <Filter>Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader.cpp">
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Ball.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Block.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Block</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Platform.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

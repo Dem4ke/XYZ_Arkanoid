@@ -2,6 +2,8 @@
 #include "MainGameplayState.h"
 #include "ISubGameplayState.h"
 #include "LevelLoader.h"
+#include "IGameObject.h"
+#include "GameObjects/Block.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -20,9 +22,18 @@ namespace Arkanoid
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
+		// Initialization of a background of the game
+		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
+		float Height = static_cast<float>(SETTINGS.GetScreenHeight());
+		BackgroundSprite.setTexture(BackgroundTexture);
+		Math::SetSize(BackgroundSprite, Width, Height);
+
 		// Create level loader and load first level
 		LevelLoader = std::make_shared<ULevelLoader>();
 		LevelLoader->Load(1);
+
+		Blocks = LevelLoader->GetBlocks();
+		GameObjects = LevelLoader->GetGameObjects();
 	}
 
 	// All menu movement and events
@@ -37,7 +48,12 @@ namespace Arkanoid
 
 	void SMainGameplay::Draw(sf::RenderWindow& Window)
 	{
-		
+		Window.draw(BackgroundSprite);
+
+		for (auto& Block : Blocks)
+		{
+			Block->Draw(Window);
+		}
 	}
 
 	bool SMainGameplay::IsGameStateUpdated() const

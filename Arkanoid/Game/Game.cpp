@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "GameStates/MainGameplay/MainGameplayState.h"
 #include "GameStates/MainMenu/MainMenuState.h"
 #include "GameStates/SettingsMenu/SettingsMenuState.h"
 #include "GameStates/LeaderBoardMenu/LeaderBoardMenuState.h"
@@ -99,7 +100,7 @@ namespace Arkanoid
 		}
 		case EGameStateType::MainGameplay:
 		{
-			GameState = std::make_shared<SMainMenu>();
+			GameState = std::make_shared<SMainGameplay>();
 			break;
 		}
 		}

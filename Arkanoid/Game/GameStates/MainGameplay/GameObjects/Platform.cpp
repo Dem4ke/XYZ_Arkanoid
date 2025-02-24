@@ -1,4 +1,4 @@
-#include "UI.h"
+#include "Platform.h"
 
 namespace Arkanoid
 {

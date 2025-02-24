@@ -1,22 +1,28 @@
+#include <cassert>
 #include "Block.h"
 #include "../../../Math/Math.h"
 #include "../../../Settings/Settings.h"
 
 namespace Arkanoid
 {
-	UBlock::UBlock(const sf::Vector2f& Position, const sf::Texture& Texture)
+	UBlock::UBlock(const sf::Vector2f& InputedPosition) 
+	: Position(InputedPosition)
 	{
+		// Load texture
+		bool bIsLoaded = Texture.loadFromFile("Resources/MainTextures/blocks_bricks.png");
+		assert(bIsLoaded);
+
 		Width *= SETTINGS.GetScaleFactor().X;
 		Height *= SETTINGS.GetScaleFactor().Y;
-
-		CurrentPosition = Position;
-		Math::SetSize(Sprite, Width, Height);
-		Math::SetRelativeOrigin(Sprite, 0.5f, 0.5f);
 
 		Sprite.setTexture(Texture);
 		Sprite.setTextureRect(TextureRect);
 		Sprite.setColor(Math::GetRandomColor());
-		Sprite.setPosition(CurrentPosition);
+		
+		Math::SetSize(Sprite, Width, Height);
+		Math::SetRelativeOrigin(Sprite, 0.5f, 0.5f);
+
+		Sprite.setPosition(Position);
 	}
 
 	void UBlock::Update(const float& deltaTime) {}
@@ -122,8 +128,8 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	UThreeHitBlock::UThreeHitBlock(const sf::Vector2f& Position, const sf::Texture& Texture)
-	: UBlock(Position, Texture)
+	UThreeHitBlock::UThreeHitBlock(const sf::Vector2f& InputedPosition)
+	: UBlock(InputedPosition)
 	{}
 
 	void UThreeHitBlock::Update(const float& DeltaTime)
@@ -144,7 +150,12 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	UUnbreakableBlock::UUnbreakableBlock(const sf::Vector2f& Position, const sf::Texture& Texture)
-	: UBlock(Position, Texture)
+	UUnbreakableBlock::UUnbreakableBlock(const sf::Vector2f& InputedPosition)
+	: UBlock(InputedPosition)
 	{}
+
+	void UUnbreakableBlock::Update(const float& DeltaTime)
+	{
+		Health = 4;
+	}
 }

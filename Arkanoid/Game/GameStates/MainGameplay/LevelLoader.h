@@ -1,15 +1,18 @@
 #pragma once
 
-#include "IGameObject.h"
+#include <vector>
+#include <memory>
+#include <string>
 
 namespace Arkanoid
 {
+	class IGameObject;
 	class IBlockFactory;
 
 	class ULevelLoader final
 	{
 	public:
-		ULevelLoader();
+		ULevelLoader() = default;
 		~ULevelLoader() = default;
 
 		void Load(int LevelIndex);

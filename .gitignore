@@ -3,5 +3,4 @@
 x64
 x86
 *.obj
-*.vcxproj
-*.vcxproj.*
+*.vcxproj.user

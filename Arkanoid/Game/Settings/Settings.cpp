@@ -127,6 +127,10 @@ namespace Arkanoid
 		Info.push_back(SoundsOnText);
 		Info.push_back(MusicOnText);
 
+		// For 1280 pixels in width and 720 in height ScaleFactor equals 1
+		ScaleFactor.X = static_cast<float>(ScreenWidth) / 1280.f;
+		ScaleFactor.Y = static_cast<float>(ScreenHeight) / 720.f;
+
 		// Get info from config file and set game properties
 		bool bIsSerialized = FileSystem.Serialize(PathToConfig, Info);
 		assert(bIsSerialized);

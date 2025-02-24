@@ -4,6 +4,7 @@
 
 namespace Arkanoid
 {
+	// Interface of objects that used in main gameplay
 	class IGameObject
 	{
 	public:

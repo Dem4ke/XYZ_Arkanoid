@@ -8,13 +8,13 @@ namespace Arkanoid
 	class UBlock : public IGameObject
 	{
 	public:
-		UBlock(const sf::Vector2f& Position, const sf::Texture& Texture);
+		UBlock(const sf::Vector2f& InputedPosition);
 		virtual ~UBlock() = default;
 
 		virtual void Update(const float& deltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
-		virtual int CheckCollision(std::shared_ptr<IGameObject> Object) override;
+		int CheckCollision(std::shared_ptr<IGameObject> Object) override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;
@@ -24,18 +24,19 @@ namespace Arkanoid
 	protected:
 		int Health = 1;									// Count of hits to destroy block
 		
-		float Width = 60.f;								// Width of block
-		float Height = 20.f;							// Height of block
+		float Width = 125.f;							// Width of block
+		float Height = 40.f;							// Height of block
 
-		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the blocks texture 
-		sf::Vector2f CurrentPosition;					// Position of block on screen
+		sf::Vector2f Position;							// Position of the block on screen
+		sf::Texture Texture;							// Texture of the block
 		sf::Sprite Sprite;								// Sprite to draw
+		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the block's texture 
 	};
 
 	class UThreeHitBlock final : public UBlock
 	{
 	public:
-		UThreeHitBlock(const sf::Vector2f& Position, const sf::Texture& Texture);
+		UThreeHitBlock(const sf::Vector2f& InputedPosition);
 		~UThreeHitBlock() = default;
 
 		void Update(const float& DeltaTime) override;
@@ -51,11 +52,13 @@ namespace Arkanoid
 	class UUnbreakableBlock final : public UBlock
 	{
 	public:
-		UUnbreakableBlock(const sf::Vector2f& Position, const sf::Texture& Texture);
+		UUnbreakableBlock(const sf::Vector2f& InputedPosition);
 		~UUnbreakableBlock() = default;
 
+		void Update(const float& DeltaTime) override;
+
 	private:
-		unsigned int Health = 40000;
+		int Health = 4;
 
 		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the blocks texture 
 	};
