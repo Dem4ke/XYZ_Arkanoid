@@ -13,7 +13,7 @@ namespace Arkanoid
 		virtual void Update(const float& DeltaTime) = 0;
 		virtual void Draw(sf::RenderWindow& Window) = 0;
 
-		virtual int CheckCollision(std::shared_ptr<IGameObject> Object) = 0;
+		virtual void CheckCollision(std::shared_ptr<IGameObject> Object) = 0;
 
 		virtual float GetOriginX() const = 0;
 		virtual float GetOriginY() const = 0;
