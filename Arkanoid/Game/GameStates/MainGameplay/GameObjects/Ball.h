@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "../IGameObject.h"
 
 namespace Arkanoid
@@ -11,7 +12,7 @@ namespace Arkanoid
 		UBall(const sf::Vector2f& InputedPosition);
 		~UBall() = default;
 
-		void Update(const float& deltaTime) override;
+		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
 		void CheckCollision(std::shared_ptr<IGameObject> Object) override;
@@ -27,9 +28,15 @@ namespace Arkanoid
 
 		float Size = 10.f;			// Size of the ball
 		float Speed = 60.f;			// Speed of the ball
+		float Angle = 0.f;			// Angle of ball's velocity
+
+		bool bIsOutOfPlayground = false;
 
 		sf::Vector2f Position;		// Position of the ball on screen
-		sf::Texture Texture;		// Texture of the ball
-		sf::Sprite Sprite;			// Sprite to draw
+		sf::Vector2f Direction;		// Unit vector that contains ball's velocity direction
+
+		sf::CircleShape Circle;		// Shape of the ball
+
+		sf::SoundBuffer HitSound;	// Sound of menu moves
 	};
 }

@@ -6,7 +6,7 @@
 namespace Arkanoid
 {
 	UBlock::UBlock(const sf::Vector2f& InputedPosition) 
-	: Position(InputedPosition)
+		: Position(InputedPosition)
 	{
 		// Load texture
 		bool bIsLoaded = Texture.loadFromFile("Resources/MainTextures/blocks_bricks.png");
@@ -25,7 +25,7 @@ namespace Arkanoid
 		Sprite.setPosition(Position);
 	}
 
-	void UBlock::Update(const float& deltaTime) {}
+	void UBlock::Update(const float& DeltaTime) {}
 
 	void UBlock::Draw(sf::RenderWindow& Window)
 	{
@@ -61,7 +61,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	UThreeHitBlock::UThreeHitBlock(const sf::Vector2f& InputedPosition)
-	: UBlock(InputedPosition)
+		: UBlock(InputedPosition)
 	{}
 
 	void UThreeHitBlock::Update(const float& DeltaTime)
@@ -83,7 +83,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	UUnbreakableBlock::UUnbreakableBlock(const sf::Vector2f& InputedPosition)
-	: UBlock(InputedPosition)
+		: UBlock(InputedPosition)
 	{}
 
 	void UUnbreakableBlock::Update(const float& DeltaTime)

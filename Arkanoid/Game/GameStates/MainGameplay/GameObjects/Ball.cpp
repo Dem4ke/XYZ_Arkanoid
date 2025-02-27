@@ -1,22 +1,53 @@
+#include <cassert>
 #include "Ball.h"
 #include "../../../Math/Math.h"
+#include "../../../Settings/Settings.h"
 
 namespace Arkanoid
 {
 	UBall::UBall(const sf::Vector2f& InputedPosition)
-	: Position(InputedPosition)
+		: Position(InputedPosition)
 	{
+		// Load sound of ball's hit
+		bool bIsLoaded = HitSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
+		assert(bIsLoaded);
 
+		Circle.setRadius(Size / 2.f);
+		Circle.setFillColor(sf::Color::White);
+		Math::SetRelativeOrigin(Circle, 0.5f, 0.5f);
+
+		// Set started direction of ball (unit vector)
+		const float pi = std::acos(-1.f);
+		Direction.x = std::cos(pi / 180.f * Angle);
+		Direction.y = std::sin(pi / 180.f * Angle);
+
+		// Set start position
+		Circle.setPosition(Position);
 	}
 
-	void UBall::Update(const float& deltaTime) 
+	void UBall::Update(const float& DeltaTime) 
 	{
+		// Calculate new position of ball
+		Position += (Speed * DeltaTime * Direction);
+		Circle.setPosition(Position);
 
+		// Check collision with window's borders
+		if (Position.x - Size / 2.f < 0 || Position.x + Size / 2.f > SETTINGS.GetScreenWidth()) {
+			ChangeX();
+		}
+
+		if (Position.y - Size / 2.f < 0) {
+			ChangeY();
+		}
+
+		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) {
+			bIsOutOfPlayground = true;
+		}
 	}
 
 	void UBall::Draw(sf::RenderWindow& Window)
 	{
-		Window.draw(Sprite);
+		Window.draw(Circle);
 	}
 
 	void UBall::CheckCollision(std::shared_ptr<IGameObject> Object)
@@ -27,68 +58,67 @@ namespace Arkanoid
 
 		if (Length < Object->GetWidth() + GetWidth())
 		{
-			float xNormal = Object->GetWidth() * 2.f;
-			float yNormal = Object->GetWidth() * 2.f;
+			float NormalX = Object->GetWidth() * 2.f;
+			float NormalY = Object->GetWidth() * 2.f;
 
 			// Search area of triangle between ball's origin and block's side
-			auto triangleArea = [](float x1, float y1, float x2, float y2, float x3, float y3)
+			auto TriangleArea = [](float x1, float y1, float x2, float y2, float x3, float y3)
 				{
 					return std::fabs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) / 2.f;
 				};
 
 			// Search length of block's side
-			auto baseLength = [](float x1, float y1, float x2, float y2)
+			auto BaseLength = [](float x1, float y1, float x2, float y2)
 				{
 					return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 				};
 
-			// Search normal from ball's orifin to block's side
-			auto triangleHeight = [](float triangleArea, float baseLenght)
+			// Search lenght of the normal from ball's orifin to block's side
+			auto TriangleHeight = [](float triangleArea, float baseLenght)
 				{
 					return triangleArea * 2.f / baseLenght;
 				};
 
-
-			// Check normal lenght from ball to block
-			if ((Object->GetOriginX() + (Object->GetWidth() / 2.f) * 0.85f > GetOriginX() - GetWidth() / 2.f) &&
-				(Object->GetOriginX() - (Object->GetWidth() / 2.f) * 0.85f < GetOriginX() + GetWidth() / 2.f))
+			// Check lenght of the normal from ball to block
+			if ((GetOriginX() + (GetWidth() / 2.f) * 0.85f > Object->GetOriginX() - Object->GetWidth() / 2.f) &&
+				(GetOriginX() - (GetWidth() / 2.f) * 0.85f < Object->GetOriginX() + Object->GetWidth() / 2.f))
 			{
-				float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
-					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
+					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
+					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-					GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-					GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f);
+				float Area2 = TriangleArea(GetOriginX(), GetOriginY(),
+					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
+					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f);
 
-				float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
-					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float Length = BaseLength(Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
+										  Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				yNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
+				NormalY = Area2 < Area2 ? TriangleHeight(Area1, Length) : TriangleHeight(Area2, Length);
 			}
 			else if ((Object->GetOriginY() + (Object->GetHeight() / 2.f) * 0.85f > GetOriginY() - GetHeight() / 2.f) &&
 				(Object->GetOriginY() - (Object->GetHeight() / 2.f) * 0.85f < GetOriginY() + GetHeight() / 2.f))
 			{
-				float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-					GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
+					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
+					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-					GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float Area2 = TriangleArea(GetOriginX(), GetOriginY(),
+					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
+					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float Length = BaseLength(Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
+										  Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				xNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
+				NormalX = Area1 < Area2 ? TriangleHeight(Area1, Length) : TriangleHeight(Area2, Length);
 			}
 
 			// Change ball's velocity 
-			if (yNormal < Object->GetHeight() / 2.f)
+			if (NormalY < GetHeight() / 2.f)
 			{
 				ChangeY();
 			}
-			else if (xNormal < Object->GetWidth() / 2.f)
+			else if (NormalX < GetWidth() / 2.f)
 			{
 				ChangeX();
 			}
@@ -97,12 +127,12 @@ namespace Arkanoid
 
 	float UBall::GetOriginX() const
 	{
-		return Sprite.getOrigin().x;
+		return Circle.getOrigin().x;
 	}
 
 	float UBall::GetOriginY() const
 	{
-		return Sprite.getOrigin().y;
+		return Circle.getOrigin().y;
 	}
 
 	float UBall::GetWidth() const
@@ -113,5 +143,23 @@ namespace Arkanoid
 	float UBall::GetHeight() const
 	{
 		return Size;
+	}
+
+	/*//////////////////////////////////*/
+	/*                                  */
+	/*	      PRIVATE WORKTOOLS         */
+	/*                                  */
+	/*//////////////////////////////////*/
+
+	void UBall::ChangeX()
+	{
+		Direction.x *= -1;
+		SETTINGS.GetResources()->PlaySound(HitSound);
+	}
+
+	void UBall::ChangeY()
+	{
+		Direction.y *= -1;
+		SETTINGS.GetResources()->PlaySound(HitSound);
 	}
 }

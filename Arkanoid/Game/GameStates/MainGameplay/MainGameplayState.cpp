@@ -37,13 +37,14 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void SMainGameplay::EventUpdate(const sf::Event& Event)
-	{
-		
-	}
+	void SMainGameplay::EventUpdate(const sf::Event& Event) {}
 
-	void SMainGameplay::GameplayUpdate(const float DeltaTime) {
-		
+	void SMainGameplay::GameplayUpdate(const float DeltaTime) 
+	{
+		for (auto& Object : GameObjects)
+		{
+			Object->Update(DeltaTime);
+		}
 	}
 
 	void SMainGameplay::Draw(sf::RenderWindow& Window)
@@ -53,6 +54,11 @@ namespace Arkanoid
 		for (auto& Block : Blocks)
 		{
 			Block->Draw(Window);
+		}
+
+		for (auto& Object : GameObjects)
+		{
+			Object->Draw(Window);
 		}
 	}
 

@@ -11,21 +11,21 @@ namespace Arkanoid
 		UBlock(const sf::Vector2f& InputedPosition);
 		virtual ~UBlock() = default;
 
-		virtual void Update(const float& deltaTime) override;
+		virtual void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
 		void CheckCollision(std::shared_ptr<IGameObject> Object) override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;
-		float GetWidth() const override;
+		float GetWidth() const override; 
 		float GetHeight() const override;
 
 	protected:
 		int Health = 1;									// Count of hits to destroy block
 		
-		float Width = 125.f;							// Width of block
-		float Height = 40.f;							// Height of block
+		float Width = 125.f;							// Width of the block
+		float Height = 40.f;							// Height of the block
 
 		sf::Vector2f Position;							// Position of the block on screen
 		sf::Texture Texture;							// Texture of the block
