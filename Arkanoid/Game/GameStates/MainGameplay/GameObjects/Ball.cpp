@@ -47,59 +47,52 @@ namespace Arkanoid
 				{
 					return triangleArea * 2.f / baseLenght;
 				};
-		}
-		else
-		{
 
-		}
 
-		
+			// Check normal lenght from ball to block
+			if ((Object->GetOriginX() + (Object->GetWidth() / 2.f) * 0.85f > GetOriginX() - GetWidth() / 2.f) &&
+				(Object->GetOriginX() - (Object->GetWidth() / 2.f) * 0.85f < GetOriginX() + GetWidth() / 2.f))
+			{
+				float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
+					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
+					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
 
-		if ((Object->GetOriginX() + (Object->GetWidth() / 2.f) * 0.85f > GetOriginX() - GetWidth() / 2.f) &&
-			(Object->GetOriginX() - (Object->GetWidth() / 2.f) * 0.85f < GetOriginX() + GetWidth() / 2.f))
-		{
-			float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-				GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
-				GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
+					GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
+					GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f);
 
-			float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-				GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-				GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f);
+				float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
+					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
 
-			float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f,
-				GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
-
-			yNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
-		}
-		else if ((Object->GetOriginY() + (Object->GetHeight() / 2.f) * 0.85f > GetOriginY() - GetHeight() / 2.f) &&
+				yNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
+			}
+			else if ((Object->GetOriginY() + (Object->GetHeight() / 2.f) * 0.85f > GetOriginY() - GetHeight() / 2.f) &&
 				(Object->GetOriginY() - (Object->GetHeight() / 2.f) * 0.85f < GetOriginY() + GetHeight() / 2.f))
-		{
-			float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-				GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-				GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+			{
+				float area1 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
+					GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
+					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
 
-			float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
-				GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-				GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float area2 = triangleArea(Object->GetOriginX(), Object->GetOriginY(),
+					GetOriginX() + GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
+					GetOriginX() + GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
 
-			float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
-				GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
+				float length = baseLength(GetOriginX() - GetWidth() / 2.f, GetOriginY() - GetHeight() / 2.f,
+					GetOriginX() - GetWidth() / 2.f, GetOriginY() + GetHeight() / 2.f);
 
-			xNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
+				xNormal = area1 < area2 ? triangleHeight(area1, length) : triangleHeight(area2, length);
+			}
+
+			// Change ball's velocity 
+			if (yNormal < Object->GetHeight() / 2.f)
+			{
+				ChangeY();
+			}
+			else if (xNormal < Object->GetWidth() / 2.f)
+			{
+				ChangeX();
+			}
 		}
-
-		if (yNormal < Object->GetWidth() / 2.f)
-		{
-			--Health;
-			return 1;
-		}
-		else if (xNormal < Object->GetWidth() / 2.f)
-		{
-			--Health;
-			return 2;
-		}
-
-		return 0;
 	}
 
 	float UBall::GetOriginX() const

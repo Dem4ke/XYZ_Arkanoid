@@ -22,6 +22,9 @@ namespace Arkanoid
 		float GetHeight() const override;
 
 	private:
+		void ChangeX();
+		void ChangeY();
+
 		float Size = 10.f;			// Size of the ball
 		float Speed = 60.f;			// Speed of the ball
 
