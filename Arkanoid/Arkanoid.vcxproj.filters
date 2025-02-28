@@ -58,6 +58,12 @@
     <Filter Include="Game\GameStates\MainGameplay\GameObjects\Platform">
       <UniqueIdentifier>{41b66522-c53f-4d6e-9ec4-de21bb69ee5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\Observer">
+      <UniqueIdentifier>{c17ea50b-8ad4-4792-9de3-67a9bb2eb88b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\PauseState">
+      <UniqueIdentifier>{aec6a123-93fa-4fea-8e17-0e62af6e9555}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\GameStates\IGameState.h">
@@ -120,9 +126,6 @@
     <ClInclude Include="Game\UI\UI.h">
       <Filter>Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader.h">
-      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Ball.h">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
     </ClInclude>
@@ -134,6 +137,15 @@
     </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Platform.h">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.h">
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\Observer.h">
+      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\PauseState\PauseState.h">
+      <Filter>Game\GameStates\MainGameplay\PauseState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +194,6 @@
     <ClCompile Include="Game\UI\UI.cpp">
       <Filter>Game\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader.cpp">
-      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Ball.cpp">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
     </ClCompile>
@@ -196,6 +205,15 @@
     </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Platform.cpp">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.cpp">
+      <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\Observer\Observer.cpp">
+      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\PauseState\PauseState.cpp">
+      <Filter>Game\GameStates\MainGameplay\PauseState</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

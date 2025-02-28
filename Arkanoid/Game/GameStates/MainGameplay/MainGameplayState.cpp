@@ -4,6 +4,8 @@
 #include "LevelLoader.h"
 #include "IGameObject.h"
 #include "GameObjects/Block.h"
+#include "GameObjects/Ball.h"
+#include "GameObjects/Platform.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -16,9 +18,6 @@ namespace Arkanoid
 		assert(bIsLoaded);
 
 		// Load sounds
-		bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
-		assert(bIsLoaded);
-
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
@@ -37,13 +36,41 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void SMainGameplay::EventUpdate(const sf::Event& Event) {}
+	void SMainGameplay::EventUpdate(const sf::Event& Event) 
+	{
+		if (GameplayType != EGameplayType::Main && SubGameplayState)
+		{
+			SubGameplayState->EventUpdate(Event);
+		}
+	}
 
 	void SMainGameplay::GameplayUpdate(const float DeltaTime) 
 	{
-		for (auto& Object : GameObjects)
+		if (GameplayType == EGameplayType::Main)
 		{
-			Object->Update(DeltaTime);
+			GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
+
+			for (auto& Block : Blocks)
+			{
+				GameObjects[1]->CheckCollision(Block, Block->GetObjectType());
+			}
+
+			for (auto& Object : GameObjects)
+			{
+				Object->Update(DeltaTime);
+			}
+
+			/*if (GameObjects[1]->IsObjectCrashed())
+			{
+				InitSubGameplayState(EGameplayType::GameOver);
+			}*/
+		}
+		else {
+			if (SubGameplayState->IsGameplayTypeChanged())
+			{
+				GameplayType = SubGameplayState->GetNewGameplayType();
+				InitSubGameplayState(GameplayType);
+			}
 		}
 	}
 
@@ -59,6 +86,11 @@ namespace Arkanoid
 		for (auto& Object : GameObjects)
 		{
 			Object->Draw(Window);
+		}
+
+		if (SubGameplayState)
+		{
+			SubGameplayState->Draw(Window);
 		}
 	}
 
@@ -89,6 +121,23 @@ namespace Arkanoid
 
 	void SMainGameplay::InitSubGameplayState(EGameplayType Type)
 	{
-		
+		if (SubGameplayState)
+		{
+			SubGameplayState = nullptr;
+		}
+
+		switch (Type)
+		{
+		case EGameplayType::Pause:
+		{
+			SubGameplayState = std::make_shared<>();
+			break;
+		}
+		case EGameplayType::GameOver:
+		{
+			SubGameplayState = std::make_shared<>();
+			break;
+		}
+		}
 	}
 }

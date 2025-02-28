@@ -33,8 +33,10 @@
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Platform.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\IGameObject.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h" />
-    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\Observer.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\PauseState\PauseState.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.h" />
@@ -55,8 +57,10 @@
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Block.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Platform.cpp" />
-    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader.cpp" />
+    <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp" />
+    <ClCompile Include="Game\GameStates\MainGameplay\Observer\Observer.cpp" />
+    <ClCompile Include="Game\GameStates\MainGameplay\PauseState\PauseState.cpp" />
     <ClCompile Include="Game\GameStates\MainMenu\MainMenuState.cpp" />
     <ClCompile Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.cpp" />
     <ClCompile Include="Game\GameStates\SettingsMenu\SettingsMenuState.cpp" />

@@ -26,5 +26,16 @@ namespace Arkanoid
 	{
 		Main = 0,	// Main gameplay
 		Pause,		// Pause dialog
+		GameOver,	// Game over 
+	};
+
+	// Types of a game object's type
+	enum class EObjectType : int
+	{
+		Ball = 0,
+		Platform,
+		SimpleBlock,
+		ThreeHitBlock,
+		UnbreackableBlock,
 	};
 }

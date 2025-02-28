@@ -32,16 +32,16 @@ namespace Arkanoid
 		Window.draw(Sprite);
 	}
 
-	void UBlock::CheckCollision(std::shared_ptr<IGameObject> Object) {}
+	void UBlock::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
 
 	float UBlock::GetOriginX() const
 	{
-		return Sprite.getOrigin().x;
+		return Position.x;
 	}
 
 	float UBlock::GetOriginY() const
 	{
-		return Sprite.getOrigin().y;
+		return Position.y;
 	}
 
 	float UBlock::GetWidth() const
@@ -52,6 +52,11 @@ namespace Arkanoid
 	float UBlock::GetHeight() const
 	{
 		return Height;
+	}
+
+	EObjectType UBlock::GetObjectType() const
+	{
+		return Type;
 	}
 
 	/*//////////////////////////////////*/

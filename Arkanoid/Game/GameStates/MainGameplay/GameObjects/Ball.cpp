@@ -12,6 +12,9 @@ namespace Arkanoid
 		bool bIsLoaded = HitSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
 		assert(bIsLoaded);
 
+		Size *= SETTINGS.GetScaleFactor().X;
+		Speed *= SETTINGS.GetScaleFactor().X;
+
 		Circle.setRadius(Size / 2.f);
 		Circle.setFillColor(sf::Color::White);
 		Math::SetRelativeOrigin(Circle, 0.5f, 0.5f);
@@ -22,6 +25,7 @@ namespace Arkanoid
 		Direction.y = std::sin(pi / 180.f * Angle);
 
 		// Set start position
+		Position.y -= Size / 2.f;
 		Circle.setPosition(Position);
 	}
 
@@ -41,7 +45,7 @@ namespace Arkanoid
 		}
 
 		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) {
-			bIsOutOfPlayground = true;
+			//bIsObjectCrashed = true;
 		}
 	}
 
@@ -50,38 +54,32 @@ namespace Arkanoid
 		Window.draw(Circle);
 	}
 
-	void UBall::CheckCollision(std::shared_ptr<IGameObject> Object)
+	void UBall::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type)
 	{
-		// Light check is lenght between ball and block is more than width of block + size of ball  
-		double Length = sqrt((Object->GetOriginX() - GetOriginX()) * (Object->GetOriginX() - GetOriginX()) +
-							 (Object->GetOriginY() - GetOriginY()) * (Object->GetOriginY() - GetOriginY()));
+		// Light check is lenght between ball and object is more than width of object + size of ball  
+		float Length = sqrt(((Object->GetOriginX() - GetOriginX()) * (Object->GetOriginX() - GetOriginX())) +
+							((Object->GetOriginY() - GetOriginY()) * (Object->GetOriginY() - GetOriginY())));
 
-		if (Length < Object->GetWidth() + GetWidth())
+		if (Length < (Object->GetWidth() + GetWidth()))
 		{
-			float NormalX = Object->GetWidth() * 2.f;
-			float NormalY = Object->GetWidth() * 2.f;
+			float NormalX = GetWidth() * 2.f;
+			float NormalY = GetWidth() * 2.f;
 
-			// Search area of triangle between ball's origin and block's side
+			// Search area of triangle between ball's origin and object's side
 			auto TriangleArea = [](float x1, float y1, float x2, float y2, float x3, float y3)
 				{
 					return std::fabs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) / 2.f;
 				};
 
-			// Search length of block's side
-			auto BaseLength = [](float x1, float y1, float x2, float y2)
-				{
-					return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-				};
-
-			// Search lenght of the normal from ball's orifin to block's side
+			// Search lenght of the normal from ball's origin to object's side
 			auto TriangleHeight = [](float triangleArea, float baseLenght)
 				{
 					return triangleArea * 2.f / baseLenght;
 				};
 
-			// Check lenght of the normal from ball to block
-			if ((GetOriginX() + (GetWidth() / 2.f) * 0.85f > Object->GetOriginX() - Object->GetWidth() / 2.f) &&
-				(GetOriginX() - (GetWidth() / 2.f) * 0.85f < Object->GetOriginX() + Object->GetWidth() / 2.f))
+			// Check lenght of the normal from ball to object
+			if ((GetOriginX() + (GetWidth() / 2.2f) >= Object->GetOriginX() - Object->GetWidth() / 2.f) &&
+				(GetOriginX() - (GetWidth() / 2.2f) <= Object->GetOriginX() + Object->GetWidth() / 2.f))
 			{
 				float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
 					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
@@ -91,13 +89,10 @@ namespace Arkanoid
 					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
 					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f);
 
-				float Length = BaseLength(Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
-										  Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
-
-				NormalY = Area2 < Area2 ? TriangleHeight(Area1, Length) : TriangleHeight(Area2, Length);
+				NormalY = Area1 < Area2 ? TriangleHeight(Area1, Object->GetWidth()) : TriangleHeight(Area2, Object->GetWidth());
 			}
-			else if ((Object->GetOriginY() + (Object->GetHeight() / 2.f) * 0.85f > GetOriginY() - GetHeight() / 2.f) &&
-				(Object->GetOriginY() - (Object->GetHeight() / 2.f) * 0.85f < GetOriginY() + GetHeight() / 2.f))
+			else if ((GetOriginY() + (GetHeight() / 2.2f) >= Object->GetOriginY() - Object->GetHeight() / 2.f) &&
+					 (GetOriginY() - (GetHeight() / 2.2f) <= Object->GetOriginY() + Object->GetHeight() / 2.f))
 			{
 				float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
 					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
@@ -107,18 +102,31 @@ namespace Arkanoid
 					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
 					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
 
-				float Length = BaseLength(Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
-										  Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
-
-				NormalX = Area1 < Area2 ? TriangleHeight(Area1, Length) : TriangleHeight(Area2, Length);
+				NormalX = Area1 < Area2 ? TriangleHeight(Area1, Object->GetHeight()) : TriangleHeight(Area2, Object->GetHeight());
 			}
 
 			// Change ball's velocity 
-			if (NormalY < GetHeight() / 2.f)
+			if (NormalY <= GetHeight() / 2.f && NormalY >= 1.f)
 			{
-				ChangeY();
+				switch (Type)
+				{
+				case EObjectType::Platform:
+				{
+					// Find relative place of collide (-1 is left corner, 1 is right corner)
+					float CollidePlace = (GetOriginX() - Object->GetOriginX()) / Object->GetWidth() / 2.f;
+
+					float NewAngle = 90.f - 120.f * CollidePlace;
+					ChangeAngle(NewAngle);
+					break;
+				}
+				default:
+				{
+					ChangeY();
+					break;
+				}
+				}
 			}
-			else if (NormalX < GetWidth() / 2.f)
+			else if (NormalX <= GetWidth() / 2.f && NormalX >= 1.f)
 			{
 				ChangeX();
 			}
@@ -127,12 +135,12 @@ namespace Arkanoid
 
 	float UBall::GetOriginX() const
 	{
-		return Circle.getOrigin().x;
+		return Position.x;
 	}
 
 	float UBall::GetOriginY() const
 	{
-		return Circle.getOrigin().y;
+		return Position.y;
 	}
 
 	float UBall::GetWidth() const
@@ -145,6 +153,11 @@ namespace Arkanoid
 		return Size;
 	}
 
+	EObjectType UBall::GetObjectType() const
+	{
+		return Type;
+
+	}
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	      PRIVATE WORKTOOLS         */
@@ -160,6 +173,16 @@ namespace Arkanoid
 	void UBall::ChangeY()
 	{
 		Direction.y *= -1;
+		SETTINGS.GetResources()->PlaySound(HitSound);
+	}
+
+	// Set new angle to the ball
+	void UBall::ChangeAngle(float NewAngle)
+	{
+		const auto pi = std::acos(-1.f);
+		Direction.x = (NewAngle / abs(NewAngle)) * std::cos(pi / 180.f * NewAngle);;
+		Direction.y = -1 * abs(std::sin(pi / 180.f * NewAngle));
+
 		SETTINGS.GetResources()->PlaySound(HitSound);
 	}
 }

@@ -14,12 +14,15 @@ namespace Arkanoid
 
 		Width *= SETTINGS.GetScaleFactor().X;
 		Height *= SETTINGS.GetScaleFactor().Y;
+		Speed *= SETTINGS.GetScaleFactor().Y;
 
 		Sprite.setTexture(Texture);
 
 		Math::SetSize(Sprite, Width, Height);
 		Math::SetRelativeOrigin(Sprite, 0.5f, 0.5f);
 
+		// Set start position
+		Position.y -= Height / 2.f;
 		Sprite.setPosition(Position);
 	}
 
@@ -56,16 +59,16 @@ namespace Arkanoid
 		Window.draw(Sprite);
 	}
 
-	void UPlatform::CheckCollision(std::shared_ptr<IGameObject> Object) {}
+	void UPlatform::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
 
 	float UPlatform::GetOriginX() const
 	{
-		return Sprite.getOrigin().x;
+		return Position.x;
 	}
 
 	float UPlatform::GetOriginY() const
 	{
-		return Sprite.getOrigin().y;
+		return Position.y;
 	}
 
 	float UPlatform::GetWidth() const
@@ -76,5 +79,10 @@ namespace Arkanoid
 	float UPlatform::GetHeight() const
 	{
 		return Height;
+	}
+
+	EObjectType UPlatform::GetObjectType() const
+	{
+		return ObjectType;
 	}
 }

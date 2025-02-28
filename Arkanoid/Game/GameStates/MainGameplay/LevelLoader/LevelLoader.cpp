@@ -1,11 +1,11 @@
 #include <cassert>
 #include "LevelLoader.h"
-#include "IGameObject.h"
-#include "GameObjects/BlockFactory.h"
-#include "GameObjects/Ball.h"
-#include "GameObjects/Platform.h"
-#include "../../FileSystem/FileSystem.h"
-#include "../../Settings/Settings.h"
+#include "../IGameObject.h"
+#include "../GameObjects/BlockFactory.h"
+#include "../GameObjects/Ball.h"
+#include "../GameObjects/Platform.h"
+#include "../../../FileSystem/FileSystem.h"
+#include "../../../Settings/Settings.h"
 
 namespace Arkanoid
 {
@@ -104,8 +104,12 @@ namespace Arkanoid
 		}
 
 		// Create a ball and platform
-		GameObjects.emplace_back(std::make_shared<UBall>(Position));
+		Position.x = SETTINGS.GetScreenWidth() / 2.f;
+		Position.y = SETTINGS.GetScreenHeight();
 		GameObjects.emplace_back(std::make_shared<UPlatform>(Position));
+
+		Position.y = SETTINGS.GetScreenHeight() - GameObjects[0]->GetHeight() * 1.1f;
+		GameObjects.emplace_back(std::make_shared<UBall>(Position));
 	}
 
 	const std::vector<std::shared_ptr<IGameObject>>& ULevelLoader::GetGameObjects()

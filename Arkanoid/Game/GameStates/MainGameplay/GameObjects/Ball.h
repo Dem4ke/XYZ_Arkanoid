@@ -15,22 +15,25 @@ namespace Arkanoid
 		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
-		void CheckCollision(std::shared_ptr<IGameObject> Object) override;
+		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;
 		float GetWidth() const override;
 		float GetHeight() const override;
 
+		EObjectType GetObjectType() const override;
+
 	private:
 		void ChangeX();
 		void ChangeY();
+		void ChangeAngle(float NewAngle);
 
-		float Size = 10.f;			// Size of the ball
-		float Speed = 60.f;			// Speed of the ball
-		float Angle = 0.f;			// Angle of ball's velocity
+		float Size = 30.f;			// Size of the ball
+		float Speed = 240.f;		// Speed of the ball
+		float Angle = -90.f;		// Angle of ball's velocity
 
-		bool bIsOutOfPlayground = false;
+		EObjectType Type = EObjectType::Ball;	// Type of current game object
 
 		sf::Vector2f Position;		// Position of the ball on screen
 		sf::Vector2f Direction;		// Unit vector that contains ball's velocity direction
