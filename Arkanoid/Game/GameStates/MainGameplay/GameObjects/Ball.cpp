@@ -1,5 +1,6 @@
 #include <cassert>
 #include "Ball.h"
+#include "../Observer/Observer.h"
 #include "../../../Math/Math.h"
 #include "../../../Settings/Settings.h"
 
@@ -45,7 +46,8 @@ namespace Arkanoid
 		}
 
 		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) {
-			//bIsObjectCrashed = true;
+			// Notify observers that ball is out of screen
+			Notify();
 		}
 	}
 
@@ -162,6 +164,31 @@ namespace Arkanoid
 		return Type;
 
 	}
+
+	/*//////////////////////////////////*/
+	/*                                  */
+	/*	       SUBJECT METHODS          */
+	/*                                  */
+	/*//////////////////////////////////*/
+
+	void UBall::Attach(std::shared_ptr<IObserver> Observer)
+	{
+		Observers.push_back(Observer);
+	}
+
+	void UBall::Detach(std::shared_ptr<IObserver> Observer)
+	{
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
+	}
+
+	void UBall::Notify()
+	{
+		for (auto& i : Observers)
+		{
+			i->Update();
+		}
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	      PRIVATE WORKTOOLS         */

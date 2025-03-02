@@ -3,10 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../IGameObject.h"
+#include "../Observer/Subject.h"
 
 namespace Arkanoid
 {
-	class UBall final : public IGameObject
+	class UBall final : public IGameObject, public ISubject
 	{
 	public:
 		UBall(const sf::Vector2f& InputedPosition);
@@ -24,6 +25,10 @@ namespace Arkanoid
 
 		EObjectType GetObjectType() const override;
 
+		void Attach(std::shared_ptr<IObserver> Observer) override;
+		void Detach(std::shared_ptr<IObserver> Observer) override;
+		void Notify() override;
+
 	private:
 		void ChangeX();
 		void ChangeY();
@@ -37,9 +42,9 @@ namespace Arkanoid
 
 		sf::Vector2f Position;		// Position of the ball on screen
 		sf::Vector2f Direction;		// Unit vector that contains ball's velocity direction
-
 		sf::CircleShape Circle;		// Shape of the ball
-
 		sf::SoundBuffer HitSound;	// Sound of menu moves
+
+		std::vector<std::shared_ptr<IObserver>> Observers;// Vector of observers
 	};
 }
