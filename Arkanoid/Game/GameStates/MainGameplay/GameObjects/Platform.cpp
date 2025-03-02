@@ -61,6 +61,8 @@ namespace Arkanoid
 
 	void UPlatform::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
 
+	void UPlatform::Hit() {}
+
 	float UPlatform::GetOriginX() const
 	{
 		return Position.x;

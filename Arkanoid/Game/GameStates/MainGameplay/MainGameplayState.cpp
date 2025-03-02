@@ -1,11 +1,11 @@
 #include <cassert>
 #include "MainGameplayState.h"
 #include "ISubGameplayState.h"
-#include "LevelLoader.h"
 #include "IGameObject.h"
 #include "GameObjects/Block.h"
 #include "GameObjects/Ball.h"
 #include "GameObjects/Platform.h"
+#include "LevelLoader/LevelLoader.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -121,7 +121,7 @@ namespace Arkanoid
 
 	void SMainGameplay::InitSubGameplayState(EGameplayType Type)
 	{
-		if (SubGameplayState)
+		/*if (SubGameplayState)
 		{
 			SubGameplayState = nullptr;
 		}
@@ -138,6 +138,6 @@ namespace Arkanoid
 			SubGameplayState = std::make_shared<>();
 			break;
 		}
-		}
+		}*/
 	}
 }

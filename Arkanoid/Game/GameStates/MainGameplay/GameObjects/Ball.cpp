@@ -121,6 +121,7 @@ namespace Arkanoid
 				}
 				default:
 				{
+					Object->Hit();
 					ChangeY();
 					break;
 				}
@@ -128,10 +129,13 @@ namespace Arkanoid
 			}
 			else if (NormalX <= GetWidth() / 2.f && NormalX >= 1.f)
 			{
+				Object->Hit();
 				ChangeX();
 			}
 		}
 	}
+
+	void UBall::Hit() {}
 
 	float UBall::GetOriginX() const
 	{

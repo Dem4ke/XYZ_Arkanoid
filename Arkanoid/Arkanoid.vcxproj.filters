@@ -147,6 +147,9 @@
     <ClInclude Include="Game\GameStates\MainGameplay\PauseState\PauseState.h">
       <Filter>Game\GameStates\MainGameplay\PauseState</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\Subject.h">
+      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">

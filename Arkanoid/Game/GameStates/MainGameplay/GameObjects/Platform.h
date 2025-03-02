@@ -14,8 +14,8 @@ namespace Arkanoid
 
 		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-
 		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
+		void Hit() override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;

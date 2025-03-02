@@ -36,6 +36,7 @@
     <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\Observer\Observer.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\Subject.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\PauseState\PauseState.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h" />

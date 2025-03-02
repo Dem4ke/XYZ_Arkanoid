@@ -1,5 +1,6 @@
 #include <cassert>
 #include "Block.h"
+#include "../Observer/Observer.h"
 #include "../../../Math/Math.h"
 #include "../../../Settings/Settings.h"
 
@@ -25,6 +26,12 @@ namespace Arkanoid
 		Sprite.setPosition(Position);
 	}
 
+	/*//////////////////////////////////*/
+	/*                                  */
+	/*	     GAME OBJECT METHODS        */
+	/*                                  */
+	/*//////////////////////////////////*/
+
 	void UBlock::Update(const float& DeltaTime) {}
 
 	void UBlock::Draw(sf::RenderWindow& Window)
@@ -33,6 +40,12 @@ namespace Arkanoid
 	}
 
 	void UBlock::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
+
+	void UBlock::Hit() 
+	{
+		--Health;
+		Notify();
+	}
 
 	float UBlock::GetOriginX() const
 	{
@@ -57,6 +70,30 @@ namespace Arkanoid
 	EObjectType UBlock::GetObjectType() const
 	{
 		return Type;
+	}
+
+	/*//////////////////////////////////*/
+	/*                                  */
+	/*	       SUBJECT METHODS          */
+	/*                                  */
+	/*//////////////////////////////////*/
+
+	void UBlock::Attach(std::shared_ptr<IObserver> Observer)
+	{
+		Observers.push_back(Observer);
+	}
+
+	void UBlock::Detach(std::shared_ptr<IObserver> Observer)
+	{
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
+	}
+
+	void UBlock::Notify()
+	{
+		for (auto& i : Observers)
+		{
+			i->Update();
+		}
 	}
 
 	/*//////////////////////////////////*/

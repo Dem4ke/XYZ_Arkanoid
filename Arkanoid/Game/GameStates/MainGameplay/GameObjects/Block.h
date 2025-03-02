@@ -2,10 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include "../IGameObject.h"
+#include "../Observer/Subject.h"
 
 namespace Arkanoid
 {
-	class UBlock : public IGameObject
+	class IObserver;
+
+	class UBlock : public IGameObject, public ISubject
 	{
 	public:
 		UBlock(const sf::Vector2f& InputedPosition);
@@ -13,8 +16,8 @@ namespace Arkanoid
 
 		virtual void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-
 		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
+		void Hit() override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;
@@ -22,6 +25,10 @@ namespace Arkanoid
 		float GetHeight() const override;
 
 		EObjectType GetObjectType() const override;
+
+		void Attach(std::shared_ptr<IObserver> Observer) override;
+		void Detach(std::shared_ptr<IObserver> Observer) override;
+		void Notify() override;
 
 	protected:
 		int Health = 1;									// Count of hits to destroy block
@@ -35,6 +42,8 @@ namespace Arkanoid
 		sf::Texture Texture;							// Texture of the block
 		sf::Sprite Sprite;								// Sprite to draw
 		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the block's texture 
+
+		std::vector<std::shared_ptr<IObserver>> Observers;// Vector of observers
 	};
 
 	class UThreeHitBlock final : public UBlock
