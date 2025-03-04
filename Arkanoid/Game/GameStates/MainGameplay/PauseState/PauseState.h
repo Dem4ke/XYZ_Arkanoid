@@ -8,11 +8,11 @@
 
 namespace Arkanoid
 {
-	class PauseState final : public ISubGameplayState
+	class SGPauseState final : public ISubGameplayState
 	{
 	public:
-		PauseState();
-		~PauseState() = default;
+		SGPauseState();
+		~SGPauseState() = default;
 
 		void EventUpdate(const sf::Event& Event) override;
 		void Draw(sf::RenderWindow& Window) override;
@@ -31,8 +31,8 @@ namespace Arkanoid
 		int ButtonsTextSize = 40;							// Menu buttons text size
 		int SelectedButton = 0;								// Index of a selected button
 
-		bool bIsSettingsTypeUpdated = false;				// Flag which contains informaion is user changed a settings type
-		ESettingsType SettingsType = ESettingsType::Sounds;	// Current settings type which shows
+		bool bIsGameplayTypeChanged = false;				// Flag which contains informaion is gameplay type changed
+		EGameplayType GameplayType = EGameplayType::Pause;	// Current settings type which shows
 
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title

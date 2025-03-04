@@ -150,6 +150,9 @@
     <ClInclude Include="Game\GameStates\MainGameplay\Observer\Subject.h">
       <Filter>Game\GameStates\MainGameplay\Observer</Filter>
     </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\GameManager.h">
+      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Main.cpp">
@@ -212,11 +215,11 @@
     <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.cpp">
       <Filter>Game\GameStates\MainGameplay\LevelLoader</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameStates\MainGameplay\Observer\Observer.cpp">
-      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\PauseState\PauseState.cpp">
       <Filter>Game\GameStates\MainGameplay\PauseState</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\Observer\GameManager.cpp">
+      <Filter>Game\GameStates\MainGameplay\Observer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

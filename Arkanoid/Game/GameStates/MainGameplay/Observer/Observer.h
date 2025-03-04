@@ -1,26 +1,28 @@
 #pragma once
 
-#include "../IGameObject.h"
+#include "../../../AppStates/AppStates.h"
 
 namespace Arkanoid
 {
 	// Interface of an observer
-	class IObserver
+	class IBlockObserver
 	{
 	public:
-		virtual ~IObserver() = default;
-		virtual void Update() = 0;
+		virtual ~IBlockObserver() = default;
+		virtual void BlockBroken(int Cost) = 0;
 	};
 
-	class BlocksObserver final : public IObserver
+	class IBallObserver
 	{
 	public:
-		~BlocksObserver() = default;
-		void Update() override;
+		virtual ~IBallObserver() = default;
+		virtual void BallOut() = 0;
 	};
 
-	class BallObserver final : public IObserver
+	class IGameManager
 	{
-
+	public:
+		virtual bool IsGameplayTypeChanged() const = 0;
+		virtual EGameplayType GetGameplayType() const = 0;
 	};
 }

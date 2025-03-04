@@ -5,7 +5,7 @@
 
 namespace Arkanoid
 {
-	PauseState::PauseState()
+	SGPauseState::SGPauseState()
 	{
 		// Load sounds
 		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
@@ -15,7 +15,7 @@ namespace Arkanoid
 		assert(bIsLoaded);
 
 		// Set clickable buttons for menu
-		std::vector<std::string> InputButtons = { "Resume", "Exit" };
+		std::vector<std::string> InputButtons = { "Resume", "End game" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -52,7 +52,7 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void PauseState::EventUpdate(const sf::Event& Event)
+	void SGPauseState::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
@@ -66,55 +66,23 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				ChangeSettingsType(ESettingsType::Main);
+				ChangeGameplayType(EGameplayType::Main);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0)
 				{
-					bIsSoundsOn = !bIsSoundsOn;
-					UpdateUi(ESGUIType::Sounds);
+					ChangeGameplayType(EGameplayType::Main);
 				}
 				else if (SelectedButton == 1)
 				{
-					bIsMusicOn = !bIsMusicOn;
-					UpdateUi(ESGUIType::Music);
-				}
-				else if (SelectedButton == 2)
-				{
-					SETTINGS.SetSoundsOn(bIsSoundsOn);
-
-					if (SETTINGS.IsSoundsOn())
-					{
-						SETTINGS.GetResources()->SetSoundsVolume(5.f);
-					}
-					else
-					{
-						SETTINGS.GetResources()->SetSoundsVolume(0.f);
-					}
-
-					SETTINGS.SetMusicOn(bIsMusicOn);
-
-					if (SETTINGS.IsMusicOn())
-					{
-						SETTINGS.GetResources()->PlayBackgroundMusic();
-					}
-					else
-					{
-						SETTINGS.GetResources()->StopBackgroundMusic();
-					}
-
-					SETTINGS.SaveSettings();
-				}
-				else if (SelectedButton == 3)
-				{
-					ChangeSettingsType(ESettingsType::Main);
+					ChangeGameplayType(EGameplayType::GameOver);
 				}
 			}
 		}
 	}
 
-	void PauseState::Draw(sf::RenderWindow& Window)
+	void SGPauseState::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(MenuTitle);
 
@@ -123,14 +91,14 @@ namespace Arkanoid
 		}
 	}
 
-	bool PauseState::IsGameplayTypeChanged() const
+	bool SGPauseState::IsGameplayTypeChanged() const
 	{
-		return bIsSettingsTypeUpdated;
+		return bIsGameplayTypeChanged;
 	}
 
-	EGameplayType PauseState::GetNewGameplayType() const
+	EGameplayType SGPauseState::GetNewGameplayType() const
 	{
-		return SettingsType;
+		return GameplayType;
 	}
 
 	/*//////////////////////////////////*/
@@ -140,7 +108,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void PauseState::MoveUp()
+	void SGPauseState::MoveUp()
 	{
 		if (SelectedButton >= 0)
 		{
@@ -158,7 +126,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void PauseState::MoveDown()
+	void SGPauseState::MoveDown()
 	{
 		int end = static_cast<int> (Buttons.size());
 
@@ -179,10 +147,10 @@ namespace Arkanoid
 	}
 
 	// Method to change type of settings menu
-	void PauseState::ChangeSettingsType(ESettingsType NewType)
+	void SGPauseState::ChangeGameplayType(EGameplayType NewType)
 	{
-		bIsSettingsTypeUpdated = true;
-		SettingsType = NewType;
+		bIsGameplayTypeChanged = true;
+		GameplayType = NewType;
 
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 	}

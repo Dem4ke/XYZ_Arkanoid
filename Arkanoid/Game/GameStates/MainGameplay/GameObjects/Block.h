@@ -8,7 +8,7 @@ namespace Arkanoid
 {
 	class IObserver;
 
-	class UBlock : public IGameObject, public ISubject
+	class UBlock : public IGameObject, public IBlockSubject
 	{
 	public:
 		UBlock(const sf::Vector2f& InputedPosition);
@@ -16,8 +16,8 @@ namespace Arkanoid
 
 		virtual void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
-		void Hit() override;
+		bool CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
+		virtual void Hit() override;
 
 		float GetOriginX() const override;
 		float GetOriginY() const override;
@@ -25,14 +25,16 @@ namespace Arkanoid
 		float GetHeight() const override;
 
 		EObjectType GetObjectType() const override;
+		virtual bool IsDestroyed() const override;
 
-		void Attach(std::shared_ptr<IObserver> Observer) override;
-		void Detach(std::shared_ptr<IObserver> Observer) override;
+		void Attach(std::shared_ptr<IBlockObserver> Observer) override;
+		void Detach(std::shared_ptr<IBlockObserver> Observer) override;
 		void Notify() override;
 
 	protected:
 		int Health = 1;									// Count of hits to destroy block
-		
+		int Cost = 1;									// Cost of block in the score points
+
 		float Width = 125.f;							// Width of the block
 		float Height = 40.f;							// Height of the block
 
@@ -43,7 +45,7 @@ namespace Arkanoid
 		sf::Sprite Sprite;								// Sprite to draw
 		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the block's texture 
 
-		std::vector<std::shared_ptr<IObserver>> Observers;// Vector of observers
+		std::vector<std::shared_ptr<IBlockObserver>> Observers;// Vector of observers
 	};
 
 	class UThreeHitBlock final : public UBlock
@@ -53,9 +55,12 @@ namespace Arkanoid
 		~UThreeHitBlock() = default;
 
 		void Update(const float& DeltaTime) override;
+		void Hit() override;
+		bool IsDestroyed() const override;
 
 	private:
 		int Health = 3;									// Count of hits to destroy block
+		int Cost = 3;									// Cost of block in the score points
 
 		EObjectType Type = EObjectType::ThreeHitBlock;	// Type of current game object
 
@@ -71,9 +76,12 @@ namespace Arkanoid
 		~UUnbreakableBlock() = default;
 
 		void Update(const float& DeltaTime) override;
+		void Hit() override;
+		bool IsDestroyed() const override;
 
 	private:
 		int Health = 4;
+		int Cost = 0;									// Cost of block in the score points
 
 		EObjectType Type = EObjectType::UnbreackableBlock;	// Type of current game object
 

@@ -24,9 +24,11 @@ namespace Arkanoid
 	// Types of a sub gameplay states
 	enum class EGameplayType : int
 	{
-		Main = 0,	// Main gameplay
-		Pause,		// Pause dialog
-		GameOver,	// Game over 
+		Main = 0,		// Main gameplay
+		Pause,			// Pause dialog
+		LevelDone,		// Level completed successfully
+		GameOver,		// Game over 
+		RecreateBall,	// Ball was out from screen and we create it again
 	};
 
 	// Types of a game object's type
@@ -37,5 +39,6 @@ namespace Arkanoid
 		SimpleBlock,
 		ThreeHitBlock,
 		UnbreackableBlock,
+		Bonus
 	};
 }

@@ -6,6 +6,8 @@
 #include "GameObjects/Ball.h"
 #include "GameObjects/Platform.h"
 #include "LevelLoader/LevelLoader.h"
+#include "Observer/GameManager.h"
+#include "PauseState/PauseState.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -29,16 +31,23 @@ namespace Arkanoid
 
 		// Create level loader and load first level
 		LevelLoader = std::make_shared<ULevelLoader>();
-		LevelLoader->Load(1);
-
-		Blocks = LevelLoader->GetBlocks();
-		GameObjects = LevelLoader->GetGameObjects();
+		InitNewLevel();
 	}
 
 	// All menu movement and events
 	void SMainGameplay::EventUpdate(const sf::Event& Event) 
 	{
-		if (GameplayType != EGameplayType::Main && SubGameplayState)
+		if (GameplayType == EGameplayType::Main)
+		{
+			if (Event.type == sf::Event::KeyReleased)
+			{
+				if (Event.key.code == Button.EscapeKey)
+				{
+					InitSubGameplayState(EGameplayType::Pause);
+				}
+			}
+		}
+		else if (GameplayType != EGameplayType::Main && SubGameplayState)
 		{
 			SubGameplayState->EventUpdate(Event);
 		}
@@ -50,9 +59,23 @@ namespace Arkanoid
 		{
 			GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
 
+			int it = 0;
 			for (auto& Block : Blocks)
 			{
-				GameObjects[1]->CheckCollision(Block, Block->GetObjectType());
+				if (GameObjects[1]->CheckCollision(Block, Block->GetObjectType()))
+				{
+					break;
+				}
+
+				if (Block->IsDestroyed()) 
+				{
+					Blocks.erase(Blocks.cbegin() + it);
+					break;
+				}
+
+				++it;
+
+				Block->Update(DeltaTime);
 			}
 
 			for (auto& Object : GameObjects)
@@ -60,13 +83,21 @@ namespace Arkanoid
 				Object->Update(DeltaTime);
 			}
 
-			/*if (GameObjects[1]->IsObjectCrashed())
+			std::shared_ptr<IGameManager>GameManager = std::dynamic_pointer_cast<IGameManager>(Observer);
+			if (GameManager->IsGameplayTypeChanged())
 			{
-				InitSubGameplayState(EGameplayType::GameOver);
+				GameplayType = GameManager->GetGameplayType();
+				InitSubGameplayState(GameplayType);
+			}
+
+			// Pause menu
+			/*if (sf::Keyboard::isKeyPressed(Button.EscapeKey))
+			{
+				InitSubGameplayState(EGameplayType::Pause);
 			}*/
 		}
 		else {
-			if (SubGameplayState->IsGameplayTypeChanged())
+			if (SubGameplayState && SubGameplayState->IsGameplayTypeChanged())
 			{
 				GameplayType = SubGameplayState->GetNewGameplayType();
 				InitSubGameplayState(GameplayType);
@@ -110,6 +141,34 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
+	void SMainGameplay::InitNewLevel()
+	{
+		Blocks.clear();
+		GameObjects.clear();
+		GameplayType = EGameplayType::Main;
+
+		if (LevelLoader->GetCurrentLevel() <= 3)
+		{
+			LevelLoader->Load(LevelLoader->GetCurrentLevel());
+
+			Blocks = LevelLoader->GetBlocks();
+			GameObjects = LevelLoader->GetGameObjects();
+			Observer = std::make_shared<OGameManager>(LevelLoader->GetBreackableBlocksCount(), 3);
+
+			// Add observers
+			std::shared_ptr<IBlockObserver>BlockObserver = std::dynamic_pointer_cast<IBlockObserver>(Observer);
+			
+			for (auto& i : Blocks)
+			{
+				i->Attach(BlockObserver);
+			}
+			
+			std::shared_ptr<UBall>Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
+			std::shared_ptr<IBallObserver>BallObserver = std::dynamic_pointer_cast<IBallObserver>(Observer);
+			Ball->Attach(BallObserver);
+		}
+	}
+
 	// Change flag and state type 
 	void SMainGameplay::SetNewGameState(EGameStateType NewState)
 	{
@@ -121,7 +180,9 @@ namespace Arkanoid
 
 	void SMainGameplay::InitSubGameplayState(EGameplayType Type)
 	{
-		/*if (SubGameplayState)
+		GameplayType = Type;
+
+		if (SubGameplayState)
 		{
 			SubGameplayState = nullptr;
 		}
@@ -130,14 +191,24 @@ namespace Arkanoid
 		{
 		case EGameplayType::Pause:
 		{
-			SubGameplayState = std::make_shared<>();
+			SubGameplayState = std::make_shared<SGPauseState>();
 			break;
 		}
 		case EGameplayType::GameOver:
 		{
-			SubGameplayState = std::make_shared<>();
+			//SubGameplayState = std::make_shared<>();
 			break;
 		}
-		}*/
+		case EGameplayType::LevelDone:
+		{
+			InitNewLevel();
+			break;
+		}
+		case EGameplayType::RecreateBall:
+		{
+			InitNewLevel();
+			break;
+		}
+		}
 	}
 }

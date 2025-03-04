@@ -39,12 +39,18 @@ namespace Arkanoid
 		Window.draw(Sprite);
 	}
 
-	void UBlock::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
+	bool UBlock::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) 
+	{
+		return false;
+	}
 
 	void UBlock::Hit() 
 	{
 		--Health;
-		Notify();
+		if (Health <= 0)
+		{
+			Notify();
+		}
 	}
 
 	float UBlock::GetOriginX() const
@@ -72,18 +78,28 @@ namespace Arkanoid
 		return Type;
 	}
 
+	bool UBlock::IsDestroyed() const
+	{
+		if (Health <= 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	       SUBJECT METHODS          */
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	void UBlock::Attach(std::shared_ptr<IObserver> Observer)
+	void UBlock::Attach(std::shared_ptr<IBlockObserver> Observer)
 	{
 		Observers.push_back(Observer);
 	}
 
-	void UBlock::Detach(std::shared_ptr<IObserver> Observer)
+	void UBlock::Detach(std::shared_ptr<IBlockObserver> Observer)
 	{
 		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
 	}
@@ -92,7 +108,7 @@ namespace Arkanoid
 	{
 		for (auto& i : Observers)
 		{
-			i->Update();
+			i->BlockBroken(Cost);
 		}
 	}
 
@@ -104,7 +120,9 @@ namespace Arkanoid
 
 	UThreeHitBlock::UThreeHitBlock(const sf::Vector2f& InputedPosition)
 		: UBlock(InputedPosition)
-	{}
+	{
+		Sprite.setTextureRect(TextureRect);
+	}
 
 	void UThreeHitBlock::Update(const float& DeltaTime)
 	{
@@ -118,6 +136,25 @@ namespace Arkanoid
 		}
 	}
 
+	void UThreeHitBlock::Hit()
+	{
+		--Health;
+		if (Health <= 0)
+		{
+			Notify();
+		}
+	}
+
+	bool UThreeHitBlock::IsDestroyed() const
+	{
+		if (Health <= 0)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	      UNBREAKABLE BLOCK         */
@@ -126,10 +163,16 @@ namespace Arkanoid
 
 	UUnbreakableBlock::UUnbreakableBlock(const sf::Vector2f& InputedPosition)
 		: UBlock(InputedPosition)
-	{}
-
-	void UUnbreakableBlock::Update(const float& DeltaTime)
 	{
-		Health = 4;
+		Sprite.setColor(sf::Color::White);
+	}
+
+	void UUnbreakableBlock::Update(const float& DeltaTime) {}
+
+	void UUnbreakableBlock::Hit() {}
+
+	bool UUnbreakableBlock::IsDestroyed() const
+	{
+		return false;
 	}
 }

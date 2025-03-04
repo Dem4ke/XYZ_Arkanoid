@@ -56,7 +56,7 @@ namespace Arkanoid
 		Window.draw(Circle);
 	}
 
-	void UBall::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type)
+	bool UBall::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type)
 	{
 		// Light check is lenght between ball and object is more than width of object + size of ball  
 		float Length = sqrt(((Object->GetOriginX() - GetOriginX()) * (Object->GetOriginX() - GetOriginX())) +
@@ -128,13 +128,17 @@ namespace Arkanoid
 					break;
 				}
 				}
+				return true;
 			}
 			else if (NormalX <= GetWidth() / 2.f && NormalX >= 1.f)
 			{
 				Object->Hit();
 				ChangeX();
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	void UBall::Hit() {}
@@ -162,7 +166,11 @@ namespace Arkanoid
 	EObjectType UBall::GetObjectType() const
 	{
 		return Type;
+	}
 
+	bool UBall::IsDestroyed() const
+	{
+		return false;
 	}
 
 	/*//////////////////////////////////*/
@@ -171,12 +179,12 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	void UBall::Attach(std::shared_ptr<IObserver> Observer)
+	void UBall::Attach(std::shared_ptr<IBallObserver> Observer)
 	{
 		Observers.push_back(Observer);
 	}
 
-	void UBall::Detach(std::shared_ptr<IObserver> Observer)
+	void UBall::Detach(std::shared_ptr<IBallObserver> Observer)
 	{
 		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
 	}
@@ -185,7 +193,7 @@ namespace Arkanoid
 	{
 		for (auto& i : Observers)
 		{
-			i->Update();
+			i->BallOut();
 		}
 	}
 

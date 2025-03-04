@@ -59,7 +59,10 @@ namespace Arkanoid
 		Window.draw(Sprite);
 	}
 
-	void UPlatform::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) {}
+	bool UPlatform::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) 
+	{
+		return false;
+	}
 
 	void UPlatform::Hit() {}
 
@@ -86,5 +89,10 @@ namespace Arkanoid
 	EObjectType UPlatform::GetObjectType() const
 	{
 		return ObjectType;
+	}
+
+	bool UPlatform::IsDestroyed() const
+	{
+		return false;
 	}
 }

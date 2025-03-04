@@ -4,14 +4,14 @@
 
 namespace Arkanoid
 {
-	class IGameObject;
+	class UBlock;
 
 	class IBlockFactory
 	{
 	public:
 		virtual ~IBlockFactory() = default;
 
-		virtual std::shared_ptr<IGameObject> CreateBlock(const sf::Vector2f& Position) = 0;
+		virtual std::shared_ptr<UBlock> CreateBlock(const sf::Vector2f& Position) = 0;
 	};
 
 	class UNormalBlockFactory final : public IBlockFactory
@@ -20,7 +20,7 @@ namespace Arkanoid
 		UNormalBlockFactory() = default;
 		~UNormalBlockFactory() = default;
 
-		std::shared_ptr<IGameObject> CreateBlock(const sf::Vector2f& Position) override;
+		std::shared_ptr<UBlock> CreateBlock(const sf::Vector2f& Position) override;
 	};
 
 	class UThreeHitBlockFactory final : public IBlockFactory
@@ -29,7 +29,7 @@ namespace Arkanoid
 		UThreeHitBlockFactory() = default;
 		~UThreeHitBlockFactory() = default;
 
-		std::shared_ptr<IGameObject> CreateBlock(const sf::Vector2f& Position) override;
+		std::shared_ptr<UBlock> CreateBlock(const sf::Vector2f& Position) override;
 	};
 
 	class UUnbreakableBlockFactory final : public IBlockFactory
@@ -38,6 +38,6 @@ namespace Arkanoid
 		UUnbreakableBlockFactory() = default;
 		~UUnbreakableBlockFactory() = default;
 
-		std::shared_ptr<IGameObject> CreateBlock(const sf::Vector2f& Position) override;
+		std::shared_ptr<UBlock> CreateBlock(const sf::Vector2f& Position) override;
 	};
 }

@@ -14,7 +14,7 @@ namespace Arkanoid
 
 		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
+		bool CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
 		void Hit() override;
 
 		float GetOriginX() const override;
@@ -23,6 +23,7 @@ namespace Arkanoid
 		float GetHeight() const override;
 
 		EObjectType GetObjectType() const override;
+		bool IsDestroyed() const override;
 		
 	private:
 		float Width = 240.f;			// Width of the platform

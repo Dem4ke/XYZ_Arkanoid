@@ -11,6 +11,8 @@ namespace Arkanoid
 	class ISubGameplayState;
 	class IGameObject;
 	class ULevelLoader;
+	class OGameManager;
+	class UBlock;
 
 	class SMainGameplay final : public IGameState
 	{
@@ -27,14 +29,19 @@ namespace Arkanoid
 
 	private:
 		// Work tools
+		void InitNewLevel();
+		void RecreateBall();
 		void SetNewGameState(EGameStateType NewState);
 		void InitSubGameplayState(EGameplayType Type);
 
 	private:
 		std::shared_ptr<ISubGameplayState> SubGameplayState;	// Sub gameplay menus (pause dialog and other)
 		std::shared_ptr<ULevelLoader> LevelLoader;				// Class to load levels from config file
+		std::shared_ptr<OGameManager> Observer;					// Game observer to the blocks and ball
+
 		std::vector<std::shared_ptr<IGameObject>> GameObjects;	// Vector of playable objects (ball, platform)
-		std::vector<std::shared_ptr<IGameObject>> Blocks;		// Vector of blocks
+		std::vector<std::shared_ptr<UBlock>> Blocks;			// Vector of blocks
+		
 
 		bool bIsGameStateUpdated = false;						// Flag contains iformaion is user changed a game state type
 		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played

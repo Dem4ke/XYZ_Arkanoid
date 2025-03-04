@@ -7,7 +7,7 @@
 
 namespace Arkanoid
 {
-	class UBall final : public IGameObject, public ISubject
+	class UBall final : public IGameObject, public IBallSubject
 	{
 	public:
 		UBall(const sf::Vector2f& InputedPosition);
@@ -15,7 +15,7 @@ namespace Arkanoid
 
 		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-		void CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
+		bool CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type) override;
 		void Hit() override;
 
 		float GetOriginX() const override;
@@ -24,9 +24,10 @@ namespace Arkanoid
 		float GetHeight() const override;
 
 		EObjectType GetObjectType() const override;
+		bool IsDestroyed() const override;
 
-		void Attach(std::shared_ptr<IObserver> Observer) override;
-		void Detach(std::shared_ptr<IObserver> Observer) override;
+		void Attach(std::shared_ptr<IBallObserver> Observer) override;
+		void Detach(std::shared_ptr<IBallObserver> Observer) override;
 		void Notify() override;
 
 	private:
@@ -45,6 +46,6 @@ namespace Arkanoid
 		sf::CircleShape Circle;		// Shape of the ball
 		sf::SoundBuffer HitSound;	// Sound of menu moves
 
-		std::vector<std::shared_ptr<IObserver>> Observers;// Vector of observers
+		std::vector<std::shared_ptr<IBallObserver>> Observers;// Vector of observers
 	};
 }

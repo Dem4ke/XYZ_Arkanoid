@@ -12,6 +12,11 @@ namespace Arkanoid
 	// Load information of inputed level and create blocks and ball with platform
 	void ULevelLoader::Load(int LevelIndex)
 	{
+		BlockFactories.clear();
+		GameObjects.clear();
+		Blocks.clear();
+		++CurrentLevel;
+
 		// Load blocks configuration from file
 		std::vector<std::string> BlocksText;
 		std::string LevelNumberText = std::to_string(LevelIndex);
@@ -95,10 +100,12 @@ namespace Arkanoid
 				else if (BlocksText[i][j] == '1')
 				{
 					Blocks.emplace_back(BlockFactories[0]->CreateBlock(Position));
+					++BreakableBlocks;
 				}
 				else if (BlocksText[i][j] == '2')
 				{
 					Blocks.emplace_back(BlockFactories[1]->CreateBlock(Position));
+					++BreakableBlocks;
 				}
 			}
 		}
@@ -112,12 +119,22 @@ namespace Arkanoid
 		GameObjects.emplace_back(std::make_shared<UBall>(Position));
 	}
 
+	int ULevelLoader::GetCurrentLevel() const
+	{
+		return CurrentLevel;
+	}
+
+	int ULevelLoader::GetBreackableBlocksCount() const
+	{
+		return BreakableBlocks;
+	}
+
 	const std::vector<std::shared_ptr<IGameObject>>& ULevelLoader::GetGameObjects()
 	{
 		return GameObjects;
 	}
 
-	const std::vector<std::shared_ptr<IGameObject>>& ULevelLoader::GetBlocks()
+	const std::vector<std::shared_ptr<UBlock>>& ULevelLoader::GetBlocks()
 	{
 		return Blocks;
 	}
