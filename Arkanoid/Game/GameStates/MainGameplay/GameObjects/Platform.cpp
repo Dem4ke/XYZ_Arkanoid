@@ -9,7 +9,7 @@ namespace Arkanoid
 		: Position(InputedPosition)
 	{
 		// Load texture
-		bool bIsLoaded = Texture.loadFromFile("Resources/MainTextures/blocks_bricks.png");
+		bool bIsLoaded = Texture.loadFromFile("Resources/MainTextures/platform.png");
 		assert(bIsLoaded);
 
 		Width *= SETTINGS.GetScaleFactor().X;

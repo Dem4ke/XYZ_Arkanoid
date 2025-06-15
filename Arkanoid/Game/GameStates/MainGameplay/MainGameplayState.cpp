@@ -57,7 +57,14 @@ namespace Arkanoid
 	{
 		if (GameplayType == EGameplayType::Main)
 		{
-			GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
+			// Check ball and platform collision
+			// ѕри вылете м€ча отсюда пропадают м€ч и платформа
+			if (GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType()))
+			{
+				// Save state of the game
+				std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(Blocks, GameObjects);
+				Observer->SaveGameState(GameState);
+			}
 
 			int it = 0;
 			for (auto& Block : Blocks)
@@ -83,20 +90,14 @@ namespace Arkanoid
 				Object->Update(DeltaTime);
 			}
 
-			std::shared_ptr<IGameManager>GameManager = std::dynamic_pointer_cast<IGameManager>(Observer);
-			if (GameManager->IsGameplayTypeChanged())
+			if (Observer->IsGameplayTypeChanged())
 			{
-				GameplayType = GameManager->GetGameplayType();
+				GameplayType = Observer->GetGameplayType();
 				InitSubGameplayState(GameplayType);
 			}
-
-			// Pause menu
-			/*if (sf::Keyboard::isKeyPressed(Button.EscapeKey))
-			{
-				InitSubGameplayState(EGameplayType::Pause);
-			}*/
 		}
-		else {
+		else 
+		{
 			if (SubGameplayState && SubGameplayState->IsGameplayTypeChanged())
 			{
 				GameplayType = SubGameplayState->GetNewGameplayType();
@@ -163,10 +164,20 @@ namespace Arkanoid
 				i->Attach(BlockObserver);
 			}
 			
-			std::shared_ptr<UBall>Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
-			std::shared_ptr<IBallObserver>BallObserver = std::dynamic_pointer_cast<IBallObserver>(Observer);
+			std::shared_ptr<UBall> Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
+			std::shared_ptr<IBallObserver> BallObserver = std::dynamic_pointer_cast<IBallObserver>(Observer);
 			Ball->Attach(BallObserver);
 		}
+	}
+
+	// Set the state that existed before ball went out of bounds
+	void SMainGameplay::RecreateBall()
+	{
+		Blocks = Observer->GetGameState()->Blocks;
+		GameObjects = Observer->GetGameState()->GameObjects;
+
+		InitSubGameplayState(EGameplayType::Main);
+		Observer->ClearGameplayType();
 	}
 
 	// Change flag and state type 
@@ -206,7 +217,7 @@ namespace Arkanoid
 		}
 		case EGameplayType::RecreateBall:
 		{
-			InitNewLevel();
+			RecreateBall();
 			break;
 		}
 		}

@@ -42,7 +42,6 @@ namespace Arkanoid
 		std::vector<std::shared_ptr<IGameObject>> GameObjects;	// Vector of playable objects (ball, platform)
 		std::vector<std::shared_ptr<UBlock>> Blocks;			// Vector of blocks
 		
-
 		bool bIsGameStateUpdated = false;						// Flag contains iformaion is user changed a game state type
 		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played
 		EGameplayType GameplayType = EGameplayType::Main;		// Current gameplay type which shows
