@@ -3,11 +3,14 @@
 #include "ISubGameplayState.h"
 #include "IGameObject.h"
 #include "GameObjects/Block.h"
+#include "GameObjects/Bonus.h"
 #include "GameObjects/Ball.h"
 #include "GameObjects/Platform.h"
+#include "GameObjects/BonusFactory.h"
 #include "LevelLoader/LevelLoader.h"
-#include "Observer/GameManager.h"
+#include "Observer/GameProperties.h"
 #include "PauseState/PauseState.h"
+#include "UI/GameUI.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -22,6 +25,18 @@ namespace Arkanoid
 		// Load sounds
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
+
+		bIsLoaded = WinSound.loadFromFile("Resources/Sounds/AppleEat.wav");
+		assert(bIsLoaded);
+
+		bIsLoaded = LoseSound.loadFromFile("Resources/Sounds/Maodin204__Lose.wav");
+		assert(bIsLoaded);
+
+		GameProperties = std::make_shared<UGameProperties>();
+
+		UI = std::make_shared<OGameUI>();
+		UI->SetScore(GameProperties->GetPlayerScore());
+		UI->SetBallLifes(GameProperties->GetBallLifes());
 
 		// Initialization of a background of the game
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -58,12 +73,25 @@ namespace Arkanoid
 		if (GameplayType == EGameplayType::Main)
 		{
 			// Check ball and platform collision
-			// ѕри вылете м€ча отсюда пропадают м€ч и платформа
 			if (GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType()))
 			{
-				// Save state of the game
-				std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(Blocks, GameObjects);
-				Observer->SaveGameState(GameState);
+				// Create copy of game objects and save them
+				std::vector<std::shared_ptr<UBlock>> CopiedBlocks;
+				std::vector<std::shared_ptr<IGameObject>> CopiedGameOjects;
+
+				for (auto& i : Blocks) 
+				{
+					std::shared_ptr<UBlock> CopiedBlock = std::dynamic_pointer_cast<UBlock>(i->clone());
+					CopiedBlocks.push_back(CopiedBlock);
+				}
+
+				for (auto& i : GameObjects)
+				{
+					CopiedGameOjects.push_back(i->clone());
+				}
+
+				std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(CopiedBlocks, CopiedGameOjects);
+				GameProperties->SetGameState(GameState);
 			}
 
 			int it = 0;
@@ -90,10 +118,24 @@ namespace Arkanoid
 				Object->Update(DeltaTime);
 			}
 
-			if (Observer->IsGameplayTypeChanged())
+			it = 0;
+			for (auto& Bonus : Bonuses)
 			{
-				GameplayType = Observer->GetGameplayType();
-				InitSubGameplayState(GameplayType);
+				if (Bonus->IsDestroyed())
+				{
+					Bonuses[it] = nullptr;
+					Bonuses.erase(Bonuses.cbegin() + it);
+					break;
+				}
+
+				++it;
+
+				Bonus->Update(DeltaTime);
+			}
+
+			for (auto& Bonus : Bonuses)
+			{
+				Bonus->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
 			}
 		}
 		else 
@@ -109,6 +151,7 @@ namespace Arkanoid
 	void SMainGameplay::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(BackgroundSprite);
+		UI->Draw(Window);
 
 		for (auto& Block : Blocks)
 		{
@@ -118,6 +161,11 @@ namespace Arkanoid
 		for (auto& Object : GameObjects)
 		{
 			Object->Draw(Window);
+		}
+
+		for (auto& Bonus : Bonuses)
+		{
+			Bonus->Draw(Window);
 		}
 
 		if (SubGameplayState)
@@ -134,6 +182,95 @@ namespace Arkanoid
 	EGameStateType SMainGameplay::GetNewGameStateType() const
 	{
 		return NewGameStateType;
+	}
+
+	void SMainGameplay::BlockBroken(int Cost, const sf::Vector2f& Position)
+	{
+		GameProperties->DeleteBlock();
+		GameProperties->IncreasePlayerScore(Cost);
+
+		UI->SetScore(GameProperties->GetPlayerScore());
+
+		if (GameProperties->GetBlocksCount() <= 0)
+		{
+			InitSubGameplayState(EGameplayType::LevelDone);
+		}
+
+		if (static_cast<int> (rand() / (float)RAND_MAX * 100) < 100)
+		{
+			std::unique_ptr<IBonusFactory> BonusFactory;
+
+			int Index = static_cast<int> (rand() / (float)RAND_MAX * 2);
+
+			switch (Index)
+			{
+			case 0:
+			{
+				BonusFactory = std::make_unique<UFireBallBonusFactory>();
+				break;
+			}
+			case 1:
+			{
+				BonusFactory = std::make_unique<UGlassBlocksBonusFactory>();
+				break;
+			}
+			case 2:
+			{
+				BonusFactory = std::make_unique<UBigPlatformBonusFactory>();
+				break;
+			}
+			}
+
+			std::shared_ptr<UBonus> NewBonus = BonusFactory->CreateBonus(Position);
+			std::shared_ptr<IBonusObserver> BonusObserver(this);
+
+			NewBonus->Attach(BonusObserver);
+			Bonuses.push_back(NewBonus);
+
+			BonusObserver = nullptr;
+		}
+	}
+
+	void SMainGameplay::BallOut()
+	{
+		GameProperties->DecreaseBallLife();
+		UI->SetBallLifes(GameProperties->GetBallLifes());
+
+		if (GameProperties->GetBallLifes() <= 0)
+		{
+			InitSubGameplayState(EGameplayType::GameOver);
+		}
+		else
+		{
+			InitSubGameplayState(EGameplayType::RecreateBall);
+		}
+	}
+
+	void SMainGameplay::BonusTaken(int Type)
+	{
+		switch (Type) 
+		{
+		case 0:
+		{
+
+			break;
+		}
+		case 1:
+		{
+
+			break;
+		}
+		case 2:
+		{
+
+			break;
+		}
+		case 3:
+		{
+
+			break;
+		}
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -154,18 +291,18 @@ namespace Arkanoid
 
 			Blocks = LevelLoader->GetBlocks();
 			GameObjects = LevelLoader->GetGameObjects();
-			Observer = std::make_shared<OGameManager>(LevelLoader->GetBreackableBlocksCount(), 3);
+			GameProperties->SetBlocksCount(LevelLoader->GetBreackableBlocksCount());
 
 			// Add observers
-			std::shared_ptr<IBlockObserver>BlockObserver = std::dynamic_pointer_cast<IBlockObserver>(Observer);
-			
+			std::shared_ptr<IBlockObserver> BlockObserver(this);
+
 			for (auto& i : Blocks)
 			{
 				i->Attach(BlockObserver);
 			}
 			
 			std::shared_ptr<UBall> Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
-			std::shared_ptr<IBallObserver> BallObserver = std::dynamic_pointer_cast<IBallObserver>(Observer);
+			std::shared_ptr<IBallObserver> BallObserver(this);
 			Ball->Attach(BallObserver);
 		}
 	}
@@ -173,11 +310,14 @@ namespace Arkanoid
 	// Set the state that existed before ball went out of bounds
 	void SMainGameplay::RecreateBall()
 	{
-		Blocks = Observer->GetGameState()->Blocks;
-		GameObjects = Observer->GetGameState()->GameObjects;
+		Blocks.clear();
+		GameObjects.clear();
+
+		Blocks = GameProperties->GetGameState()->Blocks;
+		GameObjects = GameProperties->GetGameState()->GameObjects;
+		UI->SetScore(GameProperties->GetPlayerScore());
 
 		InitSubGameplayState(EGameplayType::Main);
-		Observer->ClearGameplayType();
 	}
 
 	// Change flag and state type 

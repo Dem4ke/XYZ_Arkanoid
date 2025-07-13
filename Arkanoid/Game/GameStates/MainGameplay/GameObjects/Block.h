@@ -6,12 +6,11 @@
 
 namespace Arkanoid
 {
-	class IObserver;
-
 	class UBlock : public IGameObject, public IBlockSubject
 	{
 	public:
 		UBlock(const sf::Vector2f& InputedPosition);
+		UBlock(const UBlock& Block);
 		virtual ~UBlock() = default;
 
 		virtual void Update(const float& DeltaTime) override;
@@ -26,6 +25,8 @@ namespace Arkanoid
 
 		EObjectType GetObjectType() const override;
 		virtual bool IsDestroyed() const override;
+
+		virtual std::shared_ptr<IGameObject> clone() const override;
 
 		void Attach(std::shared_ptr<IBlockObserver> Observer) override;
 		void Detach(std::shared_ptr<IBlockObserver> Observer) override;
@@ -52,11 +53,14 @@ namespace Arkanoid
 	{
 	public:
 		UThreeHitBlock(const sf::Vector2f& InputedPosition);
+		UThreeHitBlock(const UThreeHitBlock& Block);
 		~UThreeHitBlock() = default;
 
 		void Update(const float& DeltaTime) override;
 		void Hit() override;
 		bool IsDestroyed() const override;
+
+		std::shared_ptr<IGameObject> clone() const override;
 
 	private:
 		int Health = 3;									// Count of hits to destroy block
@@ -73,11 +77,14 @@ namespace Arkanoid
 	{
 	public:
 		UUnbreakableBlock(const sf::Vector2f& InputedPosition);
+		UUnbreakableBlock(const UUnbreakableBlock& Block);
 		~UUnbreakableBlock() = default;
 
 		void Update(const float& DeltaTime) override;
 		void Hit() override;
 		bool IsDestroyed() const override;
+
+		std::shared_ptr<IGameObject> clone() const override;
 
 	private:
 		int Health = 4;

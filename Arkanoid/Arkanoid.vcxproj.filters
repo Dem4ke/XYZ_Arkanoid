@@ -4,9 +4,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{69cdf450-6538-47a4-8b0f-9dc0096ec5a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\UI">
-      <UniqueIdentifier>{b6694a5f-fc02-486d-8dc2-26ea600819dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameStates">
       <UniqueIdentifier>{902878bd-9cd0-4efb-ba60-6f00b99debd0}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,12 @@
     </Filter>
     <Filter Include="Game\GameStates\MainGameplay\PauseState">
       <UniqueIdentifier>{aec6a123-93fa-4fea-8e17-0e62af6e9555}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\UI">
+      <UniqueIdentifier>{81d3ff7d-8503-45d6-8d85-ac33c95f88b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameStates\MainGameplay\GameObjects\Bonus">
+      <UniqueIdentifier>{69ae408b-b6ea-4106-93e8-d1f13ec1e184}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -123,9 +126,6 @@
     <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h">
       <Filter>Game\GameStates\MainGameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Game\UI\UI.h">
-      <Filter>Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Ball.h">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
     </ClInclude>
@@ -150,8 +150,17 @@
     <ClInclude Include="Game\GameStates\MainGameplay\Observer\Subject.h">
       <Filter>Game\GameStates\MainGameplay\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameStates\MainGameplay\Observer\GameManager.h">
+    <ClInclude Include="Game\GameStates\MainGameplay\Observer\GameProperties.h">
       <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\UI\GameUI.h">
+      <Filter>Game\GameStates\MainGameplay\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Bonus.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,9 +206,6 @@
     <ClCompile Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.cpp">
       <Filter>Game\GameStates\LeaderBoardMenu</Filter>
     </ClCompile>
-    <ClCompile Include="Game\UI\UI.cpp">
-      <Filter>Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Ball.cpp">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Ball</Filter>
     </ClCompile>
@@ -218,8 +224,17 @@
     <ClCompile Include="Game\GameStates\MainGameplay\PauseState\PauseState.cpp">
       <Filter>Game\GameStates\MainGameplay\PauseState</Filter>
     </ClCompile>
-    <ClCompile Include="Game\GameStates\MainGameplay\Observer\GameManager.cpp">
+    <ClCompile Include="Game\GameStates\MainGameplay\Observer\GameProperties.cpp">
       <Filter>Game\GameStates\MainGameplay\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\UI\GameUI.cpp">
+      <Filter>Game\GameStates\MainGameplay\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Bonus.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,5 +23,7 @@ namespace Arkanoid
 
 		virtual EObjectType GetObjectType() const = 0;
 		virtual bool IsDestroyed() const = 0;
+
+		virtual std::shared_ptr<IGameObject> clone() const = 0;
 	};
 }

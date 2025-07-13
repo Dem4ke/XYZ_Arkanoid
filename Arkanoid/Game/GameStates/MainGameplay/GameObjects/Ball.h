@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <SFML/Audio.hpp> 
 #include "../IGameObject.h"
 #include "../Observer/Subject.h"
 
@@ -11,6 +11,7 @@ namespace Arkanoid
 	{
 	public:
 		UBall(const sf::Vector2f& InputedPosition);
+		UBall(const UBall& Ball);
 		~UBall() = default;
 
 		void Update(const float& DeltaTime) override;
@@ -25,6 +26,8 @@ namespace Arkanoid
 
 		EObjectType GetObjectType() const override;
 		bool IsDestroyed() const override;
+
+		std::shared_ptr<IGameObject> clone() const override;
 
 		void Attach(std::shared_ptr<IBallObserver> Observer) override;
 		void Detach(std::shared_ptr<IBallObserver> Observer) override;

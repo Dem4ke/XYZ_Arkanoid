@@ -17,6 +17,7 @@ namespace Arkanoid
 		Speed *= SETTINGS.GetScaleFactor().Y;
 
 		Sprite.setTexture(Texture);
+		Sprite.setTextureRect(TextureRect);
 
 		Math::SetSize(Sprite, Width, Height);
 		Math::SetRelativeOrigin(Sprite, 0.5f, 0.5f);
@@ -25,6 +26,17 @@ namespace Arkanoid
 		Position.y -= Height / 2.f;
 		Sprite.setPosition(Position);
 	}
+
+	UPlatform::UPlatform(const UPlatform& Platform)
+		: Width(Platform.Width)
+		, Height(Platform.Height)
+		, Speed(Platform.Speed)
+		, ObjectType(Platform.ObjectType)
+		, TextureRect(Platform.TextureRect)
+		, Position(Platform.Position)
+		, Texture(Platform.Texture)
+		, Sprite(Platform.Sprite)
+	{}
 
 	void UPlatform::Update(const float& DeltaTime) 
 	{
@@ -94,5 +106,9 @@ namespace Arkanoid
 	bool UPlatform::IsDestroyed() const
 	{
 		return false;
+	}
+	std::shared_ptr<IGameObject> UPlatform::clone() const
+	{
+		return std::make_shared<UPlatform>(*this);
 	}
 }

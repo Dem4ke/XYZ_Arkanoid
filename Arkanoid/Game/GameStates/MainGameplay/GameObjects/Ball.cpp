@@ -30,6 +30,18 @@ namespace Arkanoid
 		Circle.setPosition(Position);
 	}
 
+	UBall::UBall(const UBall& Ball)
+		: Size(Ball.Size)
+		, Speed(Ball.Speed)
+		, Angle(Ball.Angle)
+		, Type(Ball.Type)
+		, Position(Ball.Position)
+		, Direction(Ball.Direction)
+		, Circle(Ball.Circle)
+		, HitSound(Ball.HitSound)
+		, Observers(Ball.Observers)
+	{}
+
 	void UBall::Update(const float& DeltaTime) 
 	{
 		// Calculate new position of ball
@@ -37,15 +49,18 @@ namespace Arkanoid
 		Circle.setPosition(Position);
 
 		// Check collision with window's borders
-		if (Position.x - Size / 2.f < 0 || Position.x + Size / 2.f > SETTINGS.GetScreenWidth()) {
+		if (Position.x - Size / 2.f < 0 || Position.x + Size / 2.f > SETTINGS.GetScreenWidth()) 
+		{
 			ChangeX();
 		}
 
-		if (Position.y - Size / 2.f < 0) {
+		if (Position.y - Size / 2.f < 0) 
+		{
 			ChangeY();
 		}
 
-		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) {
+		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) 
+		{
 			// Notify observers that ball is out of screen
 			Notify();
 		}
@@ -171,6 +186,11 @@ namespace Arkanoid
 	bool UBall::IsDestroyed() const
 	{
 		return false;
+	}
+
+	std::shared_ptr<IGameObject> UBall::clone() const
+	{
+		return std::make_shared<UBall>(*this);
 	}
 
 	/*//////////////////////////////////*/

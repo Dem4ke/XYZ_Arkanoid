@@ -26,6 +26,19 @@ namespace Arkanoid
 		Sprite.setPosition(Position);
 	}
 
+	UBlock::UBlock(const UBlock& Block)
+		: Health(Block.Health)
+		, Cost(Block.Cost)
+		, Width(Block.Width)
+		, Height(Block.Height)
+		, Type(Block.Type)
+		, Position(Block.Position)
+		, Texture(Block.Texture)
+		, Sprite(Block.Sprite)
+		, TextureRect(Block.TextureRect)
+		, Observers(Block.Observers)
+	{}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	     GAME OBJECT METHODS        */
@@ -88,6 +101,11 @@ namespace Arkanoid
 		return false;
 	}
 
+	std::shared_ptr<IGameObject> UBlock::clone() const
+	{
+		return std::make_shared<UBlock>(*this);
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	       SUBJECT METHODS          */
@@ -108,7 +126,7 @@ namespace Arkanoid
 	{
 		for (auto& i : Observers)
 		{
-			i->BlockBroken(Cost);
+			i->BlockBroken(Cost, Position);
 		}
 	}
 
@@ -123,6 +141,16 @@ namespace Arkanoid
 	{
 		Sprite.setTextureRect(TextureRect);
 	}
+
+	UThreeHitBlock::UThreeHitBlock(const UThreeHitBlock& Block)
+		: UBlock(Block)
+		, Health(Block.Health)
+		, Cost(Block.Cost)
+		, Type(Block.Type)
+		, TextureRect(Block.TextureRect)
+		, TextureRect1Hit(Block.TextureRect1Hit)
+		, TextureRect2Hit(Block.TextureRect2Hit)
+	{}
 
 	void UThreeHitBlock::Update(const float& DeltaTime)
 	{
@@ -155,6 +183,11 @@ namespace Arkanoid
 		return false;
 	}
 
+	std::shared_ptr<IGameObject> UThreeHitBlock::clone() const
+	{
+		return std::make_shared<UThreeHitBlock>(*this);
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	      UNBREAKABLE BLOCK         */
@@ -167,6 +200,14 @@ namespace Arkanoid
 		Sprite.setColor(sf::Color::White);
 	}
 
+	UUnbreakableBlock::UUnbreakableBlock(const UUnbreakableBlock& Block)
+		: UBlock(Block)
+		, Health(Block.Health)
+		, Cost(Block.Cost)
+		, Type(Block.Type)
+		, TextureRect(Block.TextureRect)
+	{}
+
 	void UUnbreakableBlock::Update(const float& DeltaTime) {}
 
 	void UUnbreakableBlock::Hit() {}
@@ -174,5 +215,10 @@ namespace Arkanoid
 	bool UUnbreakableBlock::IsDestroyed() const
 	{
 		return false;
+	}
+
+	std::shared_ptr<IGameObject> UUnbreakableBlock::clone() const
+	{
+		return std::make_shared<UUnbreakableBlock>(*this);
 	}
 }

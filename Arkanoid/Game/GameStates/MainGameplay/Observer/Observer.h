@@ -2,6 +2,7 @@
 
 #include "../../../AppStates/AppStates.h"
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 namespace Arkanoid
 {
@@ -12,7 +13,7 @@ namespace Arkanoid
 	{
 	public:
 		virtual ~IBlockObserver() = default;
-		virtual void BlockBroken(int Cost) = 0;
+		virtual void BlockBroken(int Cost, const sf::Vector2f& Position) = 0;
 	};
 
 	class IBallObserver
@@ -20,6 +21,13 @@ namespace Arkanoid
 	public:
 		virtual ~IBallObserver() = default;
 		virtual void BallOut() = 0;
+	};
+
+	class IBonusObserver
+	{
+	public:
+		virtual ~IBonusObserver() = default;
+		virtual void BonusTaken(int Type) = 0;
 	};
 
 	class IGameManager
@@ -31,5 +39,6 @@ namespace Arkanoid
 		virtual void ClearGameplayType() = 0;
 		virtual bool IsGameplayTypeChanged() const = 0;
 		virtual EGameplayType GetGameplayType() const = 0;
+		virtual void DrawUI(sf::RenderWindow& Window) = 0;
 	};
 }
