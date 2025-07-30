@@ -104,5 +104,7 @@ namespace Arkanoid
 			break;
 		}
 		}
+
+		GameState->Init();
 	}
 }

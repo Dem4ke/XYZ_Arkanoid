@@ -59,6 +59,10 @@ namespace Arkanoid
 		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
+	void SExitMenu::Init()
+	{
+	}
+
 	// All menu movement and events
 	void SExitMenu::EventUpdate(const sf::Event& Event)
 	{

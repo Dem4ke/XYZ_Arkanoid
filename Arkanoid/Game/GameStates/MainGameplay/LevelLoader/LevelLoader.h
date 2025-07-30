@@ -17,6 +17,7 @@ namespace Arkanoid
 		~ULevelLoader() = default;
 
 		void Load(int LevelIndex);
+		void Clear();
 		int GetCurrentLevel() const;
 		int GetBreackableBlocksCount() const;
 

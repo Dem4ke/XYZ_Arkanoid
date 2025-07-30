@@ -59,6 +59,10 @@ namespace Arkanoid
 		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
+	void SMainMenu::Init()
+	{
+	}
+
 	// All menu movement and events
 	void SMainMenu::EventUpdate(const sf::Event& Event) 
 	{

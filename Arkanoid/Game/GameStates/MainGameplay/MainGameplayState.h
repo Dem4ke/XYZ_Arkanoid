@@ -20,12 +20,14 @@ namespace Arkanoid
 	class UGameProperties;
 
 	class SMainGameplay final : public IGameState, public IBallObserver, 
-								public IBlockObserver, public IBonusObserver
+								public IBlockObserver, public IBonusObserver, 
+		public std::enable_shared_from_this<SMainGameplay>
 	{
 	public:
 		SMainGameplay();
 		~SMainGameplay() = default;
 
+		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
 		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
@@ -72,6 +74,7 @@ namespace Arkanoid
 		sf::SoundBuffer ChoiceSound;									// Sound of menu choices
 		sf::SoundBuffer WinSound;										// Sound of a level complete
 		sf::SoundBuffer LoseSound;										// Sound of the game over
+		sf::SoundBuffer HitSound;										// Sound of ball or bonus hit
 			
 		CButton Button;													// Keys to work with game
 	};

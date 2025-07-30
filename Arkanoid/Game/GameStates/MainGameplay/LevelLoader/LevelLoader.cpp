@@ -119,6 +119,12 @@ namespace Arkanoid
 		GameObjects.emplace_back(std::make_shared<UBall>(Position));
 	}
 
+	void ULevelLoader::Clear()
+	{
+		Blocks.clear();
+		GameObjects.clear();
+	}
+
 	int ULevelLoader::GetCurrentLevel() const
 	{
 		return CurrentLevel;

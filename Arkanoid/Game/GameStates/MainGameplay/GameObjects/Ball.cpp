@@ -9,10 +9,6 @@ namespace Arkanoid
 	UBall::UBall(const sf::Vector2f& InputedPosition)
 		: Position(InputedPosition)
 	{
-		// Load sound of ball's hit
-		bool bIsLoaded = HitSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
-		assert(bIsLoaded);
-
 		Size *= SETTINGS.GetScaleFactor().X;
 		Speed *= SETTINGS.GetScaleFactor().X;
 
@@ -38,7 +34,6 @@ namespace Arkanoid
 		, Position(Ball.Position)
 		, Direction(Ball.Direction)
 		, Circle(Ball.Circle)
-		, HitSound(Ball.HitSound)
 		, Observers(Ball.Observers)
 	{}
 
@@ -199,21 +194,21 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	void UBall::Attach(std::shared_ptr<IBallObserver> Observer)
+	void UBall::Attach(std::weak_ptr<IBallObserver> Observer)
 	{
 		Observers.push_back(Observer);
 	}
 
-	void UBall::Detach(std::shared_ptr<IBallObserver> Observer)
+	void UBall::Detach(std::weak_ptr<IBallObserver> Observer)
 	{
-		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
 	}
 
 	void UBall::Notify()
 	{
 		for (auto& i : Observers)
 		{
-			i->BallOut();
+			i.lock()->BallOut();
 		}
 	}
 
@@ -226,13 +221,11 @@ namespace Arkanoid
 	void UBall::ChangeX()
 	{
 		Direction.x *= -1;
-		SETTINGS.GetResources()->PlaySound(HitSound);
 	}
 
 	void UBall::ChangeY()
 	{
 		Direction.y *= -1;
-		SETTINGS.GetResources()->PlaySound(HitSound);
 	}
 
 	// Set new angle to the ball
@@ -241,7 +234,5 @@ namespace Arkanoid
 		const auto pi = std::acos(-1.f);
 		Direction.x = (NewAngle / abs(NewAngle)) * std::cos(pi / 180.f * NewAngle);;
 		Direction.y = -1 * abs(std::sin(pi / 180.f * NewAngle));
-
-		SETTINGS.GetResources()->PlaySound(HitSound);
 	}
 }

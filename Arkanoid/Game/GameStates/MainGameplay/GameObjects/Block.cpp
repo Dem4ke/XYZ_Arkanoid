@@ -39,6 +39,11 @@ namespace Arkanoid
 		, Observers(Block.Observers)
 	{}
 
+	UBlock::~UBlock()
+	{
+		Observers.clear();
+	}
+
 	/*//////////////////////////////////*/
 	/*                                  */
 	/*	     GAME OBJECT METHODS        */
@@ -112,21 +117,21 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	void UBlock::Attach(std::shared_ptr<IBlockObserver> Observer)
+	void UBlock::Attach(std::weak_ptr<IBlockObserver> Observer)
 	{
 		Observers.push_back(Observer);
 	}
 
-	void UBlock::Detach(std::shared_ptr<IBlockObserver> Observer)
+	void UBlock::Detach(std::weak_ptr<IBlockObserver> Observer)
 	{
-		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer), Observers.end());
 	}
 
 	void UBlock::Notify()
 	{
 		for (auto& i : Observers)
 		{
-			i->BlockBroken(Cost, Position);
+			i.lock()->BlockBroken(Cost, Position);
 		}
 	}
 

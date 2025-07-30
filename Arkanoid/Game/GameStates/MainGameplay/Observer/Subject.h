@@ -14,8 +14,8 @@ namespace Arkanoid
 	public:
 		virtual ~IBlockSubject() = default;
 
-		virtual void Attach(std::shared_ptr<IBlockObserver> Observer) = 0;
-		virtual void Detach(std::shared_ptr<IBlockObserver> Observer) = 0;
+		virtual void Attach(std::weak_ptr<IBlockObserver> Observer) = 0;
+		virtual void Detach(std::weak_ptr<IBlockObserver> Observer) = 0;
 		virtual void Notify() = 0;
 	};
 
@@ -24,8 +24,8 @@ namespace Arkanoid
 	public:
 		virtual ~IBallSubject() = default;
 
-		virtual void Attach(std::shared_ptr<IBallObserver> Observer) = 0;
-		virtual void Detach(std::shared_ptr<IBallObserver> Observer) = 0;
+		virtual void Attach(std::weak_ptr<IBallObserver> Observer) = 0;
+		virtual void Detach(std::weak_ptr<IBallObserver> Observer) = 0;
 		virtual void Notify() = 0;
 	};
 
@@ -34,8 +34,8 @@ namespace Arkanoid
 	public:
 		virtual ~IBonusSubject() = default;
 
-		virtual void Attach(std::shared_ptr<IBonusObserver> Observer) = 0;
-		virtual void Detach(std::shared_ptr<IBonusObserver> Observer) = 0;
+		virtual void Attach(std::weak_ptr<IBonusObserver> Observer) = 0;
+		virtual void Detach(std::weak_ptr<IBonusObserver> Observer) = 0;
 		virtual void Notify(bool bIsTaken) = 0;
 	};
 }

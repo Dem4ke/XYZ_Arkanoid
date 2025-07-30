@@ -87,6 +87,10 @@ namespace Arkanoid
 		}
 	}
 
+	void SLeaderBoardMenu::Init()
+	{
+	}
+
 	// All menu movement and events
 	void SLeaderBoardMenu::EventUpdate(const sf::Event& Event)
 	{

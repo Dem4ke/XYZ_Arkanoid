@@ -16,6 +16,7 @@ namespace Arkanoid
 		SSettingsMenu();
 		~SSettingsMenu() = default;
 
+		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
 		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
@@ -25,7 +26,6 @@ namespace Arkanoid
 
 	private:
 		// Work tools
-		void Init();
 		void MoveUp();
 		void MoveDown();
 		void SetNewGameState(EGameStateType NewState);

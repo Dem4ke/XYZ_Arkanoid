@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp> 
 #include "../IGameObject.h"
 #include "../Observer/Subject.h"
 
@@ -29,8 +28,8 @@ namespace Arkanoid
 
 		std::shared_ptr<IGameObject> clone() const override;
 
-		void Attach(std::shared_ptr<IBallObserver> Observer) override;
-		void Detach(std::shared_ptr<IBallObserver> Observer) override;
+		void Attach(std::weak_ptr<IBallObserver> Observer) override;
+		void Detach(std::weak_ptr<IBallObserver> Observer) override;
 		void Notify() override;
 
 	private:
@@ -47,8 +46,7 @@ namespace Arkanoid
 		sf::Vector2f Position;		// Position of the ball on screen
 		sf::Vector2f Direction;		// Unit vector that contains ball's velocity direction
 		sf::CircleShape Circle;		// Shape of the ball
-		sf::SoundBuffer HitSound;	// Sound of menu moves
 
-		std::vector<std::shared_ptr<IBallObserver>> Observers;// Vector of observers
+		std::vector<std::weak_ptr<IBallObserver>> Observers;// Vector of observers
 	};
 }

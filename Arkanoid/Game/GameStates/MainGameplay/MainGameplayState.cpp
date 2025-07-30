@@ -18,6 +18,10 @@ namespace Arkanoid
 {
 	SMainGameplay::SMainGameplay()
 	{
+	}
+
+	void SMainGameplay::Init()
+	{
 		// Load textures
 		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_background.jpg");
 		assert(bIsLoaded);
@@ -30,6 +34,9 @@ namespace Arkanoid
 		assert(bIsLoaded);
 
 		bIsLoaded = LoseSound.loadFromFile("Resources/Sounds/Maodin204__Lose.wav");
+		assert(bIsLoaded);
+
+		bIsLoaded = HitSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
 		assert(bIsLoaded);
 
 		GameProperties = std::make_shared<UGameProperties>();
@@ -92,6 +99,8 @@ namespace Arkanoid
 
 				std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(CopiedBlocks, CopiedGameOjects);
 				GameProperties->SetGameState(GameState);
+
+				SETTINGS.GetResources()->PlaySound(HitSound);
 			}
 
 			int it = 0;
@@ -99,6 +108,7 @@ namespace Arkanoid
 			{
 				if (GameObjects[1]->CheckCollision(Block, Block->GetObjectType()))
 				{
+					SETTINGS.GetResources()->PlaySound(HitSound);
 					break;
 				}
 
@@ -118,9 +128,22 @@ namespace Arkanoid
 				Object->Update(DeltaTime);
 			}
 
+			it = 0;
 			for (auto& Bonus : Bonuses)
 			{
-				Bonus->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
+				if (Bonus->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType()))
+				{
+					break;
+				}
+
+				if (Bonus->IsDestroyed())
+				{
+					Bonuses.erase(Bonuses.begin() + it);
+					break;
+				}
+
+				++it;
+
 				Bonus->Update(DeltaTime);
 			}
 		}
@@ -183,7 +206,7 @@ namespace Arkanoid
 			return;
 		}
 
-		if (static_cast<int> (rand() / (float)RAND_MAX * 100) < 10)
+		if (static_cast<int> (rand() / (float)RAND_MAX * 100) < 100)
 		{
 			std::unique_ptr<IBonusFactory> BonusFactory;
 
@@ -209,10 +232,9 @@ namespace Arkanoid
 			}
 
 			std::shared_ptr<UBonus> NewBonus = BonusFactory->CreateBonus(Position);
-			std::shared_ptr<IBonusObserver> BonusObserver(this);
 
-			NewBonus->Attach(BonusObserver);
 			Bonuses.push_back(NewBonus);
+			Bonuses[Bonuses.size() - 1]->Attach(weak_from_this());
 		}
 	}
 
@@ -265,11 +287,6 @@ namespace Arkanoid
 
 	void SMainGameplay::InitNewLevel()
 	{
-		Bonuses.clear();
-		Blocks.clear();
-		GameObjects.clear();
-		InitSubGameplayState(EGameplayType::Main);
-
 		if (LevelLoader->GetCurrentLevel() <= 3)
 		{
 			LevelLoader->Load(LevelLoader->GetCurrentLevel());
@@ -278,17 +295,22 @@ namespace Arkanoid
 			GameObjects = LevelLoader->GetGameObjects();
 			GameProperties->SetBlocksCount(LevelLoader->GetBreackableBlocksCount());
 
-			// Add observers
-			std::shared_ptr<IBlockObserver> BlockObserver(this);
+			LevelLoader->Clear();
 
+			// Add observers
 			for (auto& i : Blocks)
 			{
-				i->Attach(BlockObserver);
+				i->Attach(weak_from_this());
 			}
 			
 			std::shared_ptr<UBall> Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
-			std::shared_ptr<IBallObserver> BallObserver(this);
-			Ball->Attach(BallObserver);
+			Ball->Attach(weak_from_this());
+
+			InitSubGameplayState(EGameplayType::Main);
+		}
+		else
+		{
+			InitSubGameplayState(EGameplayType::GameOver);
 		}
 	}
 

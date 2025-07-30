@@ -11,7 +11,7 @@ namespace Arkanoid
 	public:
 		UBlock(const sf::Vector2f& InputedPosition);
 		UBlock(const UBlock& Block);
-		virtual ~UBlock() = default;
+		virtual ~UBlock();
 
 		virtual void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
@@ -28,8 +28,8 @@ namespace Arkanoid
 
 		virtual std::shared_ptr<IGameObject> clone() const override;
 
-		void Attach(std::shared_ptr<IBlockObserver> Observer) override;
-		void Detach(std::shared_ptr<IBlockObserver> Observer) override;
+		void Attach(std::weak_ptr<IBlockObserver> Observer) override;
+		void Detach(std::weak_ptr<IBlockObserver> Observer) override;
 		void Notify() override;
 
 	protected:
@@ -46,7 +46,7 @@ namespace Arkanoid
 		sf::Sprite Sprite;								// Sprite to draw
 		sf::IntRect TextureRect{ 1, 1, 23, 9 };			// Rectangle coordinates on the block's texture 
 
-		std::vector<std::shared_ptr<IBlockObserver>> Observers;// Vector of observers
+		std::vector<std::weak_ptr<IBlockObserver>> Observers;// Vector of observers
 	};
 
 	class UThreeHitBlock final : public UBlock

@@ -11,7 +11,7 @@ namespace Arkanoid
 	public:
 		UBonus(const sf::Vector2f& InputedPosition);
 		UBonus(const UBonus& Bonus);
-		virtual ~UBonus() = default;
+		virtual ~UBonus();
 
 		void Update(const float& DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
@@ -28,8 +28,8 @@ namespace Arkanoid
 
 		std::shared_ptr<IGameObject> clone() const override;
 
-		void Attach(std::shared_ptr<IBonusObserver> Observer) override;
-		void Detach(std::shared_ptr<IBonusObserver> Observer) override;
+		void Attach(std::weak_ptr<IBonusObserver> Observer) override;
+		void Detach(std::weak_ptr<IBonusObserver> Observer) override;
 		void Notify(bool bIsTaken) override;
 
 	protected:
@@ -46,7 +46,7 @@ namespace Arkanoid
 		sf::Vector2f Direction;		// Unit vector that contains bonus's velocity direction
 		sf::CircleShape Circle;		// Shape of the bonus
 
-		std::vector<std::shared_ptr<IBonusObserver>> Observers;// Vector of observers
+		std::vector<std::weak_ptr<IBonusObserver>> Observers;// Vector of observers
 	};
 
 	class UFireBallBonus : public UBonus
