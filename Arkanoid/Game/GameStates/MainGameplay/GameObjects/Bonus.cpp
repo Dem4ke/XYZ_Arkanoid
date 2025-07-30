@@ -46,64 +46,73 @@ namespace Arkanoid
 
 	void UBonus::Update(const float& DeltaTime) 
 	{
-		// Calculate new position of bonus
-		Position += (Speed * DeltaTime * Direction);
-		Circle.setPosition(Position);
-
-		if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight()) 
+		if (!bIsDestroyed)
 		{
-			// Notify observers that bonus need to be deleted
-			Notify(false);
+			// Calculate new position of bonus
+			Position += (Speed * DeltaTime * Direction);
+			Circle.setPosition(Position);
+
+			if (Position.y + Size / 2.f > SETTINGS.GetScreenHeight())
+			{
+				// Notify observers that bonus need to be deleted
+				Notify(false);
+			}
 		}
 	}
 
 	void UBonus::Draw(sf::RenderWindow& Window)
 	{
-		Window.draw(Circle);
+		if (!bIsDestroyed)
+		{
+			Window.draw(Circle);
+		}
 	}
 
 	bool UBonus::CheckCollision(std::shared_ptr<IGameObject> Object, EObjectType Type)
 	{
-		// Light check is lenght between ball and object is more than width of object + size of ball  
-		float Length = sqrt(((Object->GetOriginX() - GetOriginX()) * (Object->GetOriginX() - GetOriginX())) +
-			((Object->GetOriginY() - GetOriginY()) * (Object->GetOriginY() - GetOriginY())));
-
-		if (Length < (Object->GetWidth() + GetWidth()))
+		if (!bIsDestroyed)
 		{
-			float NormalY = GetWidth() * 2.f;
+			// Light check is lenght between ball and object is more than width of object + size of ball  
+			float Length = sqrt(((Object->GetOriginX() - GetOriginX()) * (Object->GetOriginX() - GetOriginX())) +
+				((Object->GetOriginY() - GetOriginY()) * (Object->GetOriginY() - GetOriginY())));
 
-			// Search area of triangle between ball's origin and object's side
-			auto TriangleArea = [](float x1, float y1, float x2, float y2, float x3, float y3)
-				{
-					return std::fabs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) / 2.f;
-				};
-
-			// Search lenght of the normal from ball's origin to object's side
-			auto TriangleHeight = [](float triangleArea, float baseLenght)
-				{
-					return triangleArea * 2.f / baseLenght;
-				};
-
-			// Check lenght of the normal from ball to object
-			if ((GetOriginX() + (GetWidth() / 2.2f) >= Object->GetOriginX() - Object->GetWidth() / 2.f) &&
-				(GetOriginX() - (GetWidth() / 2.2f) <= Object->GetOriginX() + Object->GetWidth() / 2.f))
+			if (Length < (Object->GetWidth() + GetWidth()))
 			{
-				float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
-					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
-					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
+				float NormalY = GetWidth() * 2.f;
 
-				float Area2 = TriangleArea(GetOriginX(), GetOriginY(),
-					Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
-					Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f);
+				// Search area of triangle between ball's origin and object's side
+				auto TriangleArea = [](float x1, float y1, float x2, float y2, float x3, float y3)
+					{
+						return std::fabs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) / 2.f;
+					};
 
-				NormalY = Area1 < Area2 ? TriangleHeight(Area1, Object->GetWidth()) : TriangleHeight(Area2, Object->GetWidth());
-			}
+				// Search lenght of the normal from ball's origin to object's side
+				auto TriangleHeight = [](float triangleArea, float baseLenght)
+					{
+						return triangleArea * 2.f / baseLenght;
+					};
 
-			// Notify that bonus has been taken
-			if (NormalY <= GetHeight() / 2.f && NormalY >= 1.f)
-			{
-				Notify(true);
-				return true;
+				// Check lenght of the normal from ball to object
+				if ((GetOriginX() + (GetWidth() / 2.2f) >= Object->GetOriginX() - Object->GetWidth() / 2.f) &&
+					(GetOriginX() - (GetWidth() / 2.2f) <= Object->GetOriginX() + Object->GetWidth() / 2.f))
+				{
+					float Area1 = TriangleArea(GetOriginX(), GetOriginY(),
+						Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f,
+						Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() + Object->GetHeight() / 2.f);
+
+					float Area2 = TriangleArea(GetOriginX(), GetOriginY(),
+						Object->GetOriginX() - Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f,
+						Object->GetOriginX() + Object->GetWidth() / 2.f, Object->GetOriginY() - Object->GetHeight() / 2.f);
+
+					NormalY = Area1 < Area2 ? TriangleHeight(Area1, Object->GetWidth()) : TriangleHeight(Area2, Object->GetWidth());
+				}
+
+				// Notify that bonus has been taken
+				if (NormalY <= GetHeight() / 2.f && NormalY >= 1.f)
+				{
+					Notify(true);
+					return true;
+				}
 			}
 		}
 

@@ -118,24 +118,10 @@ namespace Arkanoid
 				Object->Update(DeltaTime);
 			}
 
-			it = 0;
-			for (auto& Bonus : Bonuses)
-			{
-				if (Bonus->IsDestroyed())
-				{
-					Bonuses[it] = nullptr;
-					Bonuses.erase(Bonuses.cbegin() + it);
-					break;
-				}
-
-				++it;
-
-				Bonus->Update(DeltaTime);
-			}
-
 			for (auto& Bonus : Bonuses)
 			{
 				Bonus->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType());
+				Bonus->Update(DeltaTime);
 			}
 		}
 		else 
@@ -194,9 +180,10 @@ namespace Arkanoid
 		if (GameProperties->GetBlocksCount() <= 0)
 		{
 			InitSubGameplayState(EGameplayType::LevelDone);
+			return;
 		}
 
-		if (static_cast<int> (rand() / (float)RAND_MAX * 100) < 100)
+		if (static_cast<int> (rand() / (float)RAND_MAX * 100) < 10)
 		{
 			std::unique_ptr<IBonusFactory> BonusFactory;
 
@@ -226,8 +213,6 @@ namespace Arkanoid
 
 			NewBonus->Attach(BonusObserver);
 			Bonuses.push_back(NewBonus);
-
-			BonusObserver = nullptr;
 		}
 	}
 
@@ -252,7 +237,6 @@ namespace Arkanoid
 		{
 		case 0:
 		{
-
 			break;
 		}
 		case 1:
@@ -281,9 +265,10 @@ namespace Arkanoid
 
 	void SMainGameplay::InitNewLevel()
 	{
+		Bonuses.clear();
 		Blocks.clear();
 		GameObjects.clear();
-		GameplayType = EGameplayType::Main;
+		InitSubGameplayState(EGameplayType::Main);
 
 		if (LevelLoader->GetCurrentLevel() <= 3)
 		{

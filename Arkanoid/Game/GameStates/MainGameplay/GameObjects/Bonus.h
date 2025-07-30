@@ -54,7 +54,7 @@ namespace Arkanoid
 	public:
 		UFireBallBonus(const sf::Vector2f& InputedPosition);
 		UFireBallBonus(const UFireBallBonus& Bonus);
-		virtual ~UFireBallBonus() = default;
+		~UFireBallBonus() = default;
 
 	private:
 		int BonusType = 1;
