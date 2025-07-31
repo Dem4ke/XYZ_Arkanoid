@@ -2,6 +2,7 @@
 #include "SettingsMenuState.h"
 #include "SoundSettingsMenuState.h"
 #include "VideoSettingsMenuState.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
@@ -39,7 +40,7 @@ namespace Arkanoid
 				}
 				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 				{
-					SetNewGameState(EGameStateType::MainMenu);
+					SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
 				}
 				else if (Event.key.code == Button.EnterKey)
 				{
@@ -55,7 +56,7 @@ namespace Arkanoid
 					}
 					else if (SelectedButton == 2)
 					{
-						SetNewGameState(EGameStateType::MainMenu);
+						SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
 					}
 				}
 			}
@@ -106,14 +107,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SSettingsMenu::IsGameStateUpdated() const
+	void SSettingsMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameStateUpdated;
+		Observers.push_back(Observer);
 	}
 
-	EGameStateType SSettingsMenu::GetNewGameStateType() const
+	void SSettingsMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return NewGameStateType;
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SSettingsMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -205,12 +214,10 @@ namespace Arkanoid
 	}
 
 	// Change flag and state type 
-	void SSettingsMenu::SetNewGameState(EGameStateType NewState)
+	void SSettingsMenu::SetNewGameState(SettingsMenu::EGameStateType NewState)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewState));
 	}
 
 	void SSettingsMenu::InitSubSettingsMenu(ESettingsType Type)

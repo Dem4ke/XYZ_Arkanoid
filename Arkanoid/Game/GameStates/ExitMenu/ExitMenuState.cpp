@@ -1,11 +1,12 @@
 #include <cassert>
 #include "ExitMenuState.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SExitMenu::SExitMenu()
+	void SExitMenu::Init()
 	{
 		// Load textures
 		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
@@ -59,10 +60,6 @@ namespace Arkanoid
 		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
-	void SExitMenu::Init()
-	{
-	}
-
 	// All menu movement and events
 	void SExitMenu::EventUpdate(const sf::Event& Event)
 	{
@@ -78,7 +75,7 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::MainMenu);
+				SetNewGameState(ExitMenu::EGameStateType::MainMenu);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
@@ -88,7 +85,7 @@ namespace Arkanoid
 				}
 				else if (SelectedButton == 1)
 				{
-					SetNewGameState(EGameStateType::MainMenu);
+					SetNewGameState(ExitMenu::EGameStateType::MainMenu);
 				}
 			}
 		}
@@ -111,14 +108,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SExitMenu::IsGameStateUpdated() const
+	void SExitMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameStateUpdated;
+		Observers.push_back(Observer);
 	}
 
-	EGameStateType SExitMenu::GetNewGameStateType() const
+	void SExitMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return NewGameStateType;
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SExitMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -167,11 +172,9 @@ namespace Arkanoid
 	}
 
 	// Change flag and state type 
-	void SExitMenu::SetNewGameState(EGameStateType NewState)
+	void SExitMenu::SetNewGameState(ExitMenu::EGameStateType NewState)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewState));
 	}
 }

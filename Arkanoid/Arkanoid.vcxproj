@@ -19,11 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\AppStates\AppStates.h" />
     <ClInclude Include="Game\FileSystem\FileSystem.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\GameStates\CButton.h" />
     <ClInclude Include="Game\GameStates\ExitMenu\ExitMenuState.h" />
+    <ClInclude Include="Game\GameStates\GameStateObserver.h" />
+    <ClInclude Include="Game\GameStates\GameStateSubject.h" />
     <ClInclude Include="Game\GameStates\IGameState.h" />
     <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoard.h" />
     <ClInclude Include="Game\GameStates\LeaderBoardMenu\LeaderBoardMenuState.h" />

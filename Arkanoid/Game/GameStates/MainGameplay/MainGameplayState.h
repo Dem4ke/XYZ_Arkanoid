@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include "../GameStateSubject.h"
 #include "Observer/Observer.h"
 #include "../IGameState.h"
 #include "../CButton.h"
@@ -19,8 +20,8 @@ namespace Arkanoid
 	class OGameUI;
 	class UGameProperties;
 
-	class SMainGameplay final : public IGameState, public IBallObserver, 
-								public IBlockObserver, public IBonusObserver, 
+	class SMainGameplay final : public IGameState, public IGameStateSubject,
+								public IBallObserver, public IBlockObserver, public IBonusObserver, 
 		public std::enable_shared_from_this<SMainGameplay>
 	{
 	public:
@@ -31,9 +32,6 @@ namespace Arkanoid
 		void EventUpdate(const sf::Event& Event) override;
 		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
-
-		bool IsGameStateUpdated() const override;
-		EGameStateType GetNewGameStateType() const override;
 
 		// IBlockObserver methods
 		void BlockBroken(int Cost, const sf::Vector2f& Position) override;
@@ -64,8 +62,6 @@ namespace Arkanoid
 		std::vector<std::shared_ptr<UBonus>> Bonuses;					// Vector of bonuses
 		std::vector<std::shared_ptr<UBlock>> Blocks;					// Vector of blocks
 		
-		bool bIsGameStateUpdated = false;								// Flag contains iformaion is user changed a game state type
-		EGameStateType NewGameStateType = EGameStateType::None;			// Next game state type that will be played
 		EGameplayType GameplayType = EGameplayType::Main;				// Current gameplay type which shows
 
 		sf::Texture BackgroundTexture;									// Texture for background
@@ -77,5 +73,7 @@ namespace Arkanoid
 		sf::SoundBuffer HitSound;										// Sound of ball or bonus hit
 			
 		CButton Button;													// Keys to work with game
+
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
 	};
 }

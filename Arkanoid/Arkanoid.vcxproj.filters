@@ -22,9 +22,6 @@
     <Filter Include="Game\Math">
       <UniqueIdentifier>{17d87739-c373-4c9e-9e62-70ad01276975}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\AppStates">
-      <UniqueIdentifier>{80ab0514-d1f7-4d7d-8a4a-0e381176c54c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\GameStates\MainGameplay">
       <UniqueIdentifier>{87113f6d-1aeb-430d-a271-02ac41be7da9}</UniqueIdentifier>
     </Filter>
@@ -86,9 +83,6 @@
     </ClInclude>
     <ClInclude Include="Game\Math\Math.h">
       <Filter>Game\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\AppStates\AppStates.h">
-      <Filter>Game\AppStates</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameStates\SettingsMenu\SettingsMenuState.h">
       <Filter>Game\GameStates\SettingsMenu</Filter>
@@ -161,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.h">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\GameStateObserver.h">
+      <Filter>Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\GameStateSubject.h">
+      <Filter>Game\GameStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

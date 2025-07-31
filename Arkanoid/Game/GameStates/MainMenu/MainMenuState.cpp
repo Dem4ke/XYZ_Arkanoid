@@ -1,11 +1,12 @@
 #include <cassert>
 #include "MainMenuState.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SMainMenu::SMainMenu()
+	void SMainMenu::Init()
 	{
 		// Load textures
 		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Main_menu_background.jpg");
@@ -59,10 +60,6 @@ namespace Arkanoid
 		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
 	}
 
-	void SMainMenu::Init()
-	{
-	}
-
 	// All menu movement and events
 	void SMainMenu::EventUpdate(const sf::Event& Event) 
 	{
@@ -78,25 +75,25 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::ExitMenu);
+				SetNewGameState(MainMenu::EGameStateType::ExitMenu);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0) 
 				{
-					SetNewGameState(EGameStateType::MainGameplay);
+					SetNewGameState(MainMenu::EGameStateType::MainGameplay);
 				}
 				else if (SelectedButton == 1)
 				{
-					SetNewGameState(EGameStateType::LeaderBoardMenu);
+					SetNewGameState(MainMenu::EGameStateType::LeaderBoardMenu);
 				}
 				else if (SelectedButton == 2)
 				{
-					SetNewGameState(EGameStateType::SettingsMenu);
+					SetNewGameState(MainMenu::EGameStateType::SettingsMenu);
 				}
 				else if (SelectedButton == 3)
 				{
-					SetNewGameState(EGameStateType::ExitMenu);
+					SetNewGameState(MainMenu::EGameStateType::ExitMenu);
 				}
 			}
 		}
@@ -114,14 +111,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SMainMenu::IsGameStateUpdated() const
+	void SMainMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameStateUpdated;
+		Observers.push_back(Observer);
 	}
 
-	EGameStateType SMainMenu::GetNewGameStateType() const
+	void SMainMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return NewGameStateType;
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SMainMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -170,11 +175,9 @@ namespace Arkanoid
 	}
 
 	// Change flag and state type 
-	void SMainMenu::SetNewGameState(EGameStateType NewState)
+	void SMainMenu::SetNewGameState(MainMenu::EGameStateType NewState)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewState));
 	}
 }

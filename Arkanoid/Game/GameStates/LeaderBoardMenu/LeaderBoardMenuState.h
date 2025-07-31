@@ -4,14 +4,23 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "../IGameState.h"
+#include "../GameStateSubject.h"
 #include "../CButton.h"
 
+namespace LeaderBoardMenu
+{
+	enum class EGameStateType : int
+	{
+		MainMenu = 0,
+	};
+
+}
 namespace Arkanoid
 {
-	class SLeaderBoardMenu final : public IGameState
+	class SLeaderBoardMenu final : public IGameState, public IGameStateSubject
 	{
 	public:
-		SLeaderBoardMenu();
+		SLeaderBoardMenu() = default;
 		~SLeaderBoardMenu() = default;
 
 		void Init() override;
@@ -19,20 +28,18 @@ namespace Arkanoid
 		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
-		bool IsGameStateUpdated() const override;
-		EGameStateType GetNewGameStateType() const override;
+		void Attach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Detach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Notify(int NewGameStateType) override;
 
 	private:
 		// Work tools
-		void SetNewGameState(EGameStateType NewState);
+		void SetNewGameState(LeaderBoardMenu::EGameStateType NewState);
 
 	private:
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size
 		int DrawablePlayers = 10;							// Count of drawable positions of players in the table
-
-		bool bIsGameStateUpdated = false;					// Flag contains iformaion is user changed a game state type
-		EGameStateType NewGameStateType = EGameStateType::None; // Next game state type that will be played
 
 		std::vector<std::pair<sf::Text, sf::Text>> Table;	// Vector of visible players in leader board
 		sf::Text ExitButton;								// Exit button
@@ -44,5 +51,7 @@ namespace Arkanoid
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
 		CButton Button;										// Keys to work with menu
+
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
 	};
 }

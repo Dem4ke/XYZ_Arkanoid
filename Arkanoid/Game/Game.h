@@ -1,28 +1,27 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include "AppStates/AppStates.h"
+#include "GameStates/GameStateObserver.h"
 
 namespace Arkanoid 
 {
-	class IGameState;
+	class OGameStatesManager;
 
-	class UGame
+	class UGame final : public IGameStateObserver,
+		public std::enable_shared_from_this<UGame>
 	{
 	public:
-		UGame();
-		~UGame();
+		UGame() = default;
+		~UGame() = default;
 		
+		void Init();
+
 		void EventUpdate(const sf::Event& Event);
 		void GameplayUpdate(const float DeltaTime);
 		void Draw(sf::RenderWindow& Window);
 
 	private:
-		// Work tools
-		void InitGameState(EGameStateType State);
+		void GameStateChanged(int NewGameStateType) override;
 
-	private:
-		EGameStateType CurrentGameStateType = EGameStateType::MainMenu;	// Game state type which plays now
-		std::shared_ptr<IGameState> GameState;							// Game state object to play
+		std::shared_ptr<IGameState> GameState = nullptr;	// Current game state
 	};
 }

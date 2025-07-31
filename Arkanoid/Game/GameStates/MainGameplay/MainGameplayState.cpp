@@ -11,6 +11,7 @@
 #include "Observer/GameProperties.h"
 #include "PauseState/PauseState.h"
 #include "UI/GameUI.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 

@@ -1,10 +1,17 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../../AppStates/AppStates.h"
 
 namespace Arkanoid
 {
+	// Types of a settings menu
+	enum class ESettingsType : int
+	{
+		Main = 0,	// Main settings
+		Sounds,		// Sound settings
+		Video,		// Video settings
+	};
+
 	class ISubSettingsMenu
 	{
 	public:

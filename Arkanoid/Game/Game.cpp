@@ -4,51 +4,30 @@
 #include "GameStates/SettingsMenu/SettingsMenuState.h"
 #include "GameStates/LeaderBoardMenu/LeaderBoardMenuState.h"
 #include "GameStates/ExitMenu/ExitMenuState.h"
+#include "GameStates/GameStateSubject.h"
 
 namespace Arkanoid
 {
-	UGame::UGame() 
+	void UGame::Init()
 	{
 		// Initialization of main menu state
-		InitGameState(CurrentGameStateType);
+		GameStateChanged(0);
 	}
-
-	UGame::~UGame() {}
 
 	void UGame::EventUpdate(const sf::Event& Event)
 	{
 		if (GameState)
 		{
-			if (GameState->IsGameStateUpdated())
-			{
-				CurrentGameStateType = GameState->GetNewGameStateType();
-				InitGameState(CurrentGameStateType);
-			}
+			GameState->EventUpdate(Event);
 		}
-		else
-		{
-			InitGameState(CurrentGameStateType);
-		}
-
-		GameState->EventUpdate(Event);
 	}
 
 	void UGame::GameplayUpdate(const float DeltaTime)
 	{
 		if (GameState)
 		{
-			if (GameState->IsGameStateUpdated())
-			{
-				CurrentGameStateType = GameState->GetNewGameStateType();
-				InitGameState(CurrentGameStateType);
-			}
+			GameState->GameplayUpdate(DeltaTime);
 		}
-		else
-		{
-			InitGameState(CurrentGameStateType);
-		}
-
-		GameState->GameplayUpdate(DeltaTime);
 	}
 
 	void UGame::Draw(sf::RenderWindow& Window)
@@ -56,10 +35,6 @@ namespace Arkanoid
 		if (GameState)
 		{
 			GameState->Draw(Window);
-		}
-		else
-		{
-			InitGameState(CurrentGameStateType);
 		}
 	}
 
@@ -69,42 +44,46 @@ namespace Arkanoid
 	/*                                  */
 	/*//////////////////////////////////*/
 
-	void UGame::InitGameState(EGameStateType State)
+	void UGame::GameStateChanged(int NewGameStateType)
 	{
-		if (GameState) 
+		if (GameState)
 		{
 			GameState = nullptr;
 		}
 
-		switch (State) 
+		switch (NewGameStateType)
 		{
-		case EGameStateType::MainMenu:
+		case 0:
 		{
 			GameState = std::make_shared<SMainMenu>();
 			break;
 		}
-		case EGameStateType::SettingsMenu:
+		case 1:
+		{
+			GameState = std::make_shared<SMainGameplay>();
+			break;
+		}
+		case 2:
+		{
+			GameState = std::make_shared<SLeaderBoardMenu>();
+			break;
+		}
+		case 3:
 		{
 			GameState = std::make_shared<SSettingsMenu>();
 			break;
 		}
-		case EGameStateType::LeaderBoardMenu:
-		{
-			GameState = std::make_shared<SLeaderBoardMenu>(); 
-			break;
-		}
-		case EGameStateType::ExitMenu:
+		case 4:
 		{
 			GameState = std::make_shared<SExitMenu>();
-			break;
-		}
-		case EGameStateType::MainGameplay:
-		{
-			GameState = std::make_shared<SMainGameplay>();
 			break;
 		}
 		}
 
 		GameState->Init();
+
+		// Add observer to game state
+		std::shared_ptr<IGameStateSubject> GameStateSubject = std::dynamic_pointer_cast<IGameStateSubject>(GameState);
+		GameStateSubject->Attach(weak_from_this());
 	}
 }

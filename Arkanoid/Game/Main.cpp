@@ -13,7 +13,8 @@ int main()
 	sf::RenderWindow Window(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
 	
 	// Initialization of game object
-	Arkanoid::UGame Game;
+	std::shared_ptr<Arkanoid::UGame> Game = std::make_shared<Arkanoid::UGame>();
+	Game->Init();
 
 	// Initialization of clocks
 	sf::Clock GameClock;
@@ -38,7 +39,7 @@ int main()
 			}
 
 			// All menu moves
-			Game.EventUpdate(Event);
+			Game->EventUpdate(Event);
 		}
 
 		// Update main gameplay 
@@ -49,11 +50,11 @@ int main()
 		}
 
 		// Core gameplay update
-		Game.GameplayUpdate(SETTINGS.GetTimePerFrame());
+		Game->GameplayUpdate(SETTINGS.GetTimePerFrame());
 
 		// Draw game
 		Window.clear();
-		Game.Draw(Window);
+		Game->Draw(Window);
 		Window.display();
 	}
 

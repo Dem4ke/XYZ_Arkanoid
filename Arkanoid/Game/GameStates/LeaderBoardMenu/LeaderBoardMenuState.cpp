@@ -1,12 +1,13 @@
 #include <cassert>
 #include "LeaderBoard.h"
 #include "LeaderBoardMenuState.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SLeaderBoardMenu::SLeaderBoardMenu()
+	void SLeaderBoardMenu::Init()
 	{
 		// Load textures
 		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
@@ -55,7 +56,7 @@ namespace Arkanoid
 
 		sf::Text PlayerName;
 		sf::Text PlayerScore;
-		
+
 		PlayerName.setFont(SETTINGS.GetResources()->GetFont());
 		PlayerName.setCharacterSize(ButtonsTextSize);
 		PlayerName.setFillColor(Button.CommonColor);
@@ -87,10 +88,6 @@ namespace Arkanoid
 		}
 	}
 
-	void SLeaderBoardMenu::Init()
-	{
-	}
-
 	// All menu movement and events
 	void SLeaderBoardMenu::EventUpdate(const sf::Event& Event)
 	{
@@ -98,11 +95,11 @@ namespace Arkanoid
 		{
 			if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				SetNewGameState(EGameStateType::MainMenu);
+				SetNewGameState(LeaderBoardMenu::EGameStateType::MainMenu);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
-				SetNewGameState(EGameStateType::MainMenu);
+				SetNewGameState(LeaderBoardMenu::EGameStateType::MainMenu);
 			}
 		}
 	}
@@ -121,14 +118,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SLeaderBoardMenu::IsGameStateUpdated() const
+	void SLeaderBoardMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameStateUpdated;
+		Observers.push_back(Observer);
 	}
 
-	EGameStateType SLeaderBoardMenu::GetNewGameStateType() const
+	void SLeaderBoardMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return NewGameStateType;
+		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SLeaderBoardMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -138,11 +143,9 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Change flag and state type 
-	void SLeaderBoardMenu::SetNewGameState(EGameStateType NewState)
+	void SLeaderBoardMenu::SetNewGameState(LeaderBoardMenu::EGameStateType NewState)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewState));
 	}
 }
