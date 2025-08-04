@@ -1,11 +1,12 @@
 #include <cassert>
 #include "SoundSettingsMenuState.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	STSoundSettingsMenu::STSoundSettingsMenu()
+	void SSoundSettingsMenu::Init()
 	{
 		// Load sounds
 		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
@@ -20,7 +21,7 @@ namespace Arkanoid
 		// Set clickable buttons for menu
 		std::string SoundsText = bIsSoundsOn ? "Sounds : On" : "Sounds : Off";
 		std::string MusicText = bIsMusicOn ? "Music : On" : "Music : Off";
-		std::vector<std::string> InputButtons = { SoundsText, MusicText, "Apply", "Back"};
+		std::vector<std::string> InputButtons = { SoundsText, MusicText, "Apply", "Back" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -57,7 +58,7 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void STSoundSettingsMenu::EventUpdate(const sf::Event& Event)
+	void SSoundSettingsMenu::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
@@ -71,19 +72,19 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				ChangeSettingsType(ESettingsType::Main);
+				ChangeSettingsType(SoundSettingsMenu::ESettingsType::Main);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0)
 				{
 					bIsSoundsOn = !bIsSoundsOn;
-					UpdateUi(ESGUIType::Sounds);
+					UpdateUi(SoundSettingsMenu::ESGUIType::Sounds);
 				}
 				else if (SelectedButton == 1)
 				{
 					bIsMusicOn = !bIsMusicOn;
-					UpdateUi(ESGUIType::Music);
+					UpdateUi(SoundSettingsMenu::ESGUIType::Music);
 				}
 				else if (SelectedButton == 2)
 				{
@@ -113,13 +114,15 @@ namespace Arkanoid
 				}
 				else if (SelectedButton == 3)
 				{
-					ChangeSettingsType(ESettingsType::Main);
+					ChangeSettingsType(SoundSettingsMenu::ESettingsType::Main);
 				}
 			}
 		}
 	}
 
-	void STSoundSettingsMenu::Draw(sf::RenderWindow& Window)
+	void SSoundSettingsMenu::GameplayUpdate(const float DeltaTime) {}
+
+	void SSoundSettingsMenu::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(MenuTitle);
 
@@ -128,14 +131,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool STSoundSettingsMenu::IsSettingsTypeChanged() const
+	void SSoundSettingsMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsSettingsTypeUpdated;
+		Observers.push_back(Observer);
 	}
 
-	ESettingsType STSoundSettingsMenu::GetNewSettingsType() const
+	void SSoundSettingsMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return SettingsType;
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SSoundSettingsMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -145,7 +156,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void STSoundSettingsMenu::MoveUp()
+	void SSoundSettingsMenu::MoveUp()
 	{
 		if (SelectedButton >= 0)
 		{
@@ -163,7 +174,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STSoundSettingsMenu::MoveDown()
+	void SSoundSettingsMenu::MoveDown()
 	{
 		int end = static_cast<int> (Buttons.size());
 
@@ -183,19 +194,19 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STSoundSettingsMenu::UpdateUi(ESGUIType ChangedType)
+	void SSoundSettingsMenu::UpdateUi(SoundSettingsMenu::ESGUIType ChangedType)
 	{
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 
 		switch (ChangedType)
 		{
-		case ESGUIType::Sounds:
+		case SoundSettingsMenu::ESGUIType::Sounds:
 		{
 			std::string SoundsText = bIsSoundsOn ? "Sounds : On" : "Sounds : Off";
 			Buttons[0].setString(SoundsText);
 			break;
 		}
-		case ESGUIType::Music:
+		case SoundSettingsMenu::ESGUIType::Music:
 		{
 			std::string MusicText = bIsMusicOn ? "Music : On" : "Music : Off";
 			Buttons[1].setString(MusicText);
@@ -205,11 +216,9 @@ namespace Arkanoid
 	}
 
 	// Method to change type of settings menu
-	void STSoundSettingsMenu::ChangeSettingsType(ESettingsType NewType)
-	{
-		bIsSettingsTypeUpdated = true;
-		SettingsType = NewType;
-		
+	void SSoundSettingsMenu::ChangeSettingsType(SoundSettingsMenu::ESettingsType NewType)
+	{		
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewType));
 	}
 }

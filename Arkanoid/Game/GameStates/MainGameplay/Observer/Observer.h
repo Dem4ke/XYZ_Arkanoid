@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../../AppStates/AppStates.h"
 #include <vector>
 #include <SFML/Graphics.hpp>
 
@@ -28,17 +27,5 @@ namespace Arkanoid
 	public:
 		virtual ~IBonusObserver() = default;
 		virtual void BonusTaken(int Type) = 0;
-	};
-
-	class IGameManager
-	{
-	public:
-		virtual void SaveGameState(std::shared_ptr<CGameState> NewGameState) = 0;
-		virtual std::shared_ptr<CGameState> GetGameState() = 0;
-
-		virtual void ClearGameplayType() = 0;
-		virtual bool IsGameplayTypeChanged() const = 0;
-		virtual EGameplayType GetGameplayType() const = 0;
-		virtual void DrawUI(sf::RenderWindow& Window) = 0;
 	};
 }

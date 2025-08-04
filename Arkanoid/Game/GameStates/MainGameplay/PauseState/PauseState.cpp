@@ -1,11 +1,12 @@
 #include <cassert>
 #include "PauseState.h"
+#include "../../GameStateObserver.h"
 #include "../../../Settings/Settings.h"
 #include "../../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SGPauseState::SGPauseState()
+	void SPauseState::Init()
 	{
 		// Load sounds
 		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
@@ -52,7 +53,7 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void SGPauseState::EventUpdate(const sf::Event& Event)
+	void SPauseState::EventUpdate(const sf::Event& Event)
 	{
 		if (Event.type == sf::Event::KeyReleased)
 		{
@@ -66,23 +67,25 @@ namespace Arkanoid
 			}
 			else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 			{
-				ChangeGameplayType(EGameplayType::Main);
+				ChangeGameplayType(PauseState::EPauseStateType::ContinueGame);
 			}
 			else if (Event.key.code == Button.EnterKey)
 			{
 				if (SelectedButton == 0)
 				{
-					ChangeGameplayType(EGameplayType::Main);
+					ChangeGameplayType(PauseState::EPauseStateType::ContinueGame);
 				}
 				else if (SelectedButton == 1)
 				{
-					ChangeGameplayType(EGameplayType::GameOver);
+					ChangeGameplayType(PauseState::EPauseStateType::ExitToMainMenu);
 				}
 			}
 		}
 	}
 
-	void SGPauseState::Draw(sf::RenderWindow& Window)
+	void SPauseState::GameplayUpdate(const float DeltaTime) {}
+
+	void SPauseState::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(MenuTitle);
 
@@ -91,14 +94,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SGPauseState::IsGameplayTypeChanged() const
+	void SPauseState::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameplayTypeChanged;
+		Observers.push_back(Observer);
 	}
 
-	EGameplayType SGPauseState::GetNewGameplayType() const
+	void SPauseState::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return GameplayType;
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SPauseState::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -108,7 +119,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void SGPauseState::MoveUp()
+	void SPauseState::MoveUp()
 	{
 		if (SelectedButton >= 0)
 		{
@@ -126,7 +137,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void SGPauseState::MoveDown()
+	void SPauseState::MoveDown()
 	{
 		int end = static_cast<int> (Buttons.size());
 
@@ -147,11 +158,9 @@ namespace Arkanoid
 	}
 
 	// Method to change type of settings menu
-	void SGPauseState::ChangeGameplayType(EGameplayType NewType)
+	void SPauseState::ChangeGameplayType(PauseState::EPauseStateType NewType)
 	{
-		bIsGameplayTypeChanged = true;
-		GameplayType = NewType;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewType));
 	}
 }

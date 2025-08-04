@@ -5,33 +5,55 @@
 #include <SFML/Audio.hpp>
 
 #include "../GameStateSubject.h"
-#include "Observer/Observer.h"
+#include "../GameStateObserver.h"
 #include "../IGameState.h"
 #include "../CButton.h"
+#include "Observer/Observer.h"
+
+namespace MainGameplay
+{
+	enum class EGameStateType : int
+	{
+		MainMenu = 0,
+	};
+
+	enum class EGameplayType : int
+	{
+		Main = 0,
+		Pause,
+		GameOver,
+		LevelDone,
+		RestoreLastGameState,
+	};
+}
 
 namespace Arkanoid
 {
-	class ISubGameplayState;
 	class IGameObject;
 	class ULevelLoader;
-	class OBonusManager;
 	class UBlock;
 	class UBonus;
 	class OGameUI;
 	class UGameProperties;
 
-	class SMainGameplay final : public IGameState, public IGameStateSubject,
+	class SMainGameplay final : public IGameState, public IGameStateSubject, public IGameStateObserver,
 								public IBallObserver, public IBlockObserver, public IBonusObserver, 
 		public std::enable_shared_from_this<SMainGameplay>
 	{
 	public:
-		SMainGameplay();
+		SMainGameplay() = default;
 		~SMainGameplay() = default;
 
+		// IGameState methods
 		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
 		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
+
+		// IGameStateSubject methods
+		void Attach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Detach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Notify(int NewGameStateType) override;
 
 		// IBlockObserver methods
 		void BlockBroken(int Cost, const sf::Vector2f& Position) override;
@@ -43,17 +65,19 @@ namespace Arkanoid
 		void BonusTaken(int Type) override;
 
 	private:
+		// IGameStateObserver methods
+		void GameStateChanged(int NewGameStateType) override;
+
 		// Work tools
-		void SaveGameState(std::shared_ptr<CGameState> NewGameState);
-		std::shared_ptr<CGameState> GetGameState();
+		void SaveGameState();
+		void RestoreLastGameState();
 
 		void InitNewLevel();
-		void RecreateBall();
-		void SetNewGameState(EGameStateType NewState);
-		void InitSubGameplayState(EGameplayType Type);
+		void SetNewGameState(MainGameplay::EGameStateType NewState);
+		void InitSubGameplayState(MainGameplay::EGameplayType Type);
 
 	private:
-		std::shared_ptr<ISubGameplayState> SubGameplayState = nullptr;	// Sub gameplay menus (pause dialog and other)
+		std::shared_ptr<IGameState> SubGameplayState = nullptr;			// Sub gameplay menus (pause dialog and other)
 		std::shared_ptr<ULevelLoader> LevelLoader = nullptr;			// Class to load levels from config file
 		std::shared_ptr<UGameProperties> GameProperties = nullptr;		// Game properties
 		std::shared_ptr<OGameUI> UI = nullptr;							// User Interface
@@ -62,7 +86,7 @@ namespace Arkanoid
 		std::vector<std::shared_ptr<UBonus>> Bonuses;					// Vector of bonuses
 		std::vector<std::shared_ptr<UBlock>> Blocks;					// Vector of blocks
 		
-		EGameplayType GameplayType = EGameplayType::Main;				// Current gameplay type which shows
+		MainGameplay::EGameplayType GameplayType;						// Current gameplay type which shows
 
 		sf::Texture BackgroundTexture;									// Texture for background
 		sf::Sprite BackgroundSprite;									// Sprite which shows on a background
@@ -74,6 +98,6 @@ namespace Arkanoid
 			
 		CButton Button;													// Keys to work with game
 
-		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;		// Observers of a state
 	};
 }

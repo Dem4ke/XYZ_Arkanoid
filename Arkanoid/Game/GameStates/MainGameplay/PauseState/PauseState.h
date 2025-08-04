@@ -3,36 +3,51 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "../ISubGameplayState.h"
+
+#include "../../IGameState.h"
+#include "../../GameStateSubject.h"
 #include "../../CButton.h"
+
+namespace PauseState
+{
+	enum class EPauseStateType : int
+	{
+		ExitToMainMenu = 0,
+		ContinueGame,
+	};
+}
 
 namespace Arkanoid
 {
-	class SGPauseState final : public ISubGameplayState
+	class IGameStateObserver;
+
+	class SPauseState final : public IGameState, public IGameStateSubject
 	{
 	public:
-		SGPauseState();
-		~SGPauseState() = default;
+		SPauseState() = default;
+		~SPauseState() = default;
 
+		// IGameState methods
+		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
+		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 		
-		bool IsGameplayTypeChanged() const override;
-		EGameplayType GetNewGameplayType() const override;
+		// IGameStateSubject methods
+		void Attach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Detach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Notify(int NewGameStateType) override;
 
 	private:
 		// Work tools
 		void MoveUp();
 		void MoveDown();
-		void ChangeGameplayType(EGameplayType NewType);
+		void ChangeGameplayType(PauseState::EPauseStateType NewType);
 
 	private:
 		int TitleTextSize = 60;								// Menu title text size
 		int ButtonsTextSize = 40;							// Menu buttons text size
 		int SelectedButton = 0;								// Index of a selected button
-
-		bool bIsGameplayTypeChanged = false;				// Flag which contains informaion is gameplay type changed
-		EGameplayType GameplayType = EGameplayType::Pause;	// Current settings type which shows
 
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
@@ -41,5 +56,7 @@ namespace Arkanoid
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
 		CButton Button;										// Keys to work with menu
+
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
 	};
 }

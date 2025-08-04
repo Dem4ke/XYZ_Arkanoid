@@ -33,9 +33,9 @@
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Bonus.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.h" />
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\DuringBonus.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Platform.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\IGameObject.h" />
-    <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\MainGameplayState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\Observer\GameProperties.h" />
@@ -44,7 +44,6 @@
     <ClInclude Include="Game\GameStates\MainGameplay\PauseState\PauseState.h" />
     <ClInclude Include="Game\GameStates\MainGameplay\UI\GameUI.h" />
     <ClInclude Include="Game\GameStates\MainMenu\MainMenuState.h" />
-    <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\SettingsMenuState.h" />
     <ClInclude Include="Game\GameStates\SettingsMenu\SoundSettingsMenuState.h" />
@@ -63,6 +62,7 @@
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BlockFactory.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Bonus.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.cpp" />
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\DuringBonus.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\Platform.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\LevelLoader\LevelLoader.cpp" />
     <ClCompile Include="Game\GameStates\MainGameplay\MainGameplayState.cpp" />

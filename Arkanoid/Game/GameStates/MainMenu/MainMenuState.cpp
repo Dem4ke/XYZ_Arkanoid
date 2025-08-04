@@ -118,7 +118,7 @@ namespace Arkanoid
 
 	void SMainMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
 	}
 
 	void SMainMenu::Notify(int NewGameStateType)

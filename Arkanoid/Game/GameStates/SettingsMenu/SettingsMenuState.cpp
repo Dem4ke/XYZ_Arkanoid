@@ -2,13 +2,12 @@
 #include "SettingsMenuState.h"
 #include "SoundSettingsMenuState.h"
 #include "VideoSettingsMenuState.h"
-#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	SSettingsMenu::SSettingsMenu()
+	void SSettingsMenu::Init()
 	{
 		// Load textures
 		bool bIsLoaded = BackgroundTexture.loadFromFile("Resources/Backgrounds/Menu_background.jpg");
@@ -21,118 +20,6 @@ namespace Arkanoid
 		bIsLoaded = ChoiceSound.loadFromFile("Resources/Sounds/Theevilsocks__menu-hover.wav");
 		assert(bIsLoaded);
 
-		Init();
-	}
-
-	// All menu movement and events
-	void SSettingsMenu::EventUpdate(const sf::Event& Event)
-	{
-		if (SettingsType == ESettingsType::Main) {
-			if (Event.type == sf::Event::KeyReleased)
-			{
-				if (Event.key.code == Button.UpKey)
-				{
-					MoveUp();
-				}
-				else if (Event.key.code == Button.DownKey)
-				{
-					MoveDown();
-				}
-				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
-				{
-					SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
-				}
-				else if (Event.key.code == Button.EnterKey)
-				{
-					if (SelectedButton == 0)
-					{
-						SettingsType = ESettingsType::Sounds;
-						InitSubSettingsMenu(SettingsType);
-					}
-					else if (SelectedButton == 1)
-					{
-						SettingsType = ESettingsType::Video;
-						InitSubSettingsMenu(SettingsType);
-					}
-					else if (SelectedButton == 2)
-					{
-						SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
-					}
-				}
-			}
-		}
-		else 
-		{
-			if (SubMenu->IsSettingsTypeChanged())
-			{
-				Init();
-				SettingsType = SubMenu->GetNewSettingsType();
-				InitSubSettingsMenu(SettingsType);
-			}
-
-			if (SubMenu)
-			{
-				SubMenu->EventUpdate(Event);
-			}
-		}
-	}
-
-	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {
-		if (SettingsType != ESettingsType::Main) {
-			if (SubMenu->IsSettingsTypeChanged())
-			{
-				Init();
-				SettingsType = SubMenu->GetNewSettingsType();
-				InitSubSettingsMenu(SettingsType);
-			}
-		}
-	}
-
-	void SSettingsMenu::Draw(sf::RenderWindow& Window)
-	{
-		Window.draw(BackgroundSprite);
-
-		if (SettingsType == ESettingsType::Main)
-		{
-			Window.draw(MenuTitle);
-
-			for (auto& i : Buttons)
-			{
-				Window.draw(i);
-			}
-		}
-		else
-		{
-			SubMenu->Draw(Window);
-		}
-	}
-
-	void SSettingsMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
-	{
-		Observers.push_back(Observer);
-	}
-
-	void SSettingsMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
-	{
-		Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
-	}
-
-	void SSettingsMenu::Notify(int NewGameStateType)
-	{
-		for (auto& i : Observers)
-		{
-			i.lock()->GameStateChanged(NewGameStateType);
-		}
-	}
-
-	/*//////////////////////////////////*/
-	/*                                  */
-	/*	      PRIVATE WORKTOOLS         */
-	/*                                  */
-	/*//////////////////////////////////*/
-
-	void SSettingsMenu::Init()
-	{
 		// Set clickable buttons for menu
 		std::vector<std::string> InputButtons = { "Sounds", "Screen", "Back" };
 
@@ -172,6 +59,106 @@ namespace Arkanoid
 
 		// Color of the first button
 		Buttons[SelectedButton].setFillColor(Button.ChosenColor);
+
+		SettingsType = SettingsMenu::ESettingsType::Main;
+	}
+
+	// All menu movement and events
+	void SSettingsMenu::EventUpdate(const sf::Event& Event)
+	{
+		if (SettingsType == SettingsMenu::ESettingsType::Main) {
+			if (Event.type == sf::Event::KeyReleased)
+			{
+				if (Event.key.code == Button.UpKey)
+				{
+					MoveUp();
+				}
+				else if (Event.key.code == Button.DownKey)
+				{
+					MoveDown();
+				}
+				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
+				{
+					SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
+				}
+				else if (Event.key.code == Button.EnterKey)
+				{
+					if (SelectedButton == 0)
+					{
+						SettingsType = SettingsMenu::ESettingsType::Sounds;
+						InitSubSettingsMenu(SettingsType);
+					}
+					else if (SelectedButton == 1)
+					{
+						SettingsType = SettingsMenu::ESettingsType::Video;
+						InitSubSettingsMenu(SettingsType);
+					}
+					else if (SelectedButton == 2)
+					{
+						SetNewGameState(SettingsMenu::EGameStateType::MainMenu);
+					}
+				}
+			}
+		}
+		else 
+		{
+			if (SubMenu)
+			{
+				SubMenu->EventUpdate(Event);
+			}
+		}
+	}
+
+	void SSettingsMenu::GameplayUpdate(const float DeltaTime) {}
+
+	void SSettingsMenu::Draw(sf::RenderWindow& Window)
+	{
+		Window.draw(BackgroundSprite);
+
+		if (SettingsType == SettingsMenu::ESettingsType::Main)
+		{
+			Window.draw(MenuTitle);
+
+			for (auto& i : Buttons)
+			{
+				Window.draw(i);
+			}
+		}
+		else
+		{
+			SubMenu->Draw(Window);
+		}
+	}
+
+	void SSettingsMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
+	{
+		Observers.push_back(Observer);
+	}
+
+	void SSettingsMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
+	{
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SSettingsMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
+	}
+
+	/*//////////////////////////////////*/
+	/*                                  */
+	/*	      PRIVATE WORKTOOLS         */
+	/*                                  */
+	/*//////////////////////////////////*/
+
+	void SSettingsMenu::GameStateChanged(int NewGameStateType)
+	{
+		SettingsType = SettingsMenu::ESettingsType::Main;
+
+		Init();
 	}
 
 	// Menu movement methods
@@ -220,7 +207,7 @@ namespace Arkanoid
 		Notify(static_cast<int>(NewState));
 	}
 
-	void SSettingsMenu::InitSubSettingsMenu(ESettingsType Type)
+	void SSettingsMenu::InitSubSettingsMenu(SettingsMenu::ESettingsType Type)
 	{
 		if (SubMenu)
 		{
@@ -229,16 +216,22 @@ namespace Arkanoid
 
 		switch (Type)
 		{
-		case ESettingsType::Sounds:
+		case SettingsMenu::ESettingsType::Sounds:
 		{
-			SubMenu = std::make_shared<STSoundSettingsMenu>();
+			SubMenu = std::make_shared<SSoundSettingsMenu>();
 			break;
 		}
-		case ESettingsType::Video:
+		case SettingsMenu::ESettingsType::Video:
 		{
-			SubMenu = std::make_shared<STVideoSettingMenu>();
+			SubMenu = std::make_shared<SVideoSettingMenu>();
 			break;
 		}
 		}
+
+		SubMenu->Init();
+
+		// Add observer to game state
+		std::shared_ptr<IGameStateSubject> GameStateSubject = std::dynamic_pointer_cast<IGameStateSubject>(SubMenu);
+		GameStateSubject->Attach(weak_from_this());
 	}
 }

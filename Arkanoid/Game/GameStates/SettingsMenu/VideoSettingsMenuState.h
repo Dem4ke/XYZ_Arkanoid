@@ -3,38 +3,54 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "ISubSettingsMenuState.h"
+
+#include "../IGameState.h"
+#include "../GameStateSubject.h"
 #include "../CButton.h"
 
-namespace Arkanoid
+namespace VideoSettingMenu
 {
-	class STResolutionSettingsMenu;
+	// Types of a settings menu
+	enum class ESettingsType : int
+	{
+		Main = 0,	// Main settings
+	};
 
-	// What type of GUI has changed
+	// Types of a GUI changes
 	enum class EVGUIType : int
 	{
 		FullscreenMode = 0,
 		Resolution,
 	};
+}
 
-	class STVideoSettingMenu final : public ISubSettingsMenu
+namespace Arkanoid
+{
+	class STResolutionSettingsMenu;
+
+	class SVideoSettingMenu final : public IGameState, public IGameStateSubject
 	{
 	public:
-		STVideoSettingMenu();
-		~STVideoSettingMenu() = default;
+		SVideoSettingMenu() = default;
+		~SVideoSettingMenu() = default;
 
+		// IGameState methods
+		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
+		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
-		bool IsSettingsTypeChanged() const override;
-		ESettingsType GetNewSettingsType() const override;
+		// IGameStateSubject methods
+		void Attach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Detach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Notify(int NewGameStateType) override;
 
 	private:
 		// Work tools
 		void MoveUp();
 		void MoveDown();
-		void UpdateUi(EVGUIType ChangedType);
-		void ChangeSettingsType(ESettingsType NewType);
+		void UpdateUi(VideoSettingMenu::EVGUIType ChangedType);
+		void ChangeSettingsType(VideoSettingMenu::ESettingsType NewType);
 
 	private:
 		int TitleTextSize = 60;								// Menu title text size
@@ -47,9 +63,7 @@ namespace Arkanoid
 		bool bIsResolutionsSnow = false;					// Flag which contains are resolution variables showing
 		bool bIsFullscreenModeChanged = false;				// Flag which contains informaion is fullscreen mode changed
 		bool bIsResolutionChanged = false;					// Flag which contains information is resolution changed
-		bool bIsSettingsTypeUpdated = false;				// Flag contains informaion is user changed a settings type
-		ESettingsType SettingsType = ESettingsType::Video;	// Current settings type which shows
-
+		
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
 
@@ -58,5 +72,7 @@ namespace Arkanoid
 
 		CButton Button;										// Keys to work with menu
 		std::shared_ptr<STResolutionSettingsMenu> Resolution;// Class which contains resolution's variables
+
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
 	};
 }

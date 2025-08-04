@@ -80,10 +80,13 @@ namespace Arkanoid
 		}
 		}
 
-		GameState->Init();
+		if (GameState)
+		{
+			GameState->Init();
 
-		// Add observer to game state
-		std::shared_ptr<IGameStateSubject> GameStateSubject = std::dynamic_pointer_cast<IGameStateSubject>(GameState);
-		GameStateSubject->Attach(weak_from_this());
+			// Add observer to game state
+			std::shared_ptr<IGameStateSubject> GameStateSubject = std::dynamic_pointer_cast<IGameStateSubject>(GameState);
+			GameStateSubject->Attach(weak_from_this());
+		}
 	}
 }

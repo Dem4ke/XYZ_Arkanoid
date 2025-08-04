@@ -1,12 +1,13 @@
 #include <cassert>
 #include "VideoSettingsMenuState.h"
 #include "ResolutionSettingsMenu.h"
+#include "../GameStateObserver.h"
 #include "../../Settings/Settings.h"
 #include "../../Math/Math.h"
 
 namespace Arkanoid
 {
-	STVideoSettingMenu::STVideoSettingMenu()
+	void SVideoSettingMenu::Init()
 	{
 		// Load sounds
 		bool bIsLoaded = MovesSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
@@ -22,7 +23,7 @@ namespace Arkanoid
 		// Set clickable buttons for menu
 		std::string FullscreenText = bIsFullscreenOn ? "Fullscreen: Yes" : "Fullscreen: No";
 		std::string ResolutionText = "Resolution: " + std::to_string(ScreenWidth) + " x " + std::to_string(ScreenHeight);
-		std::vector<std::string> InputButtons = { FullscreenText, ResolutionText, "Apply", "Back"};
+		std::vector<std::string> InputButtons = { FullscreenText, ResolutionText, "Apply", "Back" };
 
 		// Coordinates of menu items
 		float Width = static_cast<float>(SETTINGS.GetScreenWidth());
@@ -60,7 +61,7 @@ namespace Arkanoid
 	}
 
 	// All menu movement and events
-	void STVideoSettingMenu::EventUpdate(const sf::Event& Event)
+	void SVideoSettingMenu::EventUpdate(const sf::Event& Event)
 	{
 		if (bIsResolutionsSnow)
 		{
@@ -71,7 +72,7 @@ namespace Arkanoid
 				ScreenWidth = Resolution->GetWidth();
 				ScreenHeight = Resolution->GetHeight();
 
-				UpdateUi(EVGUIType::Resolution);
+				UpdateUi(VideoSettingMenu::EVGUIType::Resolution);
 				bIsResolutionsSnow = false;
 			}
 			else if (Resolution->IsExit())
@@ -93,14 +94,14 @@ namespace Arkanoid
 				}
 				else if (Event.key.code == Button.EscapeKey || Event.key.code == Button.EscapeKeyB)
 				{
-					ChangeSettingsType(ESettingsType::Main);
+					ChangeSettingsType(VideoSettingMenu::ESettingsType::Main);
 				}
 				else if (Event.key.code == Button.EnterKey)
 				{
 					if (SelectedButton == 0)
 					{
 						bIsFullscreenOn = !bIsFullscreenOn;
-						UpdateUi(EVGUIType::FullscreenMode);
+						UpdateUi(VideoSettingMenu::EVGUIType::FullscreenMode);
 					}
 					else if (SelectedButton == 1)
 					{
@@ -135,14 +136,16 @@ namespace Arkanoid
 					}
 					else if (SelectedButton == 3)
 					{
-						ChangeSettingsType(ESettingsType::Main);
+						ChangeSettingsType(VideoSettingMenu::ESettingsType::Main);
 					}
 				}
 			}
 		}
 	}
 
-	void STVideoSettingMenu::Draw(sf::RenderWindow& Window)
+	void SVideoSettingMenu::GameplayUpdate(const float DeltaTime) {}
+
+	void SVideoSettingMenu::Draw(sf::RenderWindow& Window)
 	{
 		Window.draw(MenuTitle);
 
@@ -163,7 +166,7 @@ namespace Arkanoid
 			Window.create(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
 
 			bIsFullscreenModeChanged = false;
-			ChangeSettingsType(ESettingsType::Main);
+			ChangeSettingsType(VideoSettingMenu::ESettingsType::Main);
 		}
 
 		if (bIsResolutionChanged)
@@ -174,18 +177,26 @@ namespace Arkanoid
 			Window.create(sf::VideoMode(WIndowWidth, WIndowHeight), "Arkanoid!", Style);
 
 			bIsResolutionChanged = false;
-			ChangeSettingsType(ESettingsType::Main);
+			ChangeSettingsType(VideoSettingMenu::ESettingsType::Main);
 		}
 	}
 
-	bool STVideoSettingMenu::IsSettingsTypeChanged() const
+	void SVideoSettingMenu::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsSettingsTypeUpdated;
+		Observers.push_back(Observer);
 	}
 
-	ESettingsType STVideoSettingMenu::GetNewSettingsType() const
+	void SVideoSettingMenu::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return SettingsType;
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SVideoSettingMenu::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	/*//////////////////////////////////*/
@@ -195,7 +206,7 @@ namespace Arkanoid
 	/*//////////////////////////////////*/
 
 	// Menu movement methods
-	void STVideoSettingMenu::MoveUp()
+	void SVideoSettingMenu::MoveUp()
 	{
 		if (SelectedButton >= 0)
 		{
@@ -213,7 +224,7 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STVideoSettingMenu::MoveDown()
+	void SVideoSettingMenu::MoveDown()
 	{
 		int end = static_cast<int> (Buttons.size());
 
@@ -233,19 +244,19 @@ namespace Arkanoid
 		SETTINGS.GetResources()->PlaySound(MovesSound);
 	}
 
-	void STVideoSettingMenu::UpdateUi(EVGUIType ChangedType)
+	void SVideoSettingMenu::UpdateUi(VideoSettingMenu::EVGUIType ChangedType)
 	{
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
 
 		switch (ChangedType)
 		{
-		case EVGUIType::FullscreenMode:
+		case VideoSettingMenu::EVGUIType::FullscreenMode:
 		{
 			std::string FullscreenText = bIsFullscreenOn ? "Fullscreen: Yes" : "Fullscreen: No";
 			Buttons[0].setString(FullscreenText);
 			break;
 		}
-		case EVGUIType::Resolution:
+		case VideoSettingMenu::EVGUIType::Resolution:
 		{
 			std::string ResolutionText = "Resolution: " + std::to_string(ScreenWidth) + " x " + std::to_string(ScreenHeight);
 			Buttons[1].setString(ResolutionText);
@@ -255,11 +266,9 @@ namespace Arkanoid
 	}
 
 	// Method to change type of settings menu
-	void STVideoSettingMenu::ChangeSettingsType(ESettingsType NewType)
+	void SVideoSettingMenu::ChangeSettingsType(VideoSettingMenu::ESettingsType NewType)
 	{
-		bIsSettingsTypeUpdated = true;
-		SettingsType = NewType;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewType));
 	}
 }

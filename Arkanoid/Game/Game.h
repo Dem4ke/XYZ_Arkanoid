@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <SFML/Graphics.hpp>
+
 #include "GameStates/GameStateObserver.h"
 
 namespace Arkanoid 
 {
-	class OGameStatesManager;
+	class IGameState;
 
 	class UGame final : public IGameStateObserver,
 		public std::enable_shared_from_this<UGame>

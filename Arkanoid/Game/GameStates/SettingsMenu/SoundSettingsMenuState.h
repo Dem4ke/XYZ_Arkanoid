@@ -3,36 +3,52 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "ISubSettingsMenuState.h"
+
+#include "../IGameState.h"
+#include "../GameStateSubject.h"
 #include "../CButton.h"
 
-namespace Arkanoid
+namespace SoundSettingsMenu
 {
-	// What type of GUI has changed
+	// Types of a settings menu
+	enum class ESettingsType : int
+	{
+		Main = 0,	// Main settings
+	};
+
+	// Types of a GUI changes
 	enum class ESGUIType : int
 	{
 		Sounds = 0,
 		Music,
 	};
+}
 
-	class STSoundSettingsMenu final : public ISubSettingsMenu
+namespace Arkanoid
+{
+	class SSoundSettingsMenu final : public IGameState, public IGameStateSubject
 	{
 	public:
-		STSoundSettingsMenu();
-		~STSoundSettingsMenu() = default;
+		SSoundSettingsMenu() = default;
+		~SSoundSettingsMenu() = default;
 
+		// IGameState methods
+		void Init() override;
 		void EventUpdate(const sf::Event& Event) override;
+		void GameplayUpdate(const float DeltaTime) override;
 		void Draw(sf::RenderWindow& Window) override;
 
-		bool IsSettingsTypeChanged() const override;
-		ESettingsType GetNewSettingsType() const override;
+		// IGameStateSubject methods
+		void Attach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Detach(std::weak_ptr<IGameStateObserver> Observer) override;
+		void Notify(int NewGameStateType) override;
 
 	private:
 		// Work tools
 		void MoveUp();
 		void MoveDown();
-		void UpdateUi(ESGUIType ChangedType);
-		void ChangeSettingsType(ESettingsType NewType);
+		void UpdateUi(SoundSettingsMenu::ESGUIType ChangedType);
+		void ChangeSettingsType(SoundSettingsMenu::ESettingsType NewType);
 
 	private:
 		int TitleTextSize = 60;								// Menu title text size
@@ -41,8 +57,6 @@ namespace Arkanoid
 
 		bool bIsSoundsOn = true;							// Flag which contains informaion is sounds on
 		bool bIsMusicOn = true;								// Flag which contains informaion is music on
-		bool bIsSettingsTypeUpdated = false;				// Flag which contains informaion is user changed a settings type
-		ESettingsType SettingsType = ESettingsType::Sounds;	// Current settings type which shows
 
 		std::vector<sf::Text> Buttons;						// Vector of all clickable buttons 
 		sf::Text MenuTitle;									// Menu title
@@ -51,5 +65,7 @@ namespace Arkanoid
 		sf::SoundBuffer ChoiceSound;						// Sound of menu choices
 
 		CButton Button;										// Keys to work with menu
+
+		std::vector<std::weak_ptr<IGameStateObserver>> Observers;	// Observers of a state
 	};
 }

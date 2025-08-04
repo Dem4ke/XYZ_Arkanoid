@@ -1,7 +1,6 @@
 #include <cassert>
 #include "GameProperties.h"
 
-
 namespace Arkanoid
 {
 	/*//////////////////////////////////*/
@@ -22,7 +21,7 @@ namespace Arkanoid
 		this->PlayerScore = PlayerScore;
 	}
 
-	std::shared_ptr<CGameState> OGameState::GetGameState() 
+	std::shared_ptr<CGameState> OGameState::GetGameState()
 	{
 		return GameState;
 	}

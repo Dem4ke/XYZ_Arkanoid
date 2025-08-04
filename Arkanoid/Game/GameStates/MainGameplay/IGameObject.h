@@ -1,10 +1,20 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../../AppStates/AppStates.h"
 
 namespace Arkanoid
 {
+	// Types of a game object's type
+	enum class EObjectType : int
+	{
+		Ball = 0,
+		Platform,
+		SimpleBlock,
+		ThreeHitBlock,
+		UnbreackableBlock,
+		Bonus
+	};
+
 	// Interface of objects that used in main gameplay
 	class IGameObject
 	{

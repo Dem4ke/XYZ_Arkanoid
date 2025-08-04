@@ -13,8 +13,8 @@ namespace LeaderBoardMenu
 	{
 		MainMenu = 0,
 	};
-
 }
+
 namespace Arkanoid
 {
 	class SLeaderBoardMenu final : public IGameState, public IGameStateSubject

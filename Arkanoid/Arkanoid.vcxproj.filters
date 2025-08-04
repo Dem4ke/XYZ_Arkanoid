@@ -99,9 +99,6 @@
     <ClInclude Include="Game\GameStates\CButton.h">
       <Filter>Game\GameStates</Filter>
     </ClInclude>
-    <ClInclude Include="Game\GameStates\SettingsMenu\ISubSettingsMenuState.h">
-      <Filter>Game\GameStates\SettingsMenu</Filter>
-    </ClInclude>
     <ClInclude Include="Game\GameStates\SettingsMenu\ResolutionSettingsMenu.h">
       <Filter>Game\GameStates\SettingsMenu\VideoSettings</Filter>
     </ClInclude>
@@ -115,9 +112,6 @@
       <Filter>Game\GameStates\LeaderBoardMenu</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\IGameObject.h">
-      <Filter>Game\GameStates\MainGameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\GameStates\MainGameplay\ISubGameplayState.h">
       <Filter>Game\GameStates\MainGameplay</Filter>
     </ClInclude>
     <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\Ball.h">
@@ -161,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Game\GameStates\GameStateSubject.h">
       <Filter>Game\GameStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStates\MainGameplay\GameObjects\DuringBonus.h">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +231,9 @@
       <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
     </ClCompile>
     <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\BonusFactory.cpp">
+      <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStates\MainGameplay\GameObjects\DuringBonus.cpp">
       <Filter>Game\GameStates\MainGameplay\GameObjects\Bonus</Filter>
     </ClCompile>
   </ItemGroup>

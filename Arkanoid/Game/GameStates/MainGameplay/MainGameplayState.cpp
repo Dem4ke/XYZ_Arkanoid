@@ -1,6 +1,5 @@
 #include <cassert>
 #include "MainGameplayState.h"
-#include "ISubGameplayState.h"
 #include "IGameObject.h"
 #include "GameObjects/Block.h"
 #include "GameObjects/Bonus.h"
@@ -17,10 +16,6 @@
 
 namespace Arkanoid
 {
-	SMainGameplay::SMainGameplay()
-	{
-	}
-
 	void SMainGameplay::Init()
 	{
 		// Load textures
@@ -39,6 +34,8 @@ namespace Arkanoid
 
 		bIsLoaded = HitSound.loadFromFile("Resources/Sounds/Owlstorm__Snake_hit.wav");
 		assert(bIsLoaded);
+
+		GameplayType = MainGameplay::EGameplayType::Main;
 
 		GameProperties = std::make_shared<UGameProperties>();
 
@@ -60,17 +57,17 @@ namespace Arkanoid
 	// All menu movement and events
 	void SMainGameplay::EventUpdate(const sf::Event& Event) 
 	{
-		if (GameplayType == EGameplayType::Main)
+		if (GameplayType == MainGameplay::EGameplayType::Main)
 		{
 			if (Event.type == sf::Event::KeyReleased)
 			{
 				if (Event.key.code == Button.EscapeKey)
 				{
-					InitSubGameplayState(EGameplayType::Pause);
+					InitSubGameplayState(MainGameplay::EGameplayType::Pause);
 				}
 			}
 		}
-		else if (GameplayType != EGameplayType::Main && SubGameplayState)
+		else if (GameplayType != MainGameplay::EGameplayType::Main && SubGameplayState)
 		{
 			SubGameplayState->EventUpdate(Event);
 		}
@@ -78,28 +75,12 @@ namespace Arkanoid
 
 	void SMainGameplay::GameplayUpdate(const float DeltaTime) 
 	{
-		if (GameplayType == EGameplayType::Main)
+		if (GameplayType == MainGameplay::EGameplayType::Main)
 		{
 			// Check ball and platform collision
 			if (GameObjects[1]->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType()))
 			{
-				// Create copy of game objects and save them
-				std::vector<std::shared_ptr<UBlock>> CopiedBlocks;
-				std::vector<std::shared_ptr<IGameObject>> CopiedGameOjects;
-
-				for (auto& i : Blocks) 
-				{
-					std::shared_ptr<UBlock> CopiedBlock = std::dynamic_pointer_cast<UBlock>(i->clone());
-					CopiedBlocks.push_back(CopiedBlock);
-				}
-
-				for (auto& i : GameObjects)
-				{
-					CopiedGameOjects.push_back(i->clone());
-				}
-
-				std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(CopiedBlocks, CopiedGameOjects);
-				GameProperties->SetGameState(GameState);
+				SaveGameState();
 
 				SETTINGS.GetResources()->PlaySound(HitSound);
 			}
@@ -110,7 +91,6 @@ namespace Arkanoid
 				if (GameObjects[1]->CheckCollision(Block, Block->GetObjectType()))
 				{
 					SETTINGS.GetResources()->PlaySound(HitSound);
-					break;
 				}
 
 				if (Block->IsDestroyed()) 
@@ -134,7 +114,7 @@ namespace Arkanoid
 			{
 				if (Bonus->CheckCollision(GameObjects[0], GameObjects[0]->GetObjectType()))
 				{
-					break;
+					SETTINGS.GetResources()->PlaySound(HitSound);
 				}
 
 				if (Bonus->IsDestroyed())
@@ -150,10 +130,9 @@ namespace Arkanoid
 		}
 		else 
 		{
-			if (SubGameplayState && SubGameplayState->IsGameplayTypeChanged())
+			if (SubGameplayState)
 			{
-				GameplayType = SubGameplayState->GetNewGameplayType();
-				InitSubGameplayState(GameplayType);
+				SubGameplayState->GameplayUpdate(DeltaTime);
 			}
 		}
 	}
@@ -184,14 +163,22 @@ namespace Arkanoid
 		}
 	}
 
-	bool SMainGameplay::IsGameStateUpdated() const
+	void SMainGameplay::Attach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return bIsGameStateUpdated;
+		Observers.push_back(Observer);
 	}
 
-	EGameStateType SMainGameplay::GetNewGameStateType() const
+	void SMainGameplay::Detach(std::weak_ptr<IGameStateObserver> Observer)
 	{
-		return NewGameStateType;
+		//Observers.erase(std::remove(Observers.begin(), Observers.end(), Observer.lock()), Observers.end());
+	}
+
+	void SMainGameplay::Notify(int NewGameStateType)
+	{
+		for (auto& i : Observers)
+		{
+			i.lock()->GameStateChanged(NewGameStateType);
+		}
 	}
 
 	void SMainGameplay::BlockBroken(int Cost, const sf::Vector2f& Position)
@@ -203,7 +190,7 @@ namespace Arkanoid
 
 		if (GameProperties->GetBlocksCount() <= 0)
 		{
-			InitSubGameplayState(EGameplayType::LevelDone);
+			InitSubGameplayState(MainGameplay::EGameplayType::LevelDone);
 			return;
 		}
 
@@ -246,11 +233,11 @@ namespace Arkanoid
 
 		if (GameProperties->GetBallLifes() <= 0)
 		{
-			InitSubGameplayState(EGameplayType::GameOver);
+			InitSubGameplayState(MainGameplay::EGameplayType::GameOver);
 		}
 		else
 		{
-			InitSubGameplayState(EGameplayType::RecreateBall);
+			InitSubGameplayState(MainGameplay::EGameplayType::RestoreLastGameState);
 		}
 	}
 
@@ -264,17 +251,17 @@ namespace Arkanoid
 		}
 		case 1:
 		{
-
+			//EnableFireBallBonus();
 			break;
 		}
 		case 2:
 		{
-
+			//EnableGlassBlocksBonus();
 			break;
 		}
 		case 3:
 		{
-
+			//EnableBigPlatformBonus();
 			break;
 		}
 		}
@@ -285,6 +272,58 @@ namespace Arkanoid
 	/*	      PRIVATE WORKTOOLS         */
 	/*                                  */
 	/*//////////////////////////////////*/
+
+	void SMainGameplay::GameStateChanged(int NewGameStateType)
+	{
+		switch (NewGameStateType) 
+		{
+		case 0:
+		{
+			SetNewGameState(MainGameplay::EGameStateType::MainMenu);
+			break;
+		}
+		case 1:
+		{
+			InitSubGameplayState(MainGameplay::EGameplayType::Main);
+			break;
+		}
+		}
+	}
+
+	// Create backup of game state to restore it if player lost the life
+	void SMainGameplay::SaveGameState()
+	{
+		// Create copy of game objects and save them
+		std::vector<std::shared_ptr<UBlock>> CopiedBlocks;
+		std::vector<std::shared_ptr<IGameObject>> CopiedGameOjects;
+
+		for (auto& i : Blocks)
+		{
+			std::shared_ptr<UBlock> CopiedBlock = std::dynamic_pointer_cast<UBlock>(i->clone());
+			CopiedBlocks.push_back(CopiedBlock);
+		}
+
+		for (auto& i : GameObjects)
+		{
+			CopiedGameOjects.push_back(i->clone());
+		}
+
+		std::shared_ptr<CGameState> GameState = std::make_shared<CGameState>(CopiedBlocks, CopiedGameOjects);
+		GameProperties->SetGameState(GameState);
+	}
+
+	// Set the state that existed before ball went out of bounds
+	void SMainGameplay::RestoreLastGameState()
+	{
+		Blocks.clear();
+		GameObjects.clear();
+
+		Blocks = GameProperties->GetGameState()->Blocks;
+		GameObjects = GameProperties->GetGameState()->GameObjects;
+		UI->SetScore(GameProperties->GetPlayerScore());
+
+		InitSubGameplayState(MainGameplay::EGameplayType::Main);
+	}
 
 	void SMainGameplay::InitNewLevel()
 	{
@@ -307,37 +346,24 @@ namespace Arkanoid
 			std::shared_ptr<UBall> Ball = std::dynamic_pointer_cast<UBall>(GameObjects[1]);
 			Ball->Attach(weak_from_this());
 
-			InitSubGameplayState(EGameplayType::Main);
+			// Save start information of game objects
+			SaveGameState();
+			InitSubGameplayState(MainGameplay::EGameplayType::Main);
 		}
 		else
 		{
-			InitSubGameplayState(EGameplayType::GameOver);
+			InitSubGameplayState(MainGameplay::EGameplayType::GameOver);
 		}
 	}
 
-	// Set the state that existed before ball went out of bounds
-	void SMainGameplay::RecreateBall()
-	{
-		Blocks.clear();
-		GameObjects.clear();
-
-		Blocks = GameProperties->GetGameState()->Blocks;
-		GameObjects = GameProperties->GetGameState()->GameObjects;
-		UI->SetScore(GameProperties->GetPlayerScore());
-
-		InitSubGameplayState(EGameplayType::Main);
-	}
-
 	// Change flag and state type 
-	void SMainGameplay::SetNewGameState(EGameStateType NewState)
+	void SMainGameplay::SetNewGameState(MainGameplay::EGameStateType NewState)
 	{
-		bIsGameStateUpdated = true;
-		NewGameStateType = NewState;
-
 		SETTINGS.GetResources()->PlaySound(ChoiceSound);
+		Notify(static_cast<int>(NewState));
 	}
 
-	void SMainGameplay::InitSubGameplayState(EGameplayType Type)
+	void SMainGameplay::InitSubGameplayState(MainGameplay::EGameplayType Type)
 	{
 		GameplayType = Type;
 
@@ -348,26 +374,35 @@ namespace Arkanoid
 
 		switch (Type)
 		{
-		case EGameplayType::Pause:
+		case MainGameplay::EGameplayType::Pause:
 		{
-			SubGameplayState = std::make_shared<SGPauseState>();
+			SubGameplayState = std::make_shared<SPauseState>();
 			break;
 		}
-		case EGameplayType::GameOver:
+		case MainGameplay::EGameplayType::GameOver:
 		{
 			//SubGameplayState = std::make_shared<>();
 			break;
 		}
-		case EGameplayType::LevelDone:
+		case MainGameplay::EGameplayType::LevelDone:
 		{
 			InitNewLevel();
 			break;
 		}
-		case EGameplayType::RecreateBall:
+		case MainGameplay::EGameplayType::RestoreLastGameState:
 		{
-			RecreateBall();
+			RestoreLastGameState();
 			break;
 		}
+		}
+
+		if (SubGameplayState)
+		{
+			SubGameplayState->Init();
+
+			// Add observer to game state
+			std::shared_ptr<IGameStateSubject> GameStateSubject = std::dynamic_pointer_cast<IGameStateSubject>(SubGameplayState);
+			GameStateSubject->Attach(weak_from_this());
 		}
 	}
 }
