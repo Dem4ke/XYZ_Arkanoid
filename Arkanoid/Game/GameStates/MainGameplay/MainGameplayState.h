@@ -33,6 +33,7 @@ namespace Arkanoid
 	class ULevelLoader;
 	class UBlock;
 	class UBonus;
+	class UDuringBonus;
 	class OGameUI;
 	class UGameProperties;
 
@@ -63,8 +64,14 @@ namespace Arkanoid
 
 		// IBonusObserver methods
 		void BonusTaken(int Type) override;
+		void BonusEnded(int ArrayNumber) override;
 
 	private:
+		// Bonuses
+		void EnableFireBallBonus();
+		void EnableGlassBlocksBonus();
+		void EnableBigPlatformBonus();
+
 		// IGameStateObserver methods
 		void GameStateChanged(int NewGameStateType) override;
 
@@ -83,7 +90,8 @@ namespace Arkanoid
 		std::shared_ptr<OGameUI> UI = nullptr;							// User Interface
 
 		std::vector<std::shared_ptr<IGameObject>> GameObjects;			// Vector of playable objects (ball, platform)
-		std::vector<std::shared_ptr<UBonus>> Bonuses;					// Vector of bonuses
+		std::vector<std::shared_ptr<UBonus>> Bonuses;					// Vector of untaken bonuses
+		std::vector<std::shared_ptr<UDuringBonus>> DuringBonuses;		// Vector of during bonuses
 		std::vector<std::shared_ptr<UBlock>> Blocks;					// Vector of blocks
 		
 		MainGameplay::EGameplayType GameplayType;						// Current gameplay type which shows

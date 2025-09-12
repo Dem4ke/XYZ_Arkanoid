@@ -5,6 +5,7 @@
 #include "GameObjects/Bonus.h"
 #include "GameObjects/Ball.h"
 #include "GameObjects/Platform.h"
+#include "GameObjects/DuringBonus.h"
 #include "GameObjects/BonusFactory.h"
 #include "LevelLoader/LevelLoader.h"
 #include "Observer/GameProperties.h"
@@ -243,6 +244,7 @@ namespace Arkanoid
 
 	void SMainGameplay::BonusTaken(int Type)
 	{
+		// Создать текущий бонус с таймером внутри, подключить его обсервер, когда он закончится выключить бонус
 		switch (Type) 
 		{
 		case 0:
@@ -251,21 +253,43 @@ namespace Arkanoid
 		}
 		case 1:
 		{
-			//EnableFireBallBonus();
+			EnableFireBallBonus();
 			break;
 		}
 		case 2:
 		{
-			//EnableGlassBlocksBonus();
+			EnableGlassBlocksBonus();
 			break;
 		}
 		case 3:
 		{
-			//EnableBigPlatformBonus();
+			EnableBigPlatformBonus();
 			break;
 		}
 		}
 	}
+
+	// Bonus time is over and we need to end bonus effect
+	void SMainGameplay::BonusEnded(int ArrayNumber)
+	{
+		
+	}
+
+	void SMainGameplay::EnableFireBallBonus()
+	{
+
+	}
+
+	void SMainGameplay::EnableGlassBlocksBonus()
+	{
+
+	}
+
+	void SMainGameplay::EnableBigPlatformBonus()
+	{
+		Platform->
+	}
+
 
 	/*//////////////////////////////////*/
 	/*                                  */

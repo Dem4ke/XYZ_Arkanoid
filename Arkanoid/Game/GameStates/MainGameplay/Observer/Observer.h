@@ -27,5 +27,6 @@ namespace Arkanoid
 	public:
 		virtual ~IBonusObserver() = default;
 		virtual void BonusTaken(int Type) = 0;
+		virtual void BonusEnded(int ArrayNumber) = 0;
 	};
 }
