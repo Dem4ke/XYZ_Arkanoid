@@ -245,6 +245,9 @@ namespace Arkanoid
 	void SMainGameplay::BonusTaken(int Type)
 	{
 		// Создать текущий бонус с таймером внутри, подключить его обсервер, когда он закончится выключить бонус
+		DuringBonuses.emplace_back(UDuringBonus(DuringBonuses.size() - 1));
+		DuringBonuses[DuringBonuses.size() - 1]->Attach(weak_from_this());
+
 		switch (Type) 
 		{
 		case 0:
@@ -287,7 +290,7 @@ namespace Arkanoid
 
 	void SMainGameplay::EnableBigPlatformBonus()
 	{
-		Platform->
+		
 	}
 
 
