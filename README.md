@@ -7,11 +7,7 @@ Use AD to play and Esc or B to pause the game.
 </p>
 
 <p>
-Main menu
-![MainMenu](Promo/MainMenu.png)
-
 Gameplay
 ![Gameplay](Promo/Gameplay1.png)
 ![Gameplay](Promo/Gameplay2.png)
-
 </p>
